@@ -1,5 +1,23 @@
 import { defineComponent, h, reactive } from "vue";
 
+ const Hello = defineComponent({
+  name: "Hello",
+  render() {
+    return h(
+      "div",
+      // flat data structure
+      {
+        id: "app",
+        onClick() {
+          console.log("hello");
+        },
+      },
+      [h("span", "child")]
+    );
+  },
+});
+
+
 export default defineComponent({
   name: "App",
   setup(props, { slots, attrs, emit }) {
@@ -10,14 +28,12 @@ export default defineComponent({
     function increment() {
       state.count++;
     }
-    return () => {
-      return h(
-        "div",
-        {
-          onClick: increment,
-        },
-        state.count
-      );
-    };
+
+    return () => (
+      <div onClick={increment}>
+        {state.count}
+        <Hello />
+      </div>
+    );
   },
 });
