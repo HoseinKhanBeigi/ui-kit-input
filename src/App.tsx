@@ -1,6 +1,6 @@
 import { defineComponent, h, reactive } from "vue";
 
- const Hello = defineComponent({
+const Hello = defineComponent({
   name: "Hello",
   render() {
     return h(
@@ -18,39 +18,81 @@ import { defineComponent, h, reactive } from "vue";
 
 const AnotherComponent = defineComponent({
   name: "Another",
-
+  setup(props,{ slots, attrs, emit }) {
+    emit("change")
+  },
   render() {
-    function foo() {
-      console.log("another");
-    }
-    return h("div", {
+    return h("input", {
       class: ["foo", "bar"],
       style: { color: "red" },
       id: "foo",
       innerHTML: "sadasd",
-      onClick: foo,
+      placeholder: "enter number",
+      attrs: "foo",
+      onClick: () => {
+        console.log()
+      },
       key: "foo",
     });
   },
+  props: {
+    elementtype: {
+      attributes: String,
+      required: true,
+    },
+  },
 });
 
-export default defineComponent({
-  name: "App",
+const Child = defineComponent({
+  name: "Container1",
   setup(props, { slots, attrs, emit }) {
     const state = reactive({
       count: 0,
     });
+
+    console.log(props)
 
     function increment() {
       state.count++;
     }
 
     return () => (
-      <div onClick={increment}>
+      <div>
         {state.count}
+        {props.elementtype}
         <Hello />
-        <AnotherComponent />
       </div>
     );
   },
+  props:{
+    elementtype: {
+      attributes: String,
+      required: true,
+    },
+  }
+});
+
+export default defineComponent({
+  name: "Container",
+  setup(props, { slots, attrs, emit }) {
+    const state = reactive({
+      count: 0,
+    });
+
+    console.log(props, "this props");
+
+    function increment() {
+      emit("change")
+      // state.count++;
+    }
+
+    return () => (
+      <div  onClick={increment}>
+         <AnotherComponent elementtype="asdasd" />
+         <Child elementtype="child from parent"/>
+      </div>
+     
+    );
+  },
+  emits: ['change'],
 });
