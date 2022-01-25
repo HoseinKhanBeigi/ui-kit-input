@@ -2,16 +2,22 @@ import { defineComponent, h, reactive } from "vue";
 
 const Hello = defineComponent({
   name: "Hello",
+  props: ['modelValue','message'],
+  emits: ['update:modelValue'],
   render() {
     return h(
       "div",
+      
       {
         id: "app",
-        onClick() {
-          console.log("hello");
-        },
+        modelValue: this.modelValue,
+        'onUpdate:modelValue': (value:any) => this.$emit('update:modelValue', value)
+        // onClick: $event => console.log('clicked', $event.target)
       },
-      [h("span", "child")]
+      [h("span", this.$slots.default({
+        text: this.message
+      }))],
+      
     );
   },
 });
