@@ -19,6 +19,7 @@ const Hello = defineComponent({
 const AnotherComponent = defineComponent({
   name: "Another",
   setup(props,{ slots, attrs, emit }) {
+    console.log(props,"<=======>")
     emit("change")
   },
   render() {
@@ -50,7 +51,7 @@ const Child = defineComponent({
       count: 0,
     });
 
-    console.log(props)
+    
 
     function increment() {
       state.count++;
@@ -79,7 +80,7 @@ export default defineComponent({
       count: 0,
     });
 
-    console.log(props, "this props");
+    
 
     function increment() {
       emit("change")
@@ -88,7 +89,7 @@ export default defineComponent({
 
     return () => (
       <div  onClick={increment}>
-         <AnotherComponent elementtype="asdasd" />
+         <AnotherComponent elementtype="anotherComponent" />
          <Child elementtype="child from parent"/>
       </div>
      
