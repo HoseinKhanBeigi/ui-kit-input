@@ -5,7 +5,6 @@ import { defineComponent, h, reactive } from "vue";
   render() {
     return h(
       "div",
-      // flat data structure
       {
         id: "app",
         onClick() {
@@ -17,6 +16,23 @@ import { defineComponent, h, reactive } from "vue";
   },
 });
 
+const AnotherComponent = defineComponent({
+  name: "Another",
+
+  render() {
+    function foo() {
+      console.log("another");
+    }
+    return h("div", {
+      class: ["foo", "bar"],
+      style: { color: "red" },
+      id: "foo",
+      innerHTML: "sadasd",
+      onClick: foo,
+      key: "foo",
+    });
+  },
+});
 
 export default defineComponent({
   name: "App",
@@ -33,6 +49,7 @@ export default defineComponent({
       <div onClick={increment}>
         {state.count}
         <Hello />
+        <AnotherComponent />
       </div>
     );
   },
