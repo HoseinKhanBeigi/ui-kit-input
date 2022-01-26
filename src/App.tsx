@@ -1,105 +1,151 @@
 import { defineComponent, h, reactive } from "vue";
 
-const Hello = defineComponent({
-  name: "Hello",
-  props: ['modelValue','message'],
-  emits: ['update:modelValue'],
-  render() {
-    return h(
-      "div",
-      
-      {
-        id: "app",
-        modelValue: this.modelValue,
-        'onUpdate:modelValue': (value:any) => this.$emit('update:modelValue', value)
-        // onClick: $event => console.log('clicked', $event.target)
-      },
-      [h("span", this.$slots.default({
-        text: this.message
-      }))],
-      
+const A = (props: any, { slots }: any) => (
+  <>
+    <h1>{slots.default ? slots.default() : "foo"}</h1>
+    <h2>{slots.bar?.()}</h2>
+  </>
+);
+
+const A1 = (props: any, { slots }: any) => (
+  <>
+    <h1>{slots.default ? slots.default() : "foo"}</h1>
+    <h2>{slots.bar?.()}</h2>
+  </>
+);
+
+const App23 = defineComponent({
+  setup() {
+    return () => (
+      <>
+        <A1>
+          {{
+            default: () => <div>...</div>,
+            bar: () => <span>....</span>,
+          }}
+        </A1>
+      </>
     );
   },
 });
 
-const AnotherComponent = defineComponent({
-  name: "Another",
-  setup(props,{ slots, attrs, emit }) {
-    console.log(props,"<=======>")
-    emit("change")
+const App1 = defineComponent({
+  data() {
+    return { visible: true };
   },
   render() {
-    return h("input", {
-      class: ["foo", "bar"],
-      style: { color: "red" },
-      id: "foo",
-      innerHTML: "sadasd",
-      placeholder: "enter number",
-      attrs: "foo",
-      onClick: () => {
-        console.log()
-      },
-      key: "foo",
+    return <input v-show={this.visible} />;
+  },
+});
+
+const placeholderText = "email";
+const App = () => <input type="email" placeholder={placeholderText} />;
+
+const Child2 = defineComponent({
+  name: "Child2",
+  setup(props, { slots, attrs, emit }) {
+    // console.log(slots);
+  },
+  props: ["modelValue", "childType", "child2Props"],
+  emits: ["update:modelValue"],
+  render(props: any) {
+    console.log(props);
+    return h("div", {
+      id: "app",
+      innerHTML: "im a child1",
+      modelValue: this.modelValue,
+      "onUpdate:modelValue": (value: any) =>
+        this.$emit("update:modelValue", value),
+      // onClick: $event => console.log('clicked', $event.target),
     });
   },
+});
+
+const Child1 = defineComponent({
+  name: "Child1",
+  setup(props, { slots, attrs, emit }) {
+    console.log(slots, "slotesss");
+  },
+  render() {
+    const valueName: string = "hasan";
+    return h(
+      "div",
+      {
+        // class: ["foo", "bar"],
+        // style: { color: "black" },
+        // id: "foo",
+        // innerHTML: "im a child1",
+        // placeholder: "enter number",
+        // attrs: "foo",
+        onClick: () => {
+          console.log();
+        },
+        key: "foo",
+      },
+      {
+        default: () => [h("span", "Hello"), " world!"],
+        bar: () => [h("span", "amir"), "rashti"],
+        foo: () => [h("span", "hamid"), "fooo"],
+      }
+    );
+  },
   props: {
-    elementtype: {
+    childType: {
       attributes: String,
-      required: true,
+      required: false,
     },
   },
 });
 
-const Child = defineComponent({
-  name: "Container1",
+const Child3 = defineComponent({
+  name: "Child3",
   setup(props, { slots, attrs, emit }) {
-    const state = reactive({
-      count: 0,
-    });
+    console.log(attrs.children);
+    const slotss = {
+      default: () => <div>ali</div>,
+      bar: () => <span>reza</span>,
+    };
+    return () => <A v-slots={slotss} />;
+  },
+  props: {
+    parentType: {
+      attributes: String,
+      required: false,
+    },
+  },
+});
 
-    
-
-    function increment() {
-      state.count++;
-    }
-
+const Parent = defineComponent({
+  name: "parent",
+  setup(props, { slots, attrs, emit }) {
+    console.log(slots);
     return () => (
       <div>
-        {state.count}
-        {props.elementtype}
-        <Hello />
+        <App23 />
+        {/* <App/> */}
+        {/* <App1 /> */}
+        <Child3 />
+        {/* <Child1 /> */}
       </div>
     );
   },
-  props:{
-    elementtype: {
+  props: {
+    parentType: {
       attributes: String,
       required: true,
     },
-  }
+  },
 });
 
 export default defineComponent({
   name: "Container",
   setup(props, { slots, attrs, emit }) {
-    const state = reactive({
-      count: 0,
-    });
-
-    
-
-    function increment() {
-      emit("change")
-      // state.count++;
-    }
-
+    // console.log(slots);
     return () => (
-      <div  onClick={increment}>
-         <AnotherComponent elementtype="anotherComponent" />
-         <Child elementtype="child from parent"/>
+      <div>
+        <Parent parentType="im a parent from contanier" />
       </div>
-     
     );
   },
-  emits: ['change'],
+  emits: ["change"],
 });
