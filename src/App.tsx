@@ -1,4 +1,4 @@
-import { defineComponent, h, reactive } from "vue";
+import { defineComponent, h, reactive, createApp } from "vue";
 
 const A = (props: any, { slots }: any) => (
   <>
@@ -97,6 +97,65 @@ const Child1 = defineComponent({
   },
 });
 
+const Child4 = defineComponent({
+  name: "Child4",
+  setup(props, { slots, attrs, emit }) {
+    return h("div", [
+      h("header", slots.header ? slots.header() : ""),
+      h("main", slots.default ? slots.default() : ""),
+      h("footer", slots.footer ? slots.footer() : ""),
+    ]);
+  },
+});
+
+const app4 = createApp({});
+
+app4.component("blog-post", {
+  render() {
+    return h("div", [
+      h("header", this.$slots.header()),
+      h("main", this.$slots.default()),
+      h("footer", this.$slots.footer()),
+    ]);
+  },
+});
+
+const app = createApp({});
+
+app.component("Anchor-Elf", {
+  template: `
+    <h1>
+      asdasd
+      asdad
+    </h1>
+    <h2>
+    asdasd
+      asdsad
+    </h2>
+    <h3>
+    asdads
+      asdasd
+    </h3>
+    <h4>
+    asd
+      asd
+    </h4>
+    <h5>
+      asdasd
+    </h5>
+    <h6>
+      asasda
+      asd
+    </h6>
+  `,
+  props: {
+    level: {
+      type: Number,
+      required: true,
+    },
+  },
+});
+
 const Child3 = defineComponent({
   name: "Child3",
   setup(props, { slots, attrs, emit }) {
@@ -121,10 +180,16 @@ const Parent = defineComponent({
     console.log(slots);
     return () => (
       <div>
-        <App23 />
+        <blog-post>
+          <template v-slot:header>
+            <h1>About Me</h1>
+          </template>
+        </blog-post>
+        {/* <Anchor-Elf level="3" /> */}
+        {/* <App23 /> */}
         {/* <App/> */}
         {/* <App1 /> */}
-        <Child3 />
+        {/* <Child3 /> */}
         {/* <Child1 /> */}
       </div>
     );
