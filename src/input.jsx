@@ -1,41 +1,62 @@
 // import { Vue } from '../../vue'
 import { defineComponent, h, reactive, createApp } from "vue";
-import { NAME_FORM_INPUT } from './features/constants/components'
-import { PROP_TYPE_BOOLEAN, PROP_TYPE_NUMBER_STRING, PROP_TYPE_STRING } from './features/constants/props'
-import { arrayIncludes } from './features/utils/array'
-import { attemptBlur } from './features/utils/dom'
-import { eventOn, eventOff, eventOnOff, stopEvent } from './features/utils/events'
-import { sortKeys } from './features/utils/object'
-import { makeProp, makePropsConfigurable } from './features/utils/props'
-import { formControlMixin, props as formControlProps } from './features/mixins/form-control'
-import { formSelectionMixin } from './features/mixins/form-selection'
-import { formSizeMixin, props as formSizeProps } from './features/mixins/form-size'
-import { formStateMixin, props as formStateProps } from './features/mixins/form-state'
-import { formTextMixin, props as formTextProps } from './features/mixins/form-text'
-import { formValidityMixin } from './features/mixins/form-validity'
-import { idMixin, props as idProps } from './features/mixins/id'
-import { listenersMixin } from './features/mixins/listeners'
+import { NAME_FORM_INPUT } from "./features/constants/components";
+import {
+  PROP_TYPE_BOOLEAN,
+  PROP_TYPE_NUMBER_STRING,
+  PROP_TYPE_STRING,
+} from "./features/constants/props";
+import { arrayIncludes } from "./features/utils/array";
+import { attemptBlur } from "./features/utils/dom";
+import {
+  eventOn,
+  eventOff,
+  eventOnOff,
+  stopEvent,
+} from "./features/utils/events";
+import { sortKeys } from "./features/utils/object";
+import { makeProp, makePropsConfigurable } from "./features/utils/props";
+import {
+  formControlMixin,
+  props as formControlProps,
+} from "./features/mixins/form-control";
+import { formSelectionMixin } from "./features/mixins/form-selection";
+import {
+  formSizeMixin,
+  props as formSizeProps,
+} from "./features/mixins/form-size";
+import {
+  formStateMixin,
+  props as formStateProps,
+} from "./features/mixins/form-state";
+import {
+  formTextMixin,
+  props as formTextProps,
+} from "./features/mixins/form-text";
+import { formValidityMixin } from "./features/mixins/form-validity";
+import { idMixin, props as idProps } from "./features/mixins/id";
+import { listenersMixin } from "./features/mixins/listeners";
 
 // --- Constants ---
 
 // Valid supported input types
 const TYPES = [
-  'text',
-  'password',
-  'email',
-  'number',
-  'url',
-  'tel',
-  'search',
-  'range',
-  'color',
-  'date',
-  'time',
-  'datetime',
-  'datetime-local',
-  'month',
-  'week'
-]
+  "text",
+  "password",
+  "email",
+  "number",
+  "url",
+  "tel",
+  "search",
+  "range",
+  "color",
+  "date",
+  "time",
+  "datetime",
+  "datetime-local",
+  "month",
+  "week",
+];
 
 // --- Props ---
 
@@ -52,12 +73,12 @@ export const props = makePropsConfigurable(
     // Disable mousewheel to prevent wheel from changing values (i.e. number/date)
     noWheel: makeProp(PROP_TYPE_BOOLEAN, false),
     step: makeProp(PROP_TYPE_NUMBER_STRING),
-    type: makeProp(PROP_TYPE_STRING, 'text', type => {
-      return arrayIncludes(TYPES, type)
-    })
+    type: makeProp(PROP_TYPE_STRING, "text", (type) => {
+      return arrayIncludes(TYPES, type);
+    }),
   }),
   NAME_FORM_INPUT
-)
+);
 
 // --- Main component ---
 
@@ -73,18 +94,28 @@ export const BFormInput = defineComponent({
     formStateMixin,
     formTextMixin,
     formSelectionMixin,
-    formValidityMixin
+    formValidityMixin,
   ],
   props,
+
   computed: {
     localType() {
       // We only allow certain types
-      const { type } = this
-      return arrayIncludes(TYPES, type) ? type : 'text'
+      const { type } = this;
+      return arrayIncludes(TYPES, type) ? type : "text";
     },
     computedAttrs() {
-      const { localType: type, name, form, disabled, placeholder, required, min, max, step } = this
-
+      const {
+        localType: type,
+        name,
+        form,
+        disabled,
+        placeholder,
+        required,
+        min,
+        max,
+        step,
+      } = this;
 
       return {
         id: this.safeId(),
@@ -99,72 +130,103 @@ export const BFormInput = defineComponent({
         min,
         max,
         step,
-        list: type !== 'password' ? this.list : null,
-        'aria-required': required ? 'true' : null,
-        'aria-invalid': this.computedAriaInvalid
-      }
+        list: type !== "password" ? this.list : null,
+        "aria-required": required ? "true" : null,
+        "aria-invalid": this.computedAriaInvalid,
+      };
     },
     computedListeners() {
       return {
         ...this.bvListeners,
         input: this.onInput,
         change: this.onChange,
-        blur: this.onBlur
-      }
-    }
+        blur: this.onBlur,
+      };
+    },
   },
   watch: {
     noWheel(newValue) {
-      this.setWheelStopper(newValue)
-    }
+      this.setWheelStopper(newValue);
+    },
   },
   mounted() {
-    this.setWheelStopper(this.noWheel)
+    this.setWheelStopper(this.noWheel);
   },
   /* istanbul ignore next */
   deactivated() {
     // Turn off listeners when keep-alive component deactivated
     /* istanbul ignore next */
-    this.setWheelStopper(false)
+    this.setWheelStopper(false);
   },
   /* istanbul ignore next */
   activated() {
     // Turn on listeners (if no-wheel) when keep-alive component activated
     /* istanbul ignore next */
-    this.setWheelStopper(this.noWheel)
+    this.setWheelStopper(this.noWheel);
   },
   beforeDestroy() {
     /* istanbul ignore next */
-    this.setWheelStopper(false)
+    this.setWheelStopper(false);
   },
   methods: {
     setWheelStopper(on) {
-      const input = this.$el
-      // We use native events, so that we don't interfere with propagation
-      eventOnOff(on, input, 'focus', this.onWheelFocus)
-      eventOnOff(on, input, 'blur', this.onWheelBlur)
+      const input = this.$el;
+      eventOnOff(on, input, "focus", this.onWheelFocus);
+      eventOnOff(on, input, "blur", this.onWheelBlur);
       if (!on) {
-        eventOff(document, 'wheel', this.stopWheel)
+        eventOff(document, "wheel", this.stopWheel);
       }
     },
     onWheelFocus() {
-      eventOn(document, 'wheel', this.stopWheel)
+      eventOn(document, "wheel", this.stopWheel);
     },
     onWheelBlur() {
-      eventOff(document, 'wheel', this.stopWheel)
+      eventOff(document, "wheel", this.stopWheel);
     },
     stopWheel(event) {
-      stopEvent(event, { propagation: false })
-      attemptBlur(this.$el)
-    }
+      stopEvent(event, { propagation: false });
+      attemptBlur(this.$el);
+    },
   },
   render() {
-    return h('input', {
+    console.log(this.computedListeners);
+    const {
+      id,
+      name,
+      form,
+      type,
+      disabled,
+      placeholder,
+      required,
+      autocomplete,
+      readonly,
+      min,
+      max,
+      step,
+      list,
+    } = this.computedAttrs;
+
+    const { input, change, blur } = this.computedListeners;
+
+    return h("input", {
       class: this.computedClass,
-      attrs: this.computedAttrs,
-      domProps: { value: this.localValue },
-      on: this.computedListeners,
-      ref: 'input'
-    })
-  }
-})
+      id,
+      name,
+      form,
+      type,
+      disabled,
+      placeholder,
+      required,
+      autocomplete,
+      readonly,
+      min,
+      max,
+      step,
+      list,
+      "aria-required": required ? "true" : null,
+      value: this.localValue,
+      ...this.computedListeners,
+      ref: "input",
+    });
+  },
+});

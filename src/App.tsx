@@ -1,6 +1,6 @@
 import { defineComponent, h, reactive, createApp } from "vue";
 
-import { BFormInput } from "./input"
+import { BFormInput } from "./input2"
 
 const A = (props: any, { slots }: any) => (
   <>
@@ -77,8 +77,11 @@ const Child1 = defineComponent({
   name: "Child1",
   setup(props, { slots, attrs, emit }) {
 
+    const s = props
+    return s
   },
   render() {
+    console.log()
     const valueName: string = "hasan";
     return h(
       "div",
@@ -183,13 +186,20 @@ const Parent = defineComponent({
 export default defineComponent({
   name: "Container",
   setup(props, { slots, attrs, emit }) {
+
+    function handleChange(e: any) {
+      console.log(e)
+    }
+
+    const bar = reactive({ value: "" });
+
+    console.log(bar)
+
     // console.log(slots);
     return () => (
       <div>
-        <BFormInput placeholder="enter youe name"/>
-        <Parent parentType="im a parent from contanier" />
+        <BFormInput placeholder="enter youe name" type="text" v-model={bar.value} onInput={(e: any) => handleChange(e)} />
       </div>
     );
   },
-  emits: ["change"],
 });
