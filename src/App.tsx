@@ -1,5 +1,7 @@
 import { defineComponent, h, reactive, createApp } from "vue";
 
+import { BFormInput } from "./input"
+
 const A = (props: any, { slots }: any) => (
   <>
     <h1>{slots.default ? slots.default() : "foo"}</h1>
@@ -7,25 +9,35 @@ const A = (props: any, { slots }: any) => (
   </>
 );
 
-const A1 = (props: any, { slots }: any) => (
-  <>
-    <h1>{slots.default ? slots.default() : "foo"}</h1>
-    <h2>{slots.bar?.()}</h2>
-  </>
-);
+const A1 = (props: any, { slots }: any) => {
+  console.log(props)
+  return (
+    <>
+      <h1>{props.hamid}</h1>
+      <h1>{slots.default()}</h1>
+      <h2>{slots.bar()}</h2>
+    </>
+  );
+}
 
 const App23 = defineComponent({
   setup() {
-    return () => (
-      <>
-        <A1>
-          {{
-            default: () => <div>...</div>,
-            bar: () => <span>....</span>,
-          }}
-        </A1>
-      </>
-    );
+
+    const slotss = {
+      default: () => <div>aliA1</div>,
+      bar: () => <span>rezaA1</span>,
+    };
+    return () => <A1 v-slots={slotss} hamid="aliiiiiasdadas" />;
+    // return () => (
+    //   <>
+    //     <A1 hamid="aliiiiiasdadas">
+    //       {{
+
+    //         bar: () => <span>....</span>,
+    //       }}
+    //     </A1>
+    //   </>
+    // );
   },
 });
 
@@ -64,7 +76,7 @@ const Child2 = defineComponent({
 const Child1 = defineComponent({
   name: "Child1",
   setup(props, { slots, attrs, emit }) {
-    console.log(slots, "slotesss");
+
   },
   render() {
     const valueName: string = "hasan";
@@ -81,12 +93,9 @@ const Child1 = defineComponent({
           console.log();
         },
         key: "foo",
+
+
       },
-      {
-        default: () => [h("span", "Hello"), " world!"],
-        bar: () => [h("span", "amir"), "rashti"],
-        foo: () => [h("span", "hamid"), "fooo"],
-      }
     );
   },
   props: {
@@ -101,9 +110,9 @@ const Child4 = defineComponent({
   name: "Child4",
   setup(props, { slots, attrs, emit }) {
     return h("div", [
-      h("header", slots.header ? slots.header() : ""),
-      h("main", slots.default ? slots.default() : ""),
-      h("footer", slots.footer ? slots.footer() : ""),
+      h("div", "header"),
+      h("div", "header"),
+      h("div", "header"),
     ]);
   },
 });
@@ -114,47 +123,13 @@ app4.component("blog-post", {
   render() {
     return h("div", [
       h("header", this.$slots.header()),
-      h("main", this.$slots.default()),
+      h("main", this.$slots.default({ main: "manie" })),
       h("footer", this.$slots.footer()),
     ]);
   },
 });
 
-const app = createApp({});
 
-app.component("Anchor-Elf", {
-  template: `
-    <h1>
-      asdasd
-      asdad
-    </h1>
-    <h2>
-    asdasd
-      asdsad
-    </h2>
-    <h3>
-    asdads
-      asdasd
-    </h3>
-    <h4>
-    asd
-      asd
-    </h4>
-    <h5>
-      asdasd
-    </h5>
-    <h6>
-      asasda
-      asd
-    </h6>
-  `,
-  props: {
-    level: {
-      type: Number,
-      required: true,
-    },
-  },
-});
 
 const Child3 = defineComponent({
   name: "Child3",
@@ -164,7 +139,11 @@ const Child3 = defineComponent({
       default: () => <div>ali</div>,
       bar: () => <span>reza</span>,
     };
-    return () => <A v-slots={slotss} />;
+    return () => <A>
+      {{
+        default: () => <div>ali</div>,
+        bar: () => <span>reza</span>,
+      }}</A>;
   },
   props: {
     parentType: {
@@ -177,20 +156,19 @@ const Child3 = defineComponent({
 const Parent = defineComponent({
   name: "parent",
   setup(props, { slots, attrs, emit }) {
-    console.log(slots);
+    console.log(emit);
     return () => (
       <div>
         <blog-post>
-          <template v-slot:header>
-            <h1>About Me</h1>
-          </template>
+          {{
+            default: () => <div>ali</div>,
+
+          }}
         </blog-post>
-        {/* <Anchor-Elf level="3" /> */}
-        {/* <App23 /> */}
-        {/* <App/> */}
-        {/* <App1 /> */}
-        {/* <Child3 /> */}
-        {/* <Child1 /> */}
+        <Child3 />
+        <App23 />
+        <Child1 />
+        <Child4 />
       </div>
     );
   },
@@ -208,6 +186,7 @@ export default defineComponent({
     // console.log(slots);
     return () => (
       <div>
+        <BFormInput placeholder="enter youe name"/>
         <Parent parentType="im a parent from contanier" />
       </div>
     );
