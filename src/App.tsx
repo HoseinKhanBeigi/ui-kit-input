@@ -187,18 +187,26 @@ export default defineComponent({
   name: "Container",
   setup(props, { slots, attrs, emit }) {
 
+
+    function handleInput(e: any) {
+      if(e){
+        console.log(e.target.value)
+      }
+     
+    }
+
     function handleChange(e: any) {
       console.log(e)
     }
 
-    const bar = reactive({ value: "" });
+    const bar = reactive({ value: "asdadds" });
 
     console.log(bar)
 
     // console.log(slots);
     return () => (
       <div>
-        <BFormInput placeholder="enter youe name" type="text" v-model={bar.value} onInput={(e: any) => handleChange(e)} />
+        <BFormInput placeholder="enter youe name" type="text" v-model={bar.value} onInput={(e: any) => handleInput(e)} onChange={(e: any) => handleChange(e)} />
       </div>
     );
   },

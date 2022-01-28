@@ -1,6 +1,6 @@
 
 import { InputType } from './features2/types'
-import { computed, defineComponent, PropType, h } from 'vue'
+import { computed, defineComponent, PropType, h, onMounted } from 'vue'
 import useFormInput, { COMMON_INPUT_PROPS } from './features2/composables/useFormInput'
 
 const allowedTypes = [
@@ -34,6 +34,10 @@ export const BFormInput = defineComponent({
     },
     emits: ['update:modelValue', 'change', 'blur', 'input'],
     setup(props, { emit }) {
+        onMounted(() => {
+            emit('change');
+            emit('input')
+        });
         const classes = computed(() => {
             const isRange = props.type === 'range'
             const isColor = props.type === 'color'
@@ -48,17 +52,13 @@ export const BFormInput = defineComponent({
             }
         })
 
-        // console.log(emit)
-
         const localType = computed(() => (allowedTypes.includes(props.type) ? props.type : 'text'))
-        console.log(localType.value)
+
 
         const { input, computedId, computedAriaInvalid, onInput, onChange, onBlur, focus, blur } =
             useFormInput(props, emit)
 
-        console.log(onChange)
 
-        console.log(computedId)
 
         // return {
         //   classes,
@@ -97,17 +97,21 @@ export const BFormInput = defineComponent({
         // });
 
         function handleInput(event: any) {
-            return onInput(event)
+            emit('input',event)
+            // return onInput(event)
         }
         function handleChange(event: any) {
-            return onChange(event)
+            emit('change',event)
+            // return onChange(event)
         }
         function handleBlur(event: any) {
-            return onBlur(event)
+            emit('blur')
+            // return onBlur(event)
         }
         return () => (
             <div>
                 <input
+                    ref="input"
                     placeholder={props.placeholder}
                     id={`${computedId.value}`}
                     class={classes}
@@ -123,12 +127,11 @@ export const BFormInput = defineComponent({
                     step={props.step}
                     list={props.type !== 'password' ? props.list : undefined}
                     aria-required={props.required ? 'true' : undefined}
-                    // aria-invalid={computedAriaInvalid}
                     // v-bind="$attrs"
                     onInput={handleInput}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    // v-model={["val", ["modifier"]]}
+                // v-model={["val", ["modifier"]]}
                 />
             </div>
         );

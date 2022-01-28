@@ -13,7 +13,7 @@ import useId from './useId'
 
 export const COMMON_INPUT_PROPS = {
   ariaInvalid: {
-    type: [Boolean, String] as PropType<boolean | 'false' | 'true' | 'grammar' | 'spelling'>,
+    type: [Boolean, String],
     default: false,
   },
   autocomplete: {type: String, required: false},
@@ -33,7 +33,7 @@ export const COMMON_INPUT_PROPS = {
   readonly: {type: Boolean, default: false},
   required: {type: Boolean, default: false},
   size: {type: String, required: false},
-  state: {type: Boolean as PropType<boolean | null | undefined>, default: null},
+  state: {type: Boolean , default: null},
   trim: {type: Boolean, default: false},
 }
 
