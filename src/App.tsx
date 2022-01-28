@@ -206,7 +206,7 @@ export default defineComponent({
     // console.log(slots);
     return () => (
       <div>
-        <BFormInput placeholder="enter youe name" type="text" v-model={bar.value} onInput={(e: any) => handleInput(e)} onChange={(e: any) => handleChange(e)} />
+        <BFormInput placeholder="enter youe name" type="text"  onInput={(e: any) => handleInput(e)} onChange={(e: any) => handleChange(e)} />
       </div>
     );
   },
