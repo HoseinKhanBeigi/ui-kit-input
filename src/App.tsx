@@ -1,6 +1,6 @@
 import { defineComponent, h, reactive, createApp } from "vue";
 
-import { BFormInput } from "./input2"
+import { InputKit } from "./input2"
 
 const A = (props: any, { slots }: any) => (
   <>
@@ -206,7 +206,7 @@ export default defineComponent({
     // console.log(slots);
     return () => (
       <div>
-        <BFormInput placeholder="enter youe name" type="text" modelValue={"hello"} onInput={(e: any) => handleInput(e)} onChange={(e: any) => handleChange(e)} />
+        <InputKit placeholder="enter youe name" type="text" modelValue={"hello"} onInput={(e: any) => handleInput(e)} onChange={(e: any) => handleChange(e)} />
       </div>
     );
   },
