@@ -1,7 +1,7 @@
 import { InputType } from "./features2/types";
 import { computed, defineComponent, PropType, h, onMounted } from "vue";
 // import "./input.scss"
-import  UIinputBlock  from "./style.sass";
+import "@/style.scss"
 import useFormInput, {
   COMMON_INPUT_PROPS,
 } from "./features2/composables/useFormInput";
