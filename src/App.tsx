@@ -1,16 +1,16 @@
 import { defineComponent, h, reactive, createApp } from "vue";
 
-import { UIInput } from "./input2"
+// import { UIInput } from "./input2"
 
 const A = (props: any, { slots }: any) => (
   <>
-    <h1>{slots.default ? slots.default() : "foo"}</h1>
+    <h1>{slots.default()}</h1>
     <h2>{slots.bar?.()}</h2>
   </>
 );
 
 const A1 = (props: any, { slots }: any) => {
-  console.log(props)
+  console.log(props);
   return (
     <>
       <h1>{props.hamid}</h1>
@@ -18,11 +18,10 @@ const A1 = (props: any, { slots }: any) => {
       <h2>{slots.bar()}</h2>
     </>
   );
-}
+};
 
 const App23 = defineComponent({
   setup() {
-
     const slotss = {
       default: () => <div>aliA1</div>,
       bar: () => <span>rezaA1</span>,
@@ -76,30 +75,24 @@ const Child2 = defineComponent({
 const Child1 = defineComponent({
   name: "Child1",
   setup(props, { slots, attrs, emit }) {
-
-    const s = props
-    return s
+    const s = props;
+    return s;
   },
   render() {
-    console.log()
+    console.log();
     const valueName: string = "hasan";
-    return h(
-      "div",
-      {
-        // class: ["foo", "bar"],
-        // style: { color: "black" },
-        // id: "foo",
-        // innerHTML: "im a child1",
-        // placeholder: "enter number",
-        // attrs: "foo",
-        onClick: () => {
-          console.log();
-        },
-        key: "foo",
-
-
+    return h("div", {
+      // class: ["foo", "bar"],
+      // style: { color: "black" },
+      // id: "foo",
+      // innerHTML: "im a child1",
+      // placeholder: "enter number",
+      // attrs: "foo",
+      onClick: () => {
+        console.log();
       },
-    );
+      key: "foo",
+    });
   },
   props: {
     childType: {
@@ -132,21 +125,43 @@ app4.component("blog-post", {
   },
 });
 
-
-
 const Child3 = defineComponent({
   name: "Child3",
   setup(props, { slots, attrs, emit }) {
-    console.log(attrs.children);
     const slotss = {
       default: () => <div>ali</div>,
       bar: () => <span>reza</span>,
     };
-    return () => <A>
-      {{
-        default: () => <div>ali</div>,
-        bar: () => <span>reza</span>,
-      }}</A>;
+    return () => (
+      <A>
+        {{
+          default: () => <div>ali</div>,
+          bar: () => <span>reza</span>,
+        }}
+      </A>
+    );
+  },
+  props: {
+    parentType: {
+      attributes: String,
+      required: false,
+    },
+  },
+});
+
+const ChildSlot = defineComponent({
+  name: "Child3",
+  setup(props, { slots, attrs, emit }) {
+    console.log(slots);
+    const slotss = {
+      default: () => <div>ali</div>,
+      bar: () => <span>reza</span>,
+    };
+    return () => (
+      <div>
+        <slot />
+      </div>
+    );
   },
   props: {
     parentType: {
@@ -165,7 +180,6 @@ const Parent = defineComponent({
         <blog-post>
           {{
             default: () => <div>ali</div>,
-
           }}
         </blog-post>
         <Child3 />
@@ -186,27 +200,26 @@ const Parent = defineComponent({
 export default defineComponent({
   name: "Container",
   setup(props, { slots, attrs, emit }) {
-
-
     function handleInput(e: any) {
-      if(e){
-        console.log(e.target.value)
+      if (e) {
+        console.log(e.target.value);
       }
-     
     }
 
     function handleChange(e: any) {
-      console.log(e)
+      console.log(e);
     }
 
     const bar = reactive({ value: "asdadds" });
 
-    console.log(bar)
+    console.log(bar);
 
     // console.log(slots);
     return () => (
       <div>
-        <UIInput placeholder="enter youe name" type="text" modelValue={"hello"} onInput={(e: any) => handleInput(e)} onChange={(e: any) => handleChange(e)} />
+        <Child3 />
+
+        <App23 />
       </div>
     );
   },

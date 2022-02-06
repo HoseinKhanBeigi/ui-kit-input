@@ -45,6 +45,7 @@ const normalizeOptions = (options: any[], componentName: string, props: any): an
   if (Array.isArray(options)) {
     return options.map((option) => _normalizeOption(option, null, componentName, props))
   } else if (Object.prototype.toString.call(options) === '[object Object]') {
+    console.log(options,"<======opetion")
     console.warn(
       `[BootstrapVue warn]: ${componentName} - Setting prop "options" to an object is deprecated. Use the array format instead.`
     )

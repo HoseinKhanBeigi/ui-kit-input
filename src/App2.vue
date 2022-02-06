@@ -1,25 +1,21 @@
 <template>
-  <VInput
-    placeholder="enter youe name"
-    type="text"
-    v-model="book.title"
-    :onInput="(e) => handleInput(e)"
-    :onChange="(e) => handleChange(e)"
-  />
+  <VInput type="checkbox" />
+  <VSelect name="select" />
 </template>
 
 <script>
 import { ref, reactive } from "vue";
 import { VInput } from "./VInput.tsx";
+import { VSelect } from "./VSelect";
 
 export default {
-  components: { VInput },
+  components: { VInput, VSelect },
   props: {
-    collectionName: String,
+    // collectionName: String,
   },
   setup(props) {
     const readersNumber = ref(0);
-    const book = reactive({ title: "Vue 3 Guide" });
+    const book = reactive({ title: "Vue 3 Guide", main: true });
 
     function handleInput(e) {
       console.log(e.target.value);
