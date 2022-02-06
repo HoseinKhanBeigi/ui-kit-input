@@ -20,8 +20,8 @@ const allowedTypes = [
   "color",
 ];
 
-export const InputKit = defineComponent({
-  name: "InputKit",
+export const VInput= defineComponent({
+  name: "VInput",
   props: {
     ...COMMON_INPUT_PROPS,
     max: { type: [String, Number], required: false },
@@ -35,7 +35,6 @@ export const InputKit = defineComponent({
   },
   emits: ["update:modelValue", "change", "blur", "input"],
   setup(props, { emit }) {
-    // console.log(props.modelValue);
     const classes = computed(() => {
       const isRange = props.type === "range";
       const isColor = props.type === "color";

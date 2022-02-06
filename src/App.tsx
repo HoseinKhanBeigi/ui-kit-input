@@ -1,6 +1,6 @@
 import { defineComponent, h, reactive, createApp } from "vue";
 
-import { InputKit } from "./input2"
+import { UIInput } from "./input2"
 
 const A = (props: any, { slots }: any) => (
   <>
@@ -206,7 +206,7 @@ export default defineComponent({
     // console.log(slots);
     return () => (
       <div>
-        <InputKit placeholder="enter youe name" type="text" modelValue={"hello"} onInput={(e: any) => handleInput(e)} onChange={(e: any) => handleChange(e)} />
+        <UIInput placeholder="enter youe name" type="text" modelValue={"hello"} onInput={(e: any) => handleInput(e)} onChange={(e: any) => handleChange(e)} />
       </div>
     );
   },
