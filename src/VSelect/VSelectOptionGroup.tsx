@@ -21,7 +21,7 @@ export default defineComponent({
       <optgroup label={props.label}>
         {slots.name()}
 
-        {[1, 2, 3].map((option: any, index: Number) => {
+        {formOptions.value.map((option: any, index: Number) => {
           return (
             <VseletOption
               //   v-for="(option, index) in formOptions"

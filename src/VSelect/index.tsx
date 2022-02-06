@@ -102,6 +102,8 @@ export const VSelect = defineComponent({
       const res: any = props.options;
       return normalizeOptions(res, "BFormSelect", props);
     });
+
+    console.log(formOptions)
     // /computed
 
     // methods
@@ -159,10 +161,11 @@ export const VSelect = defineComponent({
           value={props.modelValue}
           //   onInput={handleInput}
           onChange={handleChange}
-          //   onBlur={handleBlur}
+        //   onBlur={handleBlur}
         >
-          {[].map((option: any, index) => {
-            <div v-for="(option, index) in formOptions">
+          {formOptions.value.map((option: any, index: any) => {
+            console.log(option)
+            return <div>
               <VSelectOptionGroup
                 // v-if="Array.isArray(option.options)"
                 key={`option_${index}`}
@@ -175,9 +178,9 @@ export const VSelect = defineComponent({
                 key={`option2_${index}`}
                 value={option.value}
                 disabled={option.disabled}
-                // v-html="option.html || option.text"
+              // v-html="option.html || option.text"
               />
-            </div>;
+            </div>
           })}
         </select>
       </div>
