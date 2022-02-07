@@ -1,10 +1,10 @@
 import { defineComponent, computed } from "vue";
 import { normalizeOptions } from "../features2/composables/useFormSelect";
-import VseletOption from "./VseletOption";
+import { VSelectoption } from "./VSelectoption";
 
 export default defineComponent({
-  name: "VSelectOptionGroup",
-  components: { VseletOption },
+  name: "VSelectoptiongroup",
+  components: { VSelectoption },
   props: {
     label: { type: String, required: true },
     disabledField: { type: String, default: "disabled" },
@@ -15,16 +15,14 @@ export default defineComponent({
   },
   setup(props: any, { slots }: any) {
     const formOptions = computed(() =>
-      normalizeOptions(props.options, "VSelectOptionGroup", props)
+      normalizeOptions(props.options, "VSelectoptiongroup", props)
     );
     return () => (
       <optgroup label={props.label}>
-        {slots.name()}
-
+        {slots.name?.()}
         {formOptions.value.map((option: any, index: Number) => {
           return (
-            <VseletOption
-              //   v-for="(option, index) in formOptions"
+            <VSelectoption
               key={`option_${index}`}
               value={option.value}
               disabled={option.disabled}
@@ -33,7 +31,7 @@ export default defineComponent({
             />
           );
         })}
-        {slots.default()}
+        {slots.default?.()}
       </optgroup>
     );
   },

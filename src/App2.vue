@@ -1,21 +1,32 @@
 <template>
-  <VInput type="checkbox" />
-  <VSelect name="select" v-model="selected" :options="options"/>
+  <div>
+   
+
+    <VSelect name="select" v-model="selected" :options="options">
+      
+      <VSelectoption :value="name1">Option D</VSelectoption>
+      <VSelectoption :value="name2">Option C</VSelectoption>
+    </VSelect>
+     <VInput type="checkbox" v-model="book.title" />
+  </div>
 </template>
 
 <script>
 import { ref, reactive } from "vue";
 import { VInput } from "./VInput.tsx";
-import { VSelect } from "./VSelect";
+import { VSelect } from "./VSelect/VSelect.tsx";
+import { VSelectoption } from "./VSelect/VSelectoption.tsx";
 
 export default {
-  components: { VInput, VSelect },
+  components: { VInput, VSelect, VSelectoption },
   props: {
     // collectionName: String,
   },
   data() {
     return {
       selected: null,
+      name1: "D",
+      name2: "C",
       options: [
         { value: null, text: "Please select an option" },
         { value: "a", text: "This is First option" },
@@ -26,6 +37,7 @@ export default {
     };
   },
   setup(props) {
+    console.log()
     const readersNumber = ref(0);
     const book = reactive({ title: "Vue 3 Guide", main: true });
 

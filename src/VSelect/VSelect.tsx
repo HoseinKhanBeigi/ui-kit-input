@@ -11,25 +11,12 @@ import {
 } from "vue";
 import "@/style.scss";
 
-import VseletOption from "./VseletOption";
-import VSelectOptionGroup from "./VSelectOptionGroup";
+import { VSelectoption } from "./VSelectoption";
+import { VInput } from "../VInput";
+import VSelectoptiongroup from "./VSelectoptiongroup";
 import useId from "../features2/composables/useId";
 
 import { normalizeOptions } from "../features2/composables/useFormSelect";
-
-const allowedTypes = [
-  "text",
-  "number",
-  "email",
-  "password",
-  "search",
-  "url",
-  "tel",
-  "date",
-  "time",
-  "range",
-  "color",
-];
 
 export const VSelect = defineComponent({
   name: "VSelect",
@@ -49,6 +36,7 @@ export const VSelect = defineComponent({
     required: { type: Boolean, default: false },
     selectSize: { type: Number, default: 0 },
     size: { type: String, required: false },
+    readOnly: { type: Boolean, required: false },
     state: {
       type: Boolean,
       default: null,
@@ -57,10 +45,10 @@ export const VSelect = defineComponent({
     valueField: { type: String, default: "value" },
     modelValue: { type: [String, Array, Object, Number], default: "" },
   },
-  components: { VseletOption, VSelectOptionGroup },
+  components: { VSelectoption, VSelectoptiongroup },
 
   emits: ["update:modelValue", "change", "input"],
-  setup(props, { emit }) {
+  setup(props, { slots, attrs, emit }) {
     const input = ref<HTMLElement>();
     const computedId = useId(props.id, "input");
 
@@ -84,7 +72,7 @@ export const VSelect = defineComponent({
       "is-invalid": props.state === false,
     }));
 
-    const computedSelectSize = computed(() => {
+    const computedSelectSize: any = computed(() => {
       if (props.selectSize || props.plain) {
         return props.selectSize;
       }
@@ -103,25 +91,7 @@ export const VSelect = defineComponent({
       return normalizeOptions(res, "BFormSelect", props);
     });
 
-    console.log(formOptions)
-    // /computed
-
-    // methods
-
-    const onChange = (evt: any) => {
-      const { target } = evt;
-      const selectedVal = Array.from(target.options)
-        .filter((o: any) => o.selected)
-        .map((o: any) => ("_value" in o ? o._value : o.value));
-      nextTick(() => {
-        emit("change", target.multiple ? selectedVal : selectedVal[0]);
-        emit(
-          "update:modelValue",
-          target.multiple ? selectedVal : selectedVal[0]
-        );
-      });
-    };
-
+    const formValue = formOptions.value;
     const focus = () => {
       if (!props.disabled) input.value?.focus();
     };
@@ -141,19 +111,29 @@ export const VSelect = defineComponent({
     );
 
     function handleChange(event: any) {
-      emit("change", event);
-      // return onChange(event)
+      const { target } = event;
+      const selectedVal = Array.from(target.options)
+        .filter((e: any) => e.selected)
+        .map((e: any) => ("_value" in e ? e._value : e.value));
+      nextTick(() => {
+        emit("change", target.multiple ? selectedVal : selectedVal[0]);
+        emit(
+          "update:modelValue",
+          target.multiple ? selectedVal : selectedVal[0]
+        );
+      });
     }
+
     return () => (
-      <div class="input-block">
+      <div>
         <select
           id={`${computedId.value}`}
           ref="input"
           class={classes}
+          multiple={props.multiple}
+          size={computedSelectSize}
           name={props.name || undefined}
           form={props.form || undefined}
-          // multiple={props.multiple || null}
-          // size={computedSelectSize}
           disabled={props.disabled}
           required={props.required}
           aria-required={props.required ? "true" : undefined}
@@ -161,29 +141,34 @@ export const VSelect = defineComponent({
           value={props.modelValue}
           //   onInput={handleInput}
           onChange={handleChange}
-        //   onBlur={handleBlur}
+          //   onBlur={handleBlur}
         >
-          {formOptions.value.map((option: any, index: any) => {
-            console.log(option)
-            return <div>
-              <VSelectOptionGroup
-                // v-if="Array.isArray(option.options)"
-                key={`option_${index}`}
-                label={option.label}
-                options={option.options}
-              />
-
-              <VseletOption
-                v-else
-                key={`option2_${index}`}
-                value={option.value}
-                disabled={option.disabled}
-              // v-html="option.html || option.text"
-              />
-            </div>
+          {slots.default?.()}
+          {formValue.map((option: any, index: any) => {
+            return (
+              <>
+                {Array.isArray(option.options) ? (
+                  <VSelectoptiongroup
+                    key={`option_${index}`}
+                    label={option.label}
+                    options={option.options}
+                  />
+                ) : (
+                  <VSelectoption
+                    key={`option2_${index}`}
+                    value={option.value}
+                    disabled={option.disabled}
+                    v-html={option.html || option.text}
+                  />
+                )}
+              </>
+            );
           })}
         </select>
+        <VInput type="checkbox" modelValue="book.title" />
       </div>
     );
   },
 });
+
+// const A = (props: any, { slots }: any) => <>{slots.default()}</>;

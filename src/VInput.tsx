@@ -35,7 +35,6 @@ export const VInput= defineComponent({
   },
   emits: ["update:modelValue", "change", "blur", "input"],
   setup(props, { emit }) {
-    console.log(props.type)
     const classes = computed(() => {
       const isRange = props.type === "range";
       const isColor = props.type === "color";
@@ -54,7 +53,7 @@ export const VInput= defineComponent({
       allowedTypes.includes(props.type) ? props.type : "text"
     );
 
-    console.log(localType.value,"localType")
+
 
     const {
       //   input,
