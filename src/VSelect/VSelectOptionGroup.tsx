@@ -2,7 +2,7 @@ import { defineComponent, computed } from "vue";
 import { normalizeOptions } from "../features2/composables/useFormSelect";
 import { VSelectoption } from "./VSelectoption";
 
-export default defineComponent({
+export const VSelectoptiongroup =  defineComponent({
   name: "VSelectoptiongroup",
   components: { VSelectoption },
   props: {

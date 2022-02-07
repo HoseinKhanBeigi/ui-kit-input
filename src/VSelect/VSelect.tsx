@@ -13,7 +13,7 @@ import "@/style.scss";
 
 import { VSelectoption } from "./VSelectoption";
 import { VInput } from "../VInput";
-import VSelectoptiongroup from "./VSelectoptiongroup";
+import { VSelectoptiongroup } from "./VSelectoptiongroup";
 import useId from "../features2/composables/useId";
 
 import { normalizeOptions } from "../features2/composables/useFormSelect";
@@ -141,7 +141,7 @@ export const VSelect = defineComponent({
           value={props.modelValue}
           //   onInput={handleInput}
           onChange={handleChange}
-          //   onBlur={handleBlur}
+        //   onBlur={handleBlur}
         >
           {slots.default?.()}
           {formValue.map((option: any, index: any) => {
