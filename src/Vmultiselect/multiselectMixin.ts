@@ -167,10 +167,74 @@ export default {
                 ? options.filter(not((this as any).isSelected))
                 : options
             if ((this as any).taggable && normalizadSearch.length && !(this as any).isExistingOption(normalizadSearch)) {
-                options.push({ isTag: true, label: search })
-            } else {
-                options.unshift({ isTag: true, label: search })
+                if ((this as any).tagPosition === 'bottom') {
+                    options.push({ isTag: true, label: search })
+                } else {
+                    options.unshift({ isTag: true, label: search })
+                }
             }
+
+            return options.slice(0, (this as any).optionsLimit)
+        },
+        valueKeys() {
+            if ((this as any).trackBy) {
+                return (this as any).internalValue.map((element: any) => element[(this as any).trackBy])
+            } else {
+                return (this as any).internalValue
+            }
+        }
+    },
+    watch: {
+        internalValue() {
+            if ((this as any).resetAfter && (this as any).internalValue.length) {
+                (this as any).search = '' || null;
+                (this as any).$emit('input', (this as any).multiple ? [] : null)
+            }
+
+        },
+        search() {
+            (this as any).$emit('search-change', (this as any).search, (this as any).id)
+        }
+    },
+    methods: {
+        getValue() {
+            return (this as any).multiple ? (this as any).internalValue : (this as any).internalValue.length === 0 ? null : (this as any).internalValue[0]
+        },
+        filterAndFlat(options: Array<any>, search: any, label: any) {
+            return flow(
+                filterGroups(search, label, (this as any).groupValues, (this as any).groupLabel, (this as any).customLabel),
+                flattenOptions((this as any).groupValues, (this as any).groupLabel)
+            )(options)
+        },
+        flatAndStrip(options: Array<any>) {
+            return flow(
+                flattenOptions((this as any).groupValues, (this as any).groupLabel),
+                strapiGroups
+            )(options)
+        },
+        updateSearch(query: string) {
+            (this as any).search = query
+        },
+        isExistingOption(query: string) {
+            return !(this as any).option ? false : (this as any).optionKeys.indexOf(query) > -1
+        },
+        isSelected(option: any) {
+            const opt = (this as any).trackBy
+                ? option[(this as any).trackBy]
+                : option
+            return (this as any).valueKeys.indexOf(opt) > -1
+        },
+        isOptionDisabled(option: any) {
+            return !!option.$isDisabled
+        },
+        getOptionLabel(option:any){
+            if(isEmpty(option)) return ''
+            if(option.isTag) return option.label
+            if(option.$isLabel) return option.$groupLabel
+
+            let label = (this as any).customLabel(option , (this as any).label)
+            if(isEmpty(label)) return ''
+            return label
         }
     }
 
