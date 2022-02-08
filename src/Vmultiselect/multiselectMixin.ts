@@ -235,6 +235,15 @@ export default {
             let label = (this as any).customLabel(option , (this as any).label)
             if(isEmpty(label)) return ''
             return label
+        },
+        select(option:any,key:any){
+
+            if(option.$isLabel && (this as any).groupSelect){
+                (this as any).selectGroup(option)
+                return
+            }
+            
+
         }
     }
 
