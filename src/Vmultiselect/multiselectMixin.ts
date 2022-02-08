@@ -161,7 +161,7 @@ export default {
   mounted() {
     if (!(this as any).multiple && (this as any).max) {
       console.warn(
-        "[Vue-Multiselect warn]: Max prop should not be used when prop Multiple equals false."
+        "[Vmultiselect warn]: Max prop should not be used when prop Multiple equals false."
       );
     }
     if (
