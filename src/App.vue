@@ -1,19 +1,16 @@
 <template>
   <div>
-   
-
     <VSelect name="select" v-model="selected" :options="options">
-      
       <VSelectoption :value="name1">Option D</VSelectoption>
       <VSelectoption :value="name2">Option C</VSelectoption>
     </VSelect>
-     <VInput type="checkbox" v-model="book.title" />
+    <VInput type="checkbox" v-model="book.title" />
   </div>
 </template>
 
 <script>
 import { ref, reactive } from "vue";
-import { VInput } from "./VInput.tsx";
+import { VInput } from "./Vinput/VInput.tsx";
 import { VSelect } from "./VSelect/VSelect.tsx";
 import { VSelectoption } from "./VSelect/VSelectoption.tsx";
 
@@ -37,7 +34,7 @@ export default {
     };
   },
   setup(props) {
-    console.log()
+    console.log();
     const readersNumber = ref(0);
     const book = reactive({ title: "Vue 3 Guide", main: true });
 
@@ -49,7 +46,6 @@ export default {
       console.log(e.target.value);
     }
 
-    // expose to template
     return {
       readersNumber,
       book,

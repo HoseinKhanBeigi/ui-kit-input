@@ -12,7 +12,6 @@ import {
 import "@/style.scss";
 
 import { VSelectoption } from "./VSelectoption";
-import { VInput } from "../VInput";
 import { VSelectoptiongroup } from "./VSelectoptiongroup";
 import useId from "../features2/composables/useId";
 
@@ -165,7 +164,6 @@ export const VSelect = defineComponent({
             );
           })}
         </select>
-        <VInput type="checkbox" modelValue="book.title" />
       </div>
     );
   },

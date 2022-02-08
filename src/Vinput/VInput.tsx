@@ -1,10 +1,10 @@
-import { InputType } from "./features2/types";
+import { InputType } from "../features2/types";
 import { computed, defineComponent, PropType, h, onMounted } from "vue";
 // import "./input.scss"
 import "@/style.scss"
 import useFormInput, {
   COMMON_INPUT_PROPS,
-} from "./features2/composables/useFormInput";
+} from "../features2/composables/useFormInput";
 
 const allowedTypes = [
   "text",

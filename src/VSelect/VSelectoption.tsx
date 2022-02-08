@@ -9,9 +9,6 @@ export const VSelectoption = defineComponent({
   },
 
   setup(props: any, { slots }: any) {
-    console.log("hi im from vselectoptio")
-    console.log(props, "propssss");
-
     return () => (
       <option value={props.value ?? ""} disabled={props.disabled}>
         {slots.default?.()}

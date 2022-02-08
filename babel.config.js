@@ -8,5 +8,19 @@ module.exports = {
     ],
     "@babel/preset-typescript",
   ],
-  plugins: [["@babel/transform-runtime"],"@vue/babel-plugin-jsx"],
+  plugins: [
+    ["@babel/transform-runtime"],
+    "@vue/babel-plugin-jsx",
+    "@babel/plugin-transform-typescript",
+    [
+      "module-resolver",
+      {
+        root: ["./"],
+        alias: {
+          "@": "./src",
+          "~": "./examples"
+        }
+      }
+    ]
+  ],
 };
