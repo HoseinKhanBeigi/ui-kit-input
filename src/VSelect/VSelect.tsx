@@ -126,20 +126,20 @@ export const VSelect = defineComponent({
     return () => (
       <div>
         <select
-          id={`${computedId.value}`}
-          ref="input"
-          class={classes}
-          multiple={props.multiple}
-          size={computedSelectSize}
-          name={props.name || undefined}
-          form={props.form || undefined}
-          disabled={props.disabled}
-          required={props.required}
-          aria-required={props.required ? "true" : undefined}
+          // id={`${computedId.value}`}
+          // ref="input"
+          // class={classes}
+          // multiple={props.multiple}
+          // size={computedSelectSize}
+          // name={props.name}
+          // form={props.form}
+          // disabled={props.disabled}
+          // required={props.required}
+          // aria-required={props.required ? "true" : undefined}
           //   v-bind="$attrs"
-          value={props.modelValue}
+          // value={props.modelValue}
           //   onInput={handleInput}
-          onChange={handleChange}
+          // onChange={handleChange}
         //   onBlur={handleBlur}
         >
           {slots.default?.()}

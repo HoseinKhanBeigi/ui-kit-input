@@ -73,7 +73,7 @@ const filterGroups = (
     });
 };
 
-const flow =
+const pipe =
   (...fns: any) =>
   (x: any) =>
     fns.reduce((v: any, f: any) => f(v), x);
@@ -259,7 +259,7 @@ export default {
         : (this as any).internalValue[0];
     },
     filterAndFlat(options: Array<any>, search: any, label: any) {
-      return flow(
+      return pipe(
         filterGroups(
           search,
           label,
@@ -271,7 +271,7 @@ export default {
       )(options);
     },
     flatAndStrip(options: Array<any>) {
-      return flow(
+      return pipe(
         flattenOptions((this as any).groupValues, (this as any).groupLabel),
         strapiGroups
       )(options);

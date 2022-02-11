@@ -4,7 +4,7 @@
       <VSelectoption :value="name1">Option D</VSelectoption>
       <VSelectoption :value="name2">Option C</VSelectoption>
     </VSelect>
-    <VInput type="checkbox" v-model="book.title" />
+    <VInput v-model="book.title" placeholder="pleace enter your name"/>
   </div>
 </template>
 
