@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 function isEmpty(opt: any) {
   if (opt === 0) return false;
@@ -124,6 +124,8 @@ export default {
     let isOpen = false;
     let preferredOpenDirection = "below";
     let optimizedHeight = props.maxHeight;
+    let   pointer = 0;
+    let    pointerDirty = false
 
     const internalValue = computed(() =>
       props.value || props.value === 0
@@ -151,6 +153,49 @@ export default {
         return internalValue.value;
       }
     });
+
+ const  watch()
+
+ const filteredOptions = computed(()=>{
+  
+    const normalizedSearch = search.toLowerCase().trim()
+    let options = props.options.concat()
+
+    if (props.internalSearch) {
+      options = props.groupValues
+        ? filterAndFlat(options, normalizedSearch, props.label)
+        : filterOptions(options, normalizedSearch, props.label, props.customLabel)
+    } else {
+      options = props.groupValues ? flattenOptions(props.groupValues, props.groupLabel)(options) : options
+    }
+
+    options = props.hideSelected
+      ? options.filter(not(isSelected))
+      : options
+
+    if (props.taggable && normalizedSearch.length && !isExistingOption(normalizedSearch)) {
+      if (props.tagPosition === 'bottom') {
+        options.push({ isTag: true, label: search })
+      } else {
+        options.unshift({ isTag: true, label: search })
+      }
+    }
+
+    return options.slice(0, props.optionsLimit)
+  
+ }); 
+
+ const currentOptionLabel = computed(() =>{
+  return props.multiple
+    ? props.searchable ? '' : props.placeholder
+    : internalValue.value.length
+      ? getOptionLabel(internalValue.value[0])
+      : props.searchable ? '' : props.placeholder
+})
+
+
+
+ 
 
     const getValue = () => {
       return props.multiple
@@ -224,7 +269,7 @@ export default {
       )
         return;
 
-      if (key === "Tab" && !(this as any).pointerDirty) return;
+      if (key === "Tab" && !pointerDirty) return;
       if (option.isTag) {
         emit("tag", option.label, props.id);
         search = "";
@@ -304,6 +349,52 @@ export default {
         emit("input", null, props.id);
       }
       if (props.closeOnSelect && shouldClose) deactivate();
+    };
+
+  const  activate= ()=> {
+     
+      if (isOpen || props.disabled) return;
+
+      adjustPosition();
+    
+      if (props.groupValues && pointer === 0 && filteredOptions.value.length) {
+        pointer = 1;
+      }
+
+      isOpen = true;
+    
+      if (props.searchable) {
+        if (!props.preserveSearch) search = '';
+        // this.$nextTick(() => this.$refs.search && this.$refs.search.focus())
+      } else {
+        // this.$el.focus()
+      }
+      emit('open', props.id);
+    };
+
+   const toggle =  () => {
+      isOpen
+        ? deactivate()
+        : activate()
+    };
+   
+  const  adjustPosition = () =>{
+      if (typeof window === 'undefined') return
+
+      let myElement:HTMLElement | null = document.getElementById(`id`);
+      var rect = myElement.getBoundingClientRect();
+
+      // const spaceAbove = div.getBoundingClientRect().top
+      // const spaceBelow = window.innerHeight - document.getBoundingClientRect().bottom
+      // const hasEnoughSpaceBelow = spaceBelow > props.maxHeight
+
+      // if (hasEnoughSpaceBelow || spaceBelow > spaceAbove || this.openDirection === 'below' || this.openDirection === 'bottom') {
+      //   this.preferredOpenDirection = 'below'
+      //   this.optimizedHeight = Math.min(spaceBelow - 40, this.maxHeight)
+      // } else {
+      //   this.preferredOpenDirection = 'above'
+      //   this.optimizedHeight = Math.min(spaceAbove - 40, this.maxHeight)
+      // }
     };
 
     const deactivate = () => {
