@@ -21,29 +21,8 @@ const allowedTypes = [
 export const VInput = defineComponent({
   name: "VInput",
   props: {
-    ariaInvalid: {
-      type: [Boolean, String],
-      default: false,
-    },
-    autocomplete: { type: String, required: false },
-    autofocus: { type: Boolean, default: false },
-    disabled: { type: Boolean, default: false },
-    form: { type: String, required: false },
-    formatter: { type: Function, required: false },
-    id: { type: String, required: false },
-    lazy: { type: Boolean, default: false },
-    lazyFormatter: { type: Boolean, default: false },
-    list: { type: String, required: false },
-    modelValue: { type: [String, Number], default: '' },
-    name: { type: String, required: false },
-    number: { type: Boolean, default: false },
-    placeholder: { type: String, required: false },
-    plaintext: { type: Boolean, default: false },
-    readonly: { type: Boolean, default: false },
-    required: { type: Boolean, default: false },
-    size: { type: String, required: false },
-    state: { type: Boolean, default: null },
-    trim: { type: Boolean, default: false },
+    ...COMMON_INPUT_PROPS,
+    ref:{ type: [String, Number], required: false },
     max: { type: [String, Number], required: false },
     min: { type: [String, Number], required: false },
     step: { type: [String, Number], required: false },
@@ -73,37 +52,34 @@ export const VInput = defineComponent({
       allowedTypes.includes(props.type) ? props.type : "text"
     );
 
-    console.log(props)
-
-
 
     const {
-      //   input,
+        input,
       computedId,
       //   computedAriaInvalid,
-      //   onInput,
-      //   onChange,
-      //   onBlur,
-      //   focus,
+        onInput,
+        onChange,
+        onBlur,
+        focus,
       //   blur,
     } = useFormInput(props, emit);
 
     function handleInput(event: any) {
-      emit("input", event);
-      // return onInput(event)
+       onInput(event)
     }
     function handleChange(event: any) {
-      emit("change", event);
-      // return onChange(event)
+       onChange(event)
+      
     }
     function handleBlur(event: any) {
-      emit("blur");
-      // return onBlur(event)
+       onBlur(event)
+ 
     }
+   
     return () => (
       <div class="input-block">
         <input
-          ref="input"
+          ref={input}  
           value={props.modelValue}
           placeholder={props.placeholder}
           id={`${computedId.value}`}
@@ -120,12 +96,9 @@ export const VInput = defineComponent({
           step={props.step}
           list={props.type !== "password" ? props.list : undefined}
           aria-required={props.required ? "true" : undefined}
-          // v-bind="$attrs"
           onInput={handleInput}
           onChange={handleChange}
           onBlur={handleBlur}
-
-        // v-model={["val", ["modifier"]]}
         />
         <span class="placeholder">Placeholder</span>
       </div>
