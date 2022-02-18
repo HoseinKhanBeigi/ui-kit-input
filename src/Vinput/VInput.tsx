@@ -1,8 +1,7 @@
-import { InputType } from "../features2/types";
-import { computed, defineComponent, PropType, h, onMounted } from "vue";
-// import "./input.scss"
+
+import { computed, defineComponent } from "vue";
 import "@/style.scss"
-import useFormInput, { COMMON_INPUT_PROPS } from "../features2/composables/useFormInput";
+import useFormInput, { COMMON_INPUT_PROPS } from "../features/composables/useFormInput";
 
 const allowedTypes = [
   "text",
@@ -22,7 +21,7 @@ export const VInput = defineComponent({
   name: "VInput",
   props: {
     ...COMMON_INPUT_PROPS,
-    ref:{ type: [String, Number], required: false },
+    ref: { type: [String, Number], required: false },
     max: { type: [String, Number], required: false },
     min: { type: [String, Number], required: false },
     step: { type: [String, Number], required: false },
@@ -54,32 +53,35 @@ export const VInput = defineComponent({
 
 
     const {
-        input,
+      input,
       computedId,
       //   computedAriaInvalid,
-        onInput,
-        onChange,
-        onBlur,
-        focus,
-      //   blur,
+      onInput,
+      onChange,
+      onBlur,
+      focus,
+      blur,
     } = useFormInput(props, emit);
 
     function handleInput(event: any) {
-       onInput(event)
+      onInput(event)
     }
     function handleChange(event: any) {
-       onChange(event)
-      
+      onChange(event)
+
     }
-    function handleBlur(event: any) {
-       onBlur(event)
- 
-    }
-   
+    // function handleBlur(event: any) {
+    //    onBlur(event)
+    // }
+
+    // function handleFocus(){
+    //   focus()
+    // }
+
     return () => (
       <div class="input-block">
         <input
-          ref={input}  
+          ref={input}
           value={props.modelValue}
           placeholder={props.placeholder}
           id={`${computedId.value}`}
@@ -98,7 +100,8 @@ export const VInput = defineComponent({
           aria-required={props.required ? "true" : undefined}
           onInput={handleInput}
           onChange={handleChange}
-          onBlur={handleBlur}
+          on-Blur={blur()}
+          on-Focus={focus()}
         />
         <span class="placeholder">Placeholder</span>
       </div>

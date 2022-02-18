@@ -1792,7 +1792,7 @@
 
 "@vue/cli-plugin-unit-jest@^4.5.15":
   version "4.5.15"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-unit-jest/-/cli-plugin-unit-jest-4.5.15.tgz#7be914ca1507ca344487eb377ed925c9db0b772a"
+  resolved "https://registry.npmjs.org/@vue/cli-plugin-unit-jest/-/cli-plugin-unit-jest-4.5.15.tgz"
   integrity sha512-oE3RDMerb21P6ALg70Zh2zU+RYYjoe09/7ZXYUj03uTb2obqUbcINpFfeVwM0B/J6H1YmqWJpnNBxWURhrqQHg==
   dependencies:
     "@babel/core" "^7.11.0"
@@ -2024,6 +2024,11 @@
   version "1.3.0"
   resolved "https://registry.npmjs.org/@vue/web-component-wrapper/-/web-component-wrapper-1.3.0.tgz"
   integrity sha512-Iu8Tbg3f+emIIMmI2ycSI8QcEuAUgPTgHwesDU1eKMLE4YC/c/sFbGc70QgMq31ijRftV0R7vCm9co6rldCeOA==
+
+"@vueform/multiselect@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.npmjs.org/@vueform/multiselect/-/multiselect-2.3.2.tgz"
+  integrity sha512-1M/le6UwTemTHRWF8aqHU3wRVwlyWNLqh8BWDmx80ygbS80P52lhfexGNh80C2P6H8AsrIoCfvdEJtfqQ/UHCg==
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -10569,6 +10574,16 @@ vue-loader@^15.9.2:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-multiselect@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.npmjs.org/vue-multiselect/-/vue-multiselect-2.1.6.tgz"
+  integrity sha512-s7jmZPlm9FeueJg1RwJtnE9KNPtME/7C8uRWSfp9/yEN4M8XcS/d+bddoyVwVnvFyRh9msFo0HWeW0vTL8Qv+w==
+
+"vue-prev-composition-api@npm:@vue/composition-api@^1.2.4":
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.4.6.tgz#886c35221cd7c6f55272543a121240e8d3a1306c"
+  integrity sha512-UP359OJ0G0Zli603/i9fhXFmNtZUSrypSFyqClMxizp8ezlaMK2GCmHgy3qyrRnO/xjcDAx09vvXPwNFtxHPtQ==
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.3"

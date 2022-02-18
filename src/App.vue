@@ -1,62 +1,112 @@
 <template>
   <div>
-    <VSelect name="select" v-model="selected" :options="options">
-      <VSelectoption :value="name1">Option D</VSelectoption>
-      <VSelectoption :value="name2">Option C</VSelectoption>
-    </VSelect>
-    <VMultiselect />
+    <div>
+      <label class="typo__label">Tagging</label>
+      <Multiselect v-model="example7.value" v-bind="example7"></Multiselect>
+      <pre class="language-json"><code>{{ value  }}</code></pre>
+    </div>
     <VInput
-      v-model="book.title"
       id="input-live"
       :state="nameState"
       aria-describedby="input-live-help input-live-feedback"
       placeholder="Enter your name"
       trim
-      
+      v-model="book.title"
       @input="handleInput"
       @change="handleChange"
       @onBlur="handleBlue"
     />
-    <b-form-invalid-feedback id="input-live-feedback">
-      Enter at least 3 letters
-    </b-form-invalid-feedback>
-
-    <b-form-text id="input-live-help" v-model="book.title"
-      >Your full name.</b-form-text
-    >
   </div>
 </template>
 
 <script>
 import { ref, reactive, computed } from "vue";
-import { VInput } from "./Vinput/VInput.tsx";
-import { VSelect } from "./VSelect/VSelect.tsx";
-import {VMultiselect} from "./Vmultiselect/VMultiselect.tsx"
-import { VSelectoption } from "./VSelect/VSelectoption.tsx";
+import { VInput } from "./VInput/VInput.tsx";
+
+import Multiselect from "./multiselect/VMultiselect.vue";
+
+const fetchLanguages = async (query) => {
+  // From: https://www.back4app.com/database/paul-datasets/list-of-all-programming-languages/get-started/javascript/rest-api/fetch?objectClassSlug=dataset
+
+  let where = "";
+
+  if (query) {
+    where =
+      "&where=" +
+      encodeURIComponent(
+        JSON.stringify({
+          ProgrammingLanguage: {
+            $regex: `${query}|${query.toUpperCase()}|${
+              query[0].toUpperCase() + query.slice(1)
+            }`,
+          },
+        })
+      );
+  }
+
+  const response = await fetch(
+    "https://parseapi.back4app.com/classes/All_Programming_Languages?order=ProgrammingLanguage&keys=ProgrammingLanguage" +
+      where,
+    {
+      headers: {
+        "X-Parse-Application-Id": "XpRShKqJcxlqE5EQKs4bmSkozac44osKifZvLXCL", // This is the fake app's application id
+        "X-Parse-Master-Key": "Mr2UIBiCImScFbbCLndBv8qPRUKwBAq27plwXVuv", // This is the fake app's readonly master key
+      },
+    }
+  );
+
+  const data = await response.json(); // Here you have the data that you need
+
+  return data.results.map((item) => {
+    return { value: item.ProgrammingLanguage, label: item.ProgrammingLanguage };
+  });
+};
 
 export default {
-  components: { VInput, VSelect, VSelectoption ,VMultiselect},
+  components: { VInput, Multiselect },
   props: {
     // collectionName: String,
   },
   data() {
     return {
-      selected: null,
-      name1: "D",
-      name2: "C",
-      options: [
-        { value: null, text: "Please select an option" },
-        { value: "a", text: "This is First option" },
-        { value: "b", text: "Selected Option" },
-        { value: { C: "3PO" }, text: "This is an option with object value" },
-        { value: "d", text: "This one is disabled", disabled: true },
-      ],
+      value: null,
+      example7: {
+        mode: "tags",
+        closeOnSelect: false,
+        value: [],
+        placeholder: "Choose your stack",
+        filterResults: false,
+        minChars: 1,
+        resolveOnLoad: false,
+        delay: 0,
+        searchable: true,
+        options: async (query) => {
+          return await fetchLanguages(query);
+        },
+      },
     };
+  },
+  methods: {
+    addTag(newTag) {
+      const tag = {
+        name: newTag,
+        code: newTag.substring(0, 2) + Math.floor(Math.random() * 10000000),
+      };
+      this.options.push(tag);
+      this.value.push(tag);
+    },
   },
   setup(props) {
     console.log();
-    const readersNumber = ref(0);
+    // const state = reactive({
+    //   optionss: [
+    //     { name: "Vue.js", code: "vu" },
+    //     { name: "Javascript", code: "js" },
+    //     { name: "Open Source", code: "os" },
+    //   ],
+    // });
     const book = reactive({ title: "ss", main: true });
+    // const value = ref([{ name: "Javascript", code: "js" }]);
 
     function handleInput(e) {
       console.log(e);
@@ -70,10 +120,23 @@ export default {
       return book.title.length > 2 ? true : false;
     });
 
-    function handleBlue() {}
+    const options = [
+      { name: "Vue.js", code: "vu" },
+      { name: "Javascript", code: "js" },
+      { name: "Open Source", code: "os" },
+    ];
+
+    const value2 = [
+      { name: "Vue.js", code: "vu" },
+      { name: "Javascript", code: "js" },
+      { name: "Open Source", code: "os" },
+    ];
+
+    console.log(options, "options");
 
     return {
-      readersNumber,
+      // options,
+      // value2,
       book,
       nameState,
       handleInput,
@@ -82,3 +145,5 @@ export default {
   },
 };
 </script>
+
+<style src="@vueform/multiselect/themes/default.css"></style>
