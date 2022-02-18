@@ -1,7 +1,6 @@
 
 import { computed, defineComponent } from "vue";
-import "@/style.scss"
-import useFormInput, { COMMON_INPUT_PROPS } from "../features/composables/useFormInput";
+import useFormInput, { COMMON_INPUT_PROPS } from "./composables/useFormInput";
 
 const allowedTypes = [
   "text",

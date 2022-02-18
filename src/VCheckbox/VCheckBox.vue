@@ -31,10 +31,10 @@
 </template>
 
 <script lang="ts">
-import {getClasses, getInputClasses, getLabelClasses} from '../features/composables/useFormCheck'
+import {getClasses, getInputClasses, getLabelClasses} from './composables/useFormCheck'
 import {computed, defineComponent, onMounted, PropType, Ref, ref, watch} from 'vue'
 import {InputSize} from '../features/types'
-import useId from '../features/composables/useId'
+import useId from "../features/composables/useId"
 
 export const VCheckbox = defineComponent({
   name: 'VCheckbox',

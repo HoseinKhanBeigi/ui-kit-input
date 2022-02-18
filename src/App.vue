@@ -1,9 +1,7 @@
 <template>
   <div>
-    <div>
-      <label class="typo__label">Tagging</label>
+    <div class="test">
       <Multiselect v-model="example7.value" v-bind="example7"></Multiselect>
-      <pre class="language-json"><code>{{ value  }}</code></pre>
     </div>
     <VInput
       id="input-live"
@@ -23,7 +21,7 @@
 import { ref, reactive, computed } from "vue";
 import { VInput } from "./VInput/VInput.tsx";
 
-import Multiselect from "./multiselect/VMultiselect.vue";
+import Multiselect from "./VMultiselect/Multiselect.vue";
 
 const fetchLanguages = async (query) => {
   // From: https://www.back4app.com/database/paul-datasets/list-of-all-programming-languages/get-started/javascript/rest-api/fetch?objectClassSlug=dataset
@@ -70,20 +68,6 @@ export default {
   data() {
     return {
       value: null,
-      example7: {
-        mode: "tags",
-        closeOnSelect: false,
-        value: [],
-        placeholder: "Choose your stack",
-        filterResults: false,
-        minChars: 1,
-        resolveOnLoad: false,
-        delay: 0,
-        searchable: true,
-        options: async (query) => {
-          return await fetchLanguages(query);
-        },
-      },
     };
   },
   methods: {
@@ -134,9 +118,24 @@ export default {
 
     console.log(options, "options");
 
+    const example7 = {
+      mode: "tags",
+      closeOnSelect: false,
+      value: [],
+      placeholder: "Choose your stack",
+      filterResults: false,
+      minChars: 1,
+      resolveOnLoad: false,
+      delay: 0,
+      searchable: true,
+      options: async (query) => {
+        return await fetchLanguages(query);
+      },
+    };
+
     return {
       // options,
-      // value2,
+      example7,
       book,
       nameState,
       handleInput,
@@ -145,5 +144,10 @@ export default {
   },
 };
 </script>
-
-<style src="@vueform/multiselect/themes/default.css"></style>
+<style src="./VMultiselect/themes/default.css"></style>
+<style scoped>
+.test {
+  width: 30%;
+  display: flex;
+}
+</style>

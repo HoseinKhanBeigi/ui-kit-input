@@ -1,4 +1,4 @@
-import { Size } from "../types";
+import { Size } from "../../features/types";
 import {
   computed,
   ExtractPropTypes,
@@ -9,7 +9,7 @@ import {
   ref,
   watch,
 } from "vue";
-import useId from "./useId";
+import useId from '../../features/composables/useId'
 
 export const COMMON_INPUT_PROPS = {
   ariaInvalid: {
