@@ -1,4 +1,11 @@
-import { ref, computed, watch, nextTick, ExtractPropTypes } from "vue";
+import {
+  ref,
+  computed,
+  watch,
+  nextTick,
+  ExtractPropTypes,
+  defineComponent,
+} from "vue";
 
 function isEmpty(opt: any) {
   if (opt === 0) return false;
@@ -24,8 +31,11 @@ const filterOptions = (
   label: string,
   customLabel: Function
 ) => {
-  return options.filter((option: any) =>
-    includes(customLabel(option, label), search)
+  return (
+    Array.isArray(options) &&
+    options.filter((option: any) =>
+      includes(customLabel(option, label), search)
+    )
   );
 };
 
@@ -69,7 +79,7 @@ const filterGroups = (
         customLabel
       );
 
-      return groupOptions.length
+      return Array.isArray(groupOptions) && groupOptions.length
         ? { [groupLabel]: group[groupLabel], [values]: groupOptions }
         : [];
     });
@@ -86,46 +96,46 @@ const customLabelType = (option: any, label: String | any): any => {
 };
 const emptyArray = () => [];
 export const COMMON_INPUT_PROPS = {
-  internalSearch: { type: Boolean, default: true },
-  options: { type: Array, required: true },
-  multiple: { type: Boolean, default: false },
-  value: { type: null, default: [] },
-  trackBy: { type: String },
-  label: { type: String },
-  disabled: { type: Boolean, default: false },
-  searchable: { type: Boolean, default: true },
-  clearOnSelect: { type: Boolean, default: true },
-  hideSelected: { type: Boolean, default: false },
-  placeholder: { type: String, default: "select option" },
-  allowEmpty: { type: Boolean, default: true },
-  closeOnSelect: { type: Boolean, default: true },
-  resetAfter: { type: Boolean, default: false },
-  closeSelect: { type: Boolean, default: true },
-  customLabel: { type: Function, default: typeof customLabelType },
-  taggable: { type: Boolean, default: false },
-  tagPlaceholder: { type: String, default: "Press enter to create a tag" },
-  tagPosition: { type: String, default: "top" },
-  max: { type: [Number, Boolean], default: false },
-  id: { default: null },
-  groupValues: { type: String },
-  optionsLimit: { type: Number, default: 1000 },
-  groupLabel: { type: String },
-  groupSelect: { type: Boolean, default: false },
-  blockKeys: { type: Array, default: typeof emptyArray },
-  preserveSearch: { type: Boolean, default: false },
-  preselectFirst: { type: Boolean, default: false },
-  maxHeight: { type: Number, default: 300 },
-  showPointer: {
-    type: Boolean,
-    default: true,
-  },
-  optionHeight: {
-    type: Number,
-    default: 40,
-  },
+  // internalSearch: { type: Boolean, default: true },
+  // options: { type: Array, required: true },
+  // multiple: { type: Boolean, default: false },
+  // value: { type: null, default: [] },
+  // trackBy: { type: String },
+  // label: { type: String },
+  // disabled: { type: Boolean, default: false },
+  // searchable: { type: Boolean, default: true },
+  // clearOnSelect: { type: Boolean, default: true },
+  // hideSelected: { type: Boolean, default: false },
+  // placeholder: { type: String, default: "select option" },
+  // allowEmpty: { type: Boolean, default: true },
+  // closeOnSelect: { type: Boolean, default: true },
+  // resetAfter: { type: Boolean, default: false },
+  // closeSelect: { type: Boolean, default: true },
+  // customLabel: { type: Function, default: typeof customLabelType },
+  // taggable: { type: Boolean, default: false },
+  // tagPlaceholder: { type: String, default: "Press enter to create a tag" },
+  // tagPosition: { type: String, default: "top" },
+  // max: { type: [Number, Boolean], default: false },
+  // id: { default: null },
+  // groupValues: { type: String },
+  // optionsLimit: { type: Number, default: 1000 },
+  // groupLabel: { type: String },
+  // groupSelect: { type: Boolean, default: false },
+  // blockKeys: { type: Array, default: typeof emptyArray },
+  // preserveSearch: { type: Boolean, default: false },
+  // preselectFirst: { type: Boolean, default: false },
+  // maxHeight: { type: Number, default: 300 },
+  // showPointer: {
+  //   type: Boolean,
+  //   default: true,
+  // },
+  // optionHeight: {
+  //   type: Number,
+  //   default: 40,
+  // },
 };
 
-type InputProps = ExtractPropTypes<typeof COMMON_INPUT_PROPS>;
+// type InputProps = ExtractPropTypes<typeof COMMON_INPUT_PROPS>;
 type InputEmitType = (
   event:
     | "update:modelValue"
@@ -141,9 +151,7 @@ type InputEmitType = (
   ...args: any[]
 ) => void;
 
-function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
-
-  console.log(props)
+function useFormMultiSelect(props: any, emit: InputEmitType) {
   let search = "";
   let isOpen = false;
   let preferredOpenDirection = "below";
@@ -171,7 +179,7 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
 
   const filteredOptions = computed(() => {
     const normalizedSearch = search.toLowerCase().trim();
-    let options = props.options.concat();
+    let options = props.options?.concat();
 
     if (props.internalSearch) {
       options = props.groupValues
@@ -202,7 +210,7 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
       }
     }
 
-    return options.slice(0, props.optionsLimit);
+    return Array.isArray(options) && options.slice(0, props.optionsLimit);
   });
 
   const valueKeys = computed(() => {
@@ -318,14 +326,15 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
   };
 
   const addPointerElement = ({ key }: any = "Enter") => {
-    if (filteredOptions.value.length > 0) {
-      select(filteredOptions.value[pointer], key);
+    if (filteredOptions.value && filteredOptions.value.length > 0) {
+      select(filteredOptions.value && filteredOptions.value[pointer], key);
     }
     pointerReset();
   };
 
   const pointerForward = () => {
-    if (pointer < filteredOptions.value.length - 1) {
+    const F: any = filteredOptions.value && filteredOptions.value.length;
+    if (pointer < F - 1) {
       pointer++;
       if (
         list.value &&
@@ -339,6 +348,7 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
       }
 
       if (
+        filteredOptions.value &&
         filteredOptions.value[pointer] &&
         filteredOptions.value[pointer].isLabel &&
         !props.groupSelect
@@ -356,6 +366,7 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
       }
 
       if (
+        filteredOptions.value &&
         filteredOptions.value[pointer] &&
         filteredOptions.value[pointer].isLabel &&
         !props.groupSelect
@@ -363,6 +374,7 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
         pointerBackward();
     } else {
       if (
+        filteredOptions.value &&
         filteredOptions.value[pointer] &&
         filteredOptions.value[0].isLabel &&
         !props.groupSelect
@@ -381,13 +393,16 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
   };
 
   const pointerAdjust = () => {
-    if (pointer >= filteredOptions.value.length - 1) {
-      pointer = filteredOptions.value.length
-        ? filteredOptions.value.length - 1
-        : 0;
+    const F: any = filteredOptions.value && filteredOptions.value.length;
+    if (pointer >= F - 1) {
+      pointer =
+        filteredOptions.value && filteredOptions.value.length
+          ? filteredOptions.value.length - 1
+          : 0;
     }
 
     if (
+      filteredOptions.value &&
       filteredOptions.value.length > 0 &&
       filteredOptions.value[pointer].isLabel &&
       !props.groupSelect
@@ -554,12 +569,17 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
     if (props.closeOnSelect && shouldClose) deactivate();
   };
 
-  const activate = () => {
+  function activate() {
     if (isOpen || props.disabled) return;
 
     adjustPosition();
 
-    if (props.groupValues && pointer === 0 && filteredOptions.value.length) {
+    if (
+      props.groupValues &&
+      pointer === 0 &&
+      filteredOptions.value &&
+      filteredOptions.value.length
+    ) {
       pointer = 1;
     }
 
@@ -572,7 +592,7 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
       // this.$el.focus()
     }
     emit("open", props.id);
-  };
+  }
 
   const toggle = () => {
     isOpen ? deactivate() : activate();
@@ -609,7 +629,7 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
     emit("close", getValue(), props.id);
   };
 
-  return{
+  return {
     pointerPosition,
     visibleElements,
     internalValue,
@@ -640,8 +660,14 @@ function useFormMultiSelect(props: Readonly<InputProps>, emit: InputEmitType) {
     activate,
     toggle,
     deactivate,
-    adjustPosition
-  }
+    adjustPosition,
+    search,
+    isOpen,
+    preferredOpenDirection,
+    optimizedHeight,
+    pointer,
+    pointerDirty,
+  };
 }
 
 export default useFormMultiSelect;

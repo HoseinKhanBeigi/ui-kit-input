@@ -4,6 +4,7 @@
       <VSelectoption :value="name1">Option D</VSelectoption>
       <VSelectoption :value="name2">Option C</VSelectoption>
     </VSelect>
+    <VMultiselect />
     <VInput
       v-model="book.title"
       id="input-live"
@@ -30,10 +31,11 @@
 import { ref, reactive, computed } from "vue";
 import { VInput } from "./Vinput/VInput.tsx";
 import { VSelect } from "./VSelect/VSelect.tsx";
+import {VMultiselect} from "./Vmultiselect/VMultiselect.tsx"
 import { VSelectoption } from "./VSelect/VSelectoption.tsx";
 
 export default {
-  components: { VInput, VSelect, VSelectoption },
+  components: { VInput, VSelect, VSelectoption ,VMultiselect},
   props: {
     // collectionName: String,
   },
