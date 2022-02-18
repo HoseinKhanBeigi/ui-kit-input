@@ -7,123 +7,111 @@
     class="bv-no-focus-ring"
     tabindex="-1"
   >
-    <template v-for="(item, key) in checkboxList" :key="key">
-      <VCheckbox
+    <div v-for="(item, key) in checkboxList" :key="key">
+      <VCheckBox
         v-model="item.model"
         v-bind="item.props"
         @change="childUpdated($event, item.props?.value)"
       >
+        <!-- eslint-disable vue/no-v-html -->
         <span v-if="item.html" v-html="item.html" />
+        <!--eslint-enable-->
         <span v-else v-text="item.text" />
-      </VCheckbox>
-    </template>
+      </VCheckBox>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, watch } from "vue";
-import { ColorVariant, Size } from "../features/types";
-import { VCheckbox } from "./VCheckBox.vue";
-import useId from "../features/composables/useId";
+import {computed, defineComponent, PropType, watch} from 'vue'
+import {ColorVariant, Size} from '../features/types'
+import useId from '../features/composables/useId'
+import VCheckBox from "./VCheckBox.vue"
 import {
   bindGroupProps,
   getGroupAttr,
   getGroupClasses,
   optionToElement,
   slotsToElements,
-} from "../features/composables/useFormCheck";
+} from '../features/composables/useFormCheck'
 
-export const VCheckboxGroup = defineComponent({
-  components: { VCheckbox },
-  name: "VCheckboxGroup",
+export default defineComponent({
+  name: 'BFormCheckboxGroup',
+    components: {  VCheckBox },
   props: {
-    modelValue: { type: Array, default: () => [] },
-    ariaInvalid: { type: [Boolean, String], default: null },
-    autofocus: { type: Boolean, default: false },
-    buttonVariant: {
-      type: String as PropType<ColorVariant>,
-      default: "secondary",
-    },
-    buttons: { type: Boolean, default: false },
-    disabled: { type: Boolean, default: false },
-    disabledField: { type: String, default: "disabled" },
-    form: { type: String },
-    htmlField: { type: String, default: "html" },
-    id: { type: String },
-    name: { type: String },
-    options: { type: Array, default: () => [] }, // Objects are not supported yet
-    plain: { type: Boolean, default: false },
-    required: { type: Boolean, default: false },
-    size: { type: String as PropType<Size> },
-    stacked: { type: Boolean, default: false },
-    state: { type: Boolean, default: null },
-    switches: { type: Boolean, default: false },
-    textField: { type: String, default: "text" },
-    validated: { type: Boolean, default: false },
-    valueField: { type: String, default: "value" },
+    modelValue: {type: Array, default: () => []},
+    ariaInvalid: {type: [Boolean, String], default: null},
+    autofocus: {type: Boolean, default: false},
+    buttonVariant: {type: String, default: 'secondary'},
+    buttons: {type: Boolean, default: false},
+    disabled: {type: Boolean, default: false},
+    disabledField: {type: String, default: 'disabled'},
+    form: {type: String},
+    htmlField: {type: String, default: 'html'},
+    id: {type: String},
+    name: {type: String},
+    options: {type: Array, default: () => []}, // Objects are not supported yet
+    plain: {type: Boolean, default: false},
+    required: {type: Boolean, default: false},
+    size: {type: String},
+    stacked: {type: Boolean, default: false},
+    state: {type: Boolean, default: null},
+    switches: {type: Boolean, default: false},
+    textField: {type: String, default: 'text'},
+    validated: {type: Boolean, default: false},
+    valueField: {type: String, default: 'value'},
   },
-  emits: ["update:modelValue", "change", "input"],
-  setup(props, { emit, slots }) {
-    const slotsName = "BFormCheckbox";
-    const computedId = useId(props.id, "checkbox");
-    const computedName = useId(props.name, "checkbox");
+  emits: ['update:modelValue', 'change', 'input'],
+  setup(props, {emit, slots}) {
+    const slotsName = 'BFormCheckbox'
+    const computedId = useId(props.id, 'checkbox')
+    const computedName = useId(props.name, 'checkbox')
 
     const localChecked = computed({
       get: () => props.modelValue,
       set: (newValue: any) => {
-        if (JSON.stringify(newValue) === JSON.stringify(props.modelValue))
-          return;
-        emit("input", newValue);
-        emit("update:modelValue", newValue);
-        emit("change", newValue);
+        if (JSON.stringify(newValue) === JSON.stringify(props.modelValue)) return
+        emit('input', newValue)
+        emit('update:modelValue', newValue)
+        emit('change', newValue)
       },
-    });
+    })
 
     const checkboxList = computed(() =>
-      (slots.first
-        ? slotsToElements(slots.first(), slotsName, props.disabled)
-        : []
-      )
+      (slots.first ? slotsToElements(slots.first(), slotsName, props.disabled) : [])
         .concat(props.options.map((e) => optionToElement(e, props)))
-        .concat(
-          slots.default
-            ? slotsToElements(slots.default(), slotsName, props.disabled)
-            : []
-        )
-        .map((e, idx) =>
-          bindGroupProps(e, idx, props, computedName, computedId)
-        )
+        .concat(slots.default ? slotsToElements(slots.default(), slotsName, props.disabled) : [])
+        .map((e, idx) => bindGroupProps(e, idx, props, computedName, computedId))
         .map((e) => ({
           ...e,
-          model: props.modelValue.find((mv) => e.props?.value === mv)
-            ? e.props?.value
-            : false,
+          model: props.modelValue.find((mv) => e.props?.value === mv) ? e.props?.value : false,
           props: {
             switch: props.switches,
             ...e.props,
           },
         }))
-    );
+    )
 
     const childUpdated = (newValue: any, checkedValue: any) => {
       const resp = props.modelValue.filter(
         (e) => JSON.stringify(e) !== JSON.stringify(checkedValue)
-      );
-      if (JSON.stringify(newValue) === JSON.stringify(checkedValue))
-        resp.push(newValue);
-      emit("update:modelValue", resp);
-      emit("change", resp);
-    };
+      )
+      if (JSON.stringify(newValue) === JSON.stringify(checkedValue)) resp.push(newValue)
+      emit('update:modelValue', resp)
+      emit('change', resp)
+    }
 
-    const attrs = getGroupAttr(props);
-    const classes = getGroupClasses(props);
+    const attrs = getGroupAttr(props)
+    const classes = getGroupClasses(props)
 
     watch(
       () => props.modelValue,
       (newValue) => {
-        emit("input", newValue);
+        emit('input', newValue)
       }
-    );
+    )
+
+    // TODO: make jest tests compatible with the v-focus directive
 
     return {
       attrs,
@@ -132,7 +120,7 @@ export const VCheckboxGroup = defineComponent({
       childUpdated,
       computedId,
       localChecked,
-    };
+    }
   },
-});
+})
 </script>

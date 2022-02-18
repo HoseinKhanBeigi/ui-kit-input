@@ -1,23 +1,89 @@
 <template>
   <div>
     <div class="test">
-      <Multiselect v-model="example7.value" v-bind="example7"></Multiselect>
+      <Multiselect
+        v-model="multiselectAsync.value"
+        v-bind="multiselectAsync"
+      ></Multiselect>
+      <Multiselect
+        v-model="selectOption.value"
+        v-bind="selectOption"
+      ></Multiselect>
+      <Multiselect
+        v-model="selectOption2.value"
+        v-bind="selectOption2"
+      ></Multiselect>
+      <Multiselect
+        v-model="selectOption3.value"
+        v-bind="selectOption3"
+      ></Multiselect>
+      <Multiselect
+        v-model="selectOption4.value"
+        v-bind="selectOption4"
+      ></Multiselect>
+      <Multiselect
+        v-model="selectOption5.value"
+        v-bind="selectOption5"
+      ></Multiselect>
+       <Multiselect
+        v-model="selectOption6.value"
+        v-bind="selectOption6"
+      ></Multiselect>
+    <Multiselect
+      v-model="selectOption7.value"
+      v-bind="selectOption7"
+    >
+      <template v-slot:tag="{ option, handleTagRemove, disabled }">
+        <div class="multiselect-tag is-user">
+          <img :src="option.image">
+          {{ option.name }}
+          <span
+            v-if="!disabled"
+            class="multiselect-tag-remove"
+            @mousedown.prevent="handleTagRemove(option, $event)"
+          >
+            <span class="multiselect-tag-remove-icon"></span>
+          </span>
+        </div>
+      </template>
+
+      <template v-slot:option="{ option }">
+        <img class="user-image" :src="option.image"> {{ option.name }}
+      </template>
+    </Multiselect>
     </div>
 
     <div class="example">
-      <div class="output">Data: {{ example1.value }}</div>
-      <VSwitch v-model="example1.value" v-bind="example1"></VSwitch>
+      <div class="output">Data: {{ Vswitch.value }}</div>
+      <VSwitch v-model="Vswitch.value" v-bind="Vswitch"></VSwitch>
     </div>
-    <VInput
-      id="input-live"
-      :state="nameState"
-      aria-describedby="input-live-help input-live-feedback"
-      placeholder="Enter your name"
-      trim
-      v-model="book.title"
-      @input="handleInput"
-      @change="handleChange"
-      @onBlur="handleBlue"
+    <div>
+      <VInput id="input-1" v-model="book.title" :name="book.title" placeholder="place enter you name"></VInput>
+    </div>
+    <div>
+      <VTextarea id="textarea-2" v-model="book.main"></VTextarea>
+    </div>
+    <div>
+      <VRadio
+        v-model="radioButton"
+        :aria-describedby="ariaDescribedby"
+        name="some-radios"
+        value="A"
+        >Option A</VRadio
+      >
+      <VRadio
+        v-model="radioButton"
+        :aria-describedby="ariaDescribedby"
+        name="some-radios"
+        value="B"
+        >Option B</VRadio
+      >
+    </div>
+
+    <VCheckBoxGroup
+      id="checkbox-group-1"
+      v-model="checkboxes.selected"
+      :options="checkboxes.options"
     />
   </div>
 </template>
@@ -25,15 +91,15 @@
 <script>
 import { ref, reactive, computed } from "vue";
 import { VInput } from "./VInput/VInput.tsx";
+import { VTextarea } from "./VTextarea/VTextarea.tsx";
 
 import Multiselect from "./VSelect/Multiselect.vue";
 import VSwitch from "./VSwitch/VSwitch.vue";
+import VCheckBoxGroup from "./VCheckbox/VCheckBoxGroup.vue";
+import VRadio from "./VRadio/VRadio.vue";
 
 const fetchLanguages = async (query) => {
-  // From: https://www.back4app.com/database/paul-datasets/list-of-all-programming-languages/get-started/javascript/rest-api/fetch?objectClassSlug=dataset
-
   let where = "";
-
   if (query) {
     where =
       "&where=" +
@@ -67,66 +133,24 @@ const fetchLanguages = async (query) => {
 };
 
 export default {
-  components: { VInput, Multiselect, VSwitch },
-  props: {
-    // collectionName: String,
-  },
-  data() {
-    return {
-      example1: {
-        value: false,
-      },
-    };
-  },
-  methods: {
-    addTag(newTag) {
-      const tag = {
-        name: newTag,
-        code: newTag.substring(0, 2) + Math.floor(Math.random() * 10000000),
-      };
-      this.options.push(tag);
-      this.value.push(tag);
-    },
+  components: {
+    VInput,
+    VTextarea,
+    Multiselect,
+    VSwitch,
+    VCheckBoxGroup,
+    VRadio,
   },
   setup(props) {
-    console.log();
-    // const state = reactive({
-    //   optionss: [
-    //     { name: "Vue.js", code: "vu" },
-    //     { name: "Javascript", code: "js" },
-    //     { name: "Open Source", code: "os" },
-    //   ],
-    // });
-    const book = reactive({ title: "ss", main: true });
-    // const value = ref([{ name: "Javascript", code: "js" }]);
+    const book = reactive({ title: "", main: "main" });
+    const radioButton = ref("A");
 
-    function handleInput(e) {
-      console.log(e);
-    }
-
-    function handleChange(e) {
-      console.log(e, "change");
-    }
-
-    const nameState = computed(() => {
-      return book.title.length > 2 ? true : false;
-    });
-
-    const options = [
+    const optionsSelect = [
       { name: "Vue.js", code: "vu" },
       { name: "Javascript", code: "js" },
       { name: "Open Source", code: "os" },
     ];
-
-    const value2 = [
-      { name: "Vue.js", code: "vu" },
-      { name: "Javascript", code: "js" },
-      { name: "Open Source", code: "os" },
-    ];
-
-    console.log(options, "options");
-
-    const example7 = {
+    const multiselectAsync = {
       mode: "tags",
       closeOnSelect: false,
       value: [],
@@ -141,26 +165,145 @@ export default {
       },
     };
 
+    const selectOption = {
+      value: 0,
+      options: ["Batman", "Robin", "Joker"],
+    };
+
+    const selectOption2 = {
+      mode: "multiple",
+      value: ["robin"],
+      closeOnSelect: false,
+      options: {
+        batman: "Batman",
+        robin: "Robin",
+        joker: "Joker",
+      },
+    };
+
+    const selectOption3 = {
+      mode: "multiple",
+      value: [],
+      closeOnSelect: false,
+      options: [
+        { value: "batman", label: "Batman" },
+        { value: "robin", label: "Robin", disabled: true },
+        { value: "joker", label: "Joker" },
+      ],
+    };
+
+    const selectOption4 = {
+      mode: "multiple",
+      groups: true,
+      value: [],
+      closeOnSelect: false,
+      options: [
+        {
+          label: "DC",
+          options: ["Batman", "Robin", "Joker"],
+        },
+        {
+          label: "Marvel",
+          options: ["Spiderman", "Iron Man", "Captain America"],
+        },
+      ],
+    };
+    const selectOption5 = {
+      mode: "tags",
+      value: ["batman"],
+      closeOnSelect: false,
+      options: [
+        { value: "batman", label: "Batman" },
+        { value: "robin", label: "Robin" },
+        { value: "joker", label: "Joker" },
+      ],
+      searchable: true,
+      createOption: true,
+    };
+
+    const selectOption6 = {
+      mode: "multiple",
+      value: null,
+      placeholder: "Select your characters",
+      closeOnSelect: false,
+      options: {
+        batman: "Batman",
+        robin: "Robin",
+        joker: "Joker",
+      },
+    };
+    const selectOption7 = {
+      mode: "tags",
+      value: [],
+      placeholder: "Select employees",
+      closeOnSelect: false,
+      search: true,
+      trackBy: "name",
+      label: "name",
+      options: [
+        {
+          value: "judy",
+          name: "Judy",
+          image: "https://randomuser.me/api/portraits/med/women/1.jpg",
+        },
+        {
+          value: "jane",
+          name: "Jane",
+          image: "https://randomuser.me/api/portraits/med/women/2.jpg",
+        },
+        {
+          value: "john",
+          name: "John",
+          image: "https://randomuser.me/api/portraits/med/men/1.jpg",
+        },
+        {
+          value: "joe",
+          name: "Joe",
+          image: "https://randomuser.me/api/portraits/med/men/2.jpg",
+        },
+      ],
+    };
+
+    const checkboxes = reactive({
+      status: "accepted",
+      selected: ["pineapple"],
+      options: [
+        { text: "Orange", value: "orange" },
+        { text: "Apple", value: "apple" },
+        { text: "Pineapple", value: "pineapple" },
+        { html: "<b>Grape</b> (html content)", value: "grape" },
+      ],
+    });
+
+    const Vswitch = reactive({
+      value: false,
+    });
+    const name = reactive({});
+
     return {
-      // options,
-      example7,
+      Vswitch,
+      name,
+      radioButton,
+      selectOption,
+      selectOption2,
+      selectOption3,
+      selectOption4,
+      selectOption5,
+      selectOption6,
+      selectOption7,
+      multiselectAsync,
       book,
-      nameState,
-      handleInput,
-      handleChange,
+      checkboxes,
     };
   },
 };
 </script>
-<style src="./VMultiselect/themes/default.css"></style>
+<style src="./VSelect/themes/default.css"></style>
 <style src="./VSwitch/themes/default.css"></style>
 <style scoped>
 .test {
-  width: 30%;
+  width: 15%;
   display: flex;
+  flex-direction: column;
 }
-</style>
-
-<style lang="scss">
-// @import "./styles/_variables.scss";
 </style>

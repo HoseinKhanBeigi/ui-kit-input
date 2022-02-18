@@ -31,13 +31,13 @@
 </template>
 
 <script lang="ts">
-import {getClasses, getInputClasses, getLabelClasses} from './composables/useFormCheck'
+import {getClasses, getInputClasses, getLabelClasses} from '../features/composables/useFormCheck'
 import {computed, defineComponent, onMounted, PropType, Ref, ref, watch} from 'vue'
 import {InputSize} from '../features/types'
-import useId from "../features/composables/useId"
+import useId from '../features/composables/useId'
 
-export const VCheckbox = defineComponent({
-  name: 'VCheckbox',
+export default defineComponent({
+  name: 'BFormCheckbox',
   inheritAttrs: false,
   props: {
     id: {type: String, default: undefined},
@@ -54,7 +54,7 @@ export const VCheckbox = defineComponent({
     inline: {type: Boolean, default: false},
     name: {type: String},
     required: {type: Boolean, default: undefined},
-    size: {type: String as PropType<InputSize>, default: 'md'},
+    size: {type: String , default: 'md'},
     state: {type: Boolean, default: null},
     uncheckedValue: {type: [Boolean, String, Array, Object, Number], default: false},
     value: {type: [Boolean, String, Array, Object, Number], default: true},
@@ -63,7 +63,8 @@ export const VCheckbox = defineComponent({
   emits: ['update:modelValue', 'input', 'change'],
   setup(props, {emit}) {
     const computedId = useId(props.id, 'form-check')
-    const input: Ref<HTMLElement> = ref(null as unknown as HTMLElement)
+    // const input: Ref<HTMLElement> = ref(null as unknown as HTMLElement)
+      const input = ref<HTMLInputElement>();
     const isFocused = ref(false)
 
     const localChecked = computed({
@@ -95,13 +96,13 @@ export const VCheckbox = defineComponent({
 
     const focus = () => {
       isFocused.value = true
-      if (!props.disabled) input.value.focus()
+      if (!props.disabled) input.value?.focus()
     }
 
     const blur = () => {
       isFocused.value = false
       if (!props.disabled) {
-        input.value.blur()
+        input.value?.blur()
       }
     }
 
@@ -125,9 +126,10 @@ export const VCheckbox = defineComponent({
       }
     }
 
+    // TODO: make jest tests compatible with the v-focus directive
     if (props.autofocus) {
       onMounted(() => {
-        input.value.focus()
+        input.value?.focus()
       })
     }
 

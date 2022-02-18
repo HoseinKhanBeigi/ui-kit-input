@@ -9,7 +9,7 @@ import {
   ref,
   watch,
 } from "vue";
-import useId from '../../features/composables/useId'
+import useId from './useId'
 
 export const COMMON_INPUT_PROPS = {
   ariaInvalid: {

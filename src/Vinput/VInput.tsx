@@ -1,6 +1,7 @@
 
 import { computed, defineComponent } from "vue";
-import useFormInput, { COMMON_INPUT_PROPS } from "./composables/useFormInput";
+import useFormInput, { COMMON_INPUT_PROPS } from "../features/composables/useFormInput";
+import './default.css'
 
 const allowedTypes = [
   "text",
@@ -69,22 +70,16 @@ export const VInput = defineComponent({
       onChange(event)
 
     }
-    // function handleBlur(event: any) {
-    //    onBlur(event)
-    // }
-
-    // function handleFocus(){
-    //   focus()
-    // }
 
     return () => (
-      <div class="input-block">
+      <div class="field">
         <input
+          
           ref={input}
           value={props.modelValue}
           placeholder={props.placeholder}
           id={`${computedId.value}`}
-          class={classes}
+          class="textFeild"
           name={props.name || undefined}
           form={props.form || undefined}
           type={`${localType.value}`}
@@ -102,7 +97,7 @@ export const VInput = defineComponent({
           on-Blur={blur()}
           on-Focus={focus()}
         />
-        <span class="placeholder">Placeholder</span>
+         <label for="fullname" class="labelTextfeild">{props.placeholder}</label>
       </div>
     );
   },

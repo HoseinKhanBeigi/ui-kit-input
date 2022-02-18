@@ -35,7 +35,7 @@ import {computed, defineComponent, onMounted, PropType, Ref, ref, watch} from 'v
 import useId from '../features/composables/useId'
 
 export default defineComponent({
-  name: 'BFormRadio',
+  name: 'VRadio',
   props: {
     ariaLabel: {type: String},
     ariaLabelledBy: {type: String},
@@ -52,13 +52,14 @@ export default defineComponent({
     name: {type: String},
     required: {type: Boolean, default: false},
     size: {type: String},
-    state: {type: Boolean as PropType<boolean | null | undefined>, default: null},
+    state: {type: Boolean, default: null},
     value: {type: [String, Boolean, Object, Number], default: true},
   },
   emits: ['update:modelValue', 'change', 'input'],
   setup(props, {emit}) {
     const computedId = useId(props.id, 'form-check')
-    const input: Ref<HTMLElement> = ref(null as unknown as HTMLElement)
+    // const input: Ref<HTMLElement> = ref(null as unknown as HTMLElement)
+      const input = ref<HTMLInputElement>();
     const isFocused = ref(false)
 
     const localChecked: any = computed({
@@ -72,13 +73,13 @@ export default defineComponent({
 
     const focus = () => {
       isFocused.value = true
-      if (!props.disabled) input.value.focus()
+      if (!props.disabled) input.value?.focus()
     }
 
     const blur = () => {
       isFocused.value = false
       if (!props.disabled) {
-        input.value.blur()
+        input.value?.blur()
       }
     }
 
@@ -113,7 +114,7 @@ export default defineComponent({
     // TODO: make jest tests compatible with the v-focus directive
     if (props.autofocus) {
       onMounted(() => {
-        input.value.focus()
+        input.value?.focus()
       })
     }
 
