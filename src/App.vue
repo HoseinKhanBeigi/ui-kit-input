@@ -3,6 +3,11 @@
     <div class="test">
       <Multiselect v-model="example7.value" v-bind="example7"></Multiselect>
     </div>
+
+    <div class="example">
+      <div class="output">Data: {{ example1.value }}</div>
+      <VSwitch v-model="example1.value" v-bind="example1"></VSwitch>
+    </div>
     <VInput
       id="input-live"
       :state="nameState"
@@ -22,6 +27,7 @@ import { ref, reactive, computed } from "vue";
 import { VInput } from "./VInput/VInput.tsx";
 
 import Multiselect from "./VSelect/Multiselect.vue";
+import VSwitch from "./VSwitch/VSwitch.vue";
 
 const fetchLanguages = async (query) => {
   // From: https://www.back4app.com/database/paul-datasets/list-of-all-programming-languages/get-started/javascript/rest-api/fetch?objectClassSlug=dataset
@@ -61,13 +67,15 @@ const fetchLanguages = async (query) => {
 };
 
 export default {
-  components: { VInput, Multiselect },
+  components: { VInput, Multiselect, VSwitch },
   props: {
     // collectionName: String,
   },
   data() {
     return {
-      value: null,
+      example1: {
+        value: false,
+      },
     };
   },
   methods: {
@@ -145,9 +153,14 @@ export default {
 };
 </script>
 <style src="./VMultiselect/themes/default.css"></style>
+<style src="./VSwitch/themes/default.css"></style>
 <style scoped>
 .test {
   width: 30%;
   display: flex;
 }
+</style>
+
+<style lang="scss">
+// @import "./styles/_variables.scss";
 </style>
