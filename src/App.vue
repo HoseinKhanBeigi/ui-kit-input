@@ -21,7 +21,7 @@
 import { ref, reactive, computed } from "vue";
 import { VInput } from "./VInput/VInput.tsx";
 
-import Multiselect from "./VMultiselect/Multiselect.vue";
+import Multiselect from "./VSelect/Multiselect.vue";
 
 const fetchLanguages = async (query) => {
   // From: https://www.back4app.com/database/paul-datasets/list-of-all-programming-languages/get-started/javascript/rest-api/fetch?objectClassSlug=dataset
