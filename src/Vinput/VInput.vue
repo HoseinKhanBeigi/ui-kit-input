@@ -1,32 +1,20 @@
 <template>
   <div
     class="TextInput"
-    :class="{ 'has-error': !!errorMessage }"
+    :class="{ 'has-error': !!errorMessage, success: meta.valid }"
   >
+    <label :for="name">{{ label }}</label>
     <input
-      class="inputtext"
-      :id="computedId"
-      ref="input"
-      :value="defaultValue"
-      :class="classes"
-      :name="name || undefined"
-      :form="form || undefined"
-      :type="localType"
-      :disabled="disabled"
+      :name="name"
+      :id="name"
+      :type="type"
+      :value="inputValue"
       :placeholder="placeholder"
-      :required="required"
-      :autocomplete="autocomplete || undefined"
-      :readonly="readonly || plaintext"
-      :list="type !== 'password' ? list : undefined"
-      :aria-required="required ? 'true' : undefined"
-      :aria-invalid="computedAriaInvalid"
-      v-bind="$attrs"
-      @input="onInput($event)"
-      @change="handleChange($event)"
-      @blur="onBlur($event)"
+      @input="handleChange"
+      @blur="handleBlur"
     />
-    <p class="help-message" v-show="errorMessage">
-      {{ errorMessage}}
+    <p class="help-message" v-show="errorMessage || meta.valid">
+      {{ errorMessage || successMessage }}
     </p>
   </div>
 </template>
@@ -34,9 +22,6 @@
 <script lang="ts">
 import { useField } from "vee-validate";
 import { computed, defineComponent } from "vue";
-import useFormInput, {
-  COMMON_INPUT_PROPS,
-} from "../features/composables/useFormInput";
 
 const allowedTypes = [
   "text",
@@ -55,8 +40,7 @@ const allowedTypes = [
 export default defineComponent({
   name: "VInput",
   props: {
-    ...COMMON_INPUT_PROPS,
-    ...COMMON_INPUT_PROPS,
+    id: { type: String, required: false },
     loading: {
       type: Boolean,
       default: false,
@@ -65,9 +49,14 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    name: { type: String, required: false },
     label: {
       type: String,
       required: true,
+    },
+    value: {
+      type: String,
+      default: "",
     },
     type: {
       type: String,
@@ -81,45 +70,32 @@ export default defineComponent({
       allowedTypes.includes(props.type) ? props.type : "text"
     );
 
-    const {
-      input,
-      computedId,
-      computedAriaInvalid,
-      onInput,
-      onChange,
-      onBlur,
-      focus,
-      blur,
-    } = useFormInput(props, emit);
-
     const name: any = props.name;
     const {
-      value: defaultValue,
+      value: inputValue,
       errorMessage,
       handleBlur,
       handleChange,
+      meta,
     } = useField(name, undefined, {
-      initialValue: props.modelValue,
+      initialValue: props.value,
     });
 
     return {
       localType,
       errorMessage,
-      input,
-      computedId,
-      computedAriaInvalid,
-      defaultValue,
-      onInput,
+      inputValue,
+      handleBlur,
       handleChange,
-      onBlur,
       focus,
       blur,
+      meta,
     };
   },
 });
 </script>
 
-<style  scoped>
+<style scoped>
 .TextInput {
   position: relative;
   margin-bottom: calc(1em * 1.5);
@@ -181,5 +157,3 @@ input:focus {
   color: var(--success-color);
 }
 </style>
-
-
