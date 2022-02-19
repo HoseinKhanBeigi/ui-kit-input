@@ -1,61 +1,60 @@
-  
-  form {
-    margin: 2em 0;
-  }
+.TextInput {
+  position: relative;
+  margin-bottom: calc(1em * 1.5);
+  width: 100%;
+}
 
-   
-  .field {
-    display: flex;
-    flex-flow: column-reverse;
-    margin-bottom: 1em;
-  }
+label {
+  display: block;
+  margin-bottom: 4px;
+  width: 100%;
+}
 
-  .labelTextfeild, .textFeild {
-    transition: all 0.2s;
-    touch-action: manipulation;
-  }
-  
-  .textFeild {
-    font-size: 1.5em;
-    border: 0;
-    border-bottom: 1px solid #ccc;
-    font-family: inherit;
-    -webkit-appearance: none;
-    border-radius: 0;
-    padding: 0;
-    cursor: text;
-  }
-  
-  .textFeild:focus {
-    outline: 0;
-    border-bottom: 1px solid #666;
-  }
-  
-  .labelTextfeild {
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .textFeild:placeholder-shown + .labelTextfeild {
-    cursor: text;
-    max-width: 66.66%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transform-origin: left bottom;
-    transform: translate(0, 2.125rem) scale(1.5);
-  }
+.inputtext {
+  border-radius: 5px;
+  border: 2px solid transparent;
+  padding: 15px 10px;
+  outline: none;
+  background-color: #f2f5f7;
+  width: 100%;
+  transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
+}
 
-  ::-webkit-input-placeholder {
-    opacity: 0;
-    transition: inherit;
-  }
+.inputtext:focus {
+  border-color: var(--primary-color);
+}
 
-  .textFeild:focus::-webkit-input-placeholder {
-    opacity: 1;
-  }
+.help-message {
+  position: absolute;
+  bottom: calc(-1.5 * 1em);
+  left: 0;
+  margin: 0;
+  font-size: 14px;
+}
 
-  .textFeild:not(:placeholder-shown) + .labelTextfeild,
-  .textFeild:focus + .labelTextfeild {
-    transform: translate(0, 0) scale(1);
-    cursor: pointer;
-  }
+.TextInput.has-error .inputtext {
+  background-color: var(--error-bg-color);
+  color: var(--error-color);
+}
+
+.TextInput.has-error .inputtext:focus {
+  border-color: var(--error-color);
+}
+
+.TextInput.has-error .help-message {
+  color: var(--error-color);
+}
+
+.TextInput.success .inputtext {
+  background-color: var(--success-bg-color);
+  color: var(--success-color);
+}
+
+.TextInput.success .inputtext:focus {
+  border-color: var(--success-color);
+}
+
+.TextInput.success .help-message {
+  color: var(--success-color);
+}

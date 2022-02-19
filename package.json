@@ -13,12 +13,12 @@
     "@babel/core": "^7.16.12",
     "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/preset-typescript": "^7.16.7",
-    "@vueform/multiselect": "^2.3.2",
     "babel-plugin-module-resolver": "^4.1.0",
     "core-js": "^3.6.5",
     "eslint-plugin-prettier": "^4.0.0",
+    "vee-validate": "^4.5.8",
     "vue": "^3.0.0",
-    "vue-multiselect": "^2.1.6"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/plugin-transform-typescript": "^7.16.8",

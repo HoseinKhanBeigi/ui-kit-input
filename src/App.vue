@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <Form
+    @submit="onSubmit"
+    :validation-schema="schema"
+    @invalid-submit="onInvalidSubmit"
+  >
     <div class="test">
       <Multiselect
         v-model="multiselectAsync.value"
@@ -25,32 +29,29 @@
         v-model="selectOption5.value"
         v-bind="selectOption5"
       ></Multiselect>
-       <Multiselect
+      <Multiselect
         v-model="selectOption6.value"
         v-bind="selectOption6"
       ></Multiselect>
-    <Multiselect
-      v-model="selectOption7.value"
-      v-bind="selectOption7"
-    >
-      <template v-slot:tag="{ option, handleTagRemove, disabled }">
-        <div class="multiselect-tag is-user">
-          <img :src="option.image">
-          {{ option.name }}
-          <span
-            v-if="!disabled"
-            class="multiselect-tag-remove"
-            @mousedown.prevent="handleTagRemove(option, $event)"
-          >
-            <span class="multiselect-tag-remove-icon"></span>
-          </span>
-        </div>
-      </template>
+      <Multiselect v-model="selectOption7.value" v-bind="selectOption7">
+        <template v-slot:tag="{ option, handleTagRemove, disabled }">
+          <div class="multiselect-tag is-user">
+            <img :src="option.image" />
+            {{ option.name }}
+            <span
+              v-if="!disabled"
+              class="multiselect-tag-remove"
+              @mousedown.prevent="handleTagRemove(option, $event)"
+            >
+              <span class="multiselect-tag-remove-icon"></span>
+            </span>
+          </div>
+        </template>
 
-      <template v-slot:option="{ option }">
-        <img class="user-image" :src="option.image"> {{ option.name }}
-      </template>
-    </Multiselect>
+        <template v-slot:option="{ option }">
+          <img class="user-image" :src="option.image" /> {{ option.name }}
+        </template>
+      </Multiselect>
     </div>
 
     <div class="example">
@@ -58,7 +59,28 @@
       <VSwitch v-model="Vswitch.value" v-bind="Vswitch"></VSwitch>
     </div>
     <div>
-      <VInput id="input-1" v-model="book.title" :name="book.title" placeholder="place enter you name"></VInput>
+      <VInput
+        name="name"
+        type="text"
+        label="Full Name"
+        placeholder="Your Name"
+      />
+    </div>
+    <div>
+      <VInput
+        name="email"
+        type="email"
+        label="E-mail"
+        placeholder="Your email address"
+      />
+    </div>
+    <div>
+      <VInput
+        name="password"
+        type="password"
+        label="Password"
+        placeholder="Your password"
+      />
     </div>
     <div>
       <VTextarea id="textarea-2" v-model="book.main"></VTextarea>
@@ -85,12 +107,15 @@
       v-model="checkboxes.selected"
       :options="checkboxes.options"
     />
-  </div>
+    <button class="submit-btn" type="submit">Submit</button>
+  </Form>
 </template>
 
 <script>
+import { Form } from "vee-validate";
+import * as Yup from "yup";
 import { ref, reactive, computed } from "vue";
-import { VInput } from "./VInput/VInput.tsx";
+import  VInput  from "./VInput/VInput.vue";
 import { VTextarea } from "./VTextarea/VTextarea.tsx";
 
 import Multiselect from "./VSelect/Multiselect.vue";
@@ -140,9 +165,31 @@ export default {
     VSwitch,
     VCheckBoxGroup,
     VRadio,
+    Form,
   },
   setup(props) {
-    const book = reactive({ title: "", main: "main" });
+    function onSubmit(values) {
+      console.log(JSON.stringify(values, null, 2));
+    }
+
+    function onInvalidSubmit() {
+      const submitBtn = document.querySelector(".submit-btn");
+      submitBtn.classList.add("invalid");
+      setTimeout(() => {
+        submitBtn.classList.remove("invalid");
+      }, 1000);
+    }
+
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string().email().required(),
+      password: Yup.string().min(6).required(),
+      confirm_password: Yup.string()
+        .required()
+        .oneOf([Yup.ref("password")], "Passwords do not match"),
+    });
+
+    const book = reactive({ title: "ccc", main: "main" });
     const radioButton = ref("A");
 
     const optionsSelect = [
@@ -294,6 +341,9 @@ export default {
       multiselectAsync,
       book,
       checkboxes,
+      onSubmit,
+      schema,
+      onInvalidSubmit,
     };
   },
 };
@@ -301,9 +351,73 @@ export default {
 <style src="./VSelect/themes/default.css"></style>
 <style src="./VSwitch/themes/default.css"></style>
 <style scoped>
+form {
+  width: 300px;
+}
 .test {
-  width: 15%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.submit-btn {
+  outline: none;
+  border: none;
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  padding: 10px 15px;
+  display: block;
+  background-color: aqua;
+  width: 100%;
+  border-radius: 7px;
+  margin-top: 40px;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.submit-btn.invalid {
+  animation: shake 0.5s;
+  /* When the animation is finished, start again */
+  animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px);
+  }
+  10% {
+    transform: translate(-1px, -2px);
+  }
+  20% {
+    transform: translate(-3px, 0px);
+  }
+  30% {
+    transform: translate(3px, 2px);
+  }
+  40% {
+    transform: translate(1px, -1px);
+  }
+  50% {
+    transform: translate(-1px, 2px);
+  }
+  60% {
+    transform: translate(-3px, 1px);
+  }
+  70% {
+    transform: translate(3px, 1px);
+  }
+  80% {
+    transform: translate(-1px, -1px);
+  }
+  90% {
+    transform: translate(1px, 2px);
+  }
+  100% {
+    transform: translate(1px, -2px);
+  }
+}
+
+.submit-btn:hover {
+  transform: scale(1.1);
 }
 </style>

@@ -49,14 +49,14 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
   let neverFormatted = true;
   const computedId = useId(props.id, "input");
 
-  const _formatValue = (value: unknown, evt: any, force = false) => {
+  const _formatValue = (value: unknown, event: any, force = false) => {
     value = String(value);
     if (
       typeof props.formatter === "function" &&
       (!props.lazyFormatter || force)
     ) {
       neverFormatted = false;
-      return props.formatter(value, evt);
+      return props.formatter(value, event);
     }
     return value;
   };
@@ -91,11 +91,11 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
     return props.state === false ? "true" : undefined;
   });
 
-  const onInput = (evt: Event) => {
-    const { value }: any = evt.target;
-    const formattedValue = _formatValue(value, evt);
-    if (formattedValue === false || evt.defaultPrevented) {
-      evt.preventDefault();
+  const onInput = (event: Event) => {
+    const { value }: any = event.target;
+    const formattedValue = _formatValue(value, event);
+    if (formattedValue === false || event.defaultPrevented) {
+      event.preventDefault();
       return;
     }
 
@@ -110,11 +110,11 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
     }
   };
 
-  const onChange = (evt: Event) => {
-    const { value }: any = evt.target;
-    const formattedValue = _formatValue(value, evt);
-    if (formattedValue === false || evt.defaultPrevented) {
-      evt.preventDefault();
+  const onChange = (event: Event) => {
+    const { value }: any = event.target;
+    const formattedValue = _formatValue(value, event);
+    if (formattedValue === false || event.defaultPrevented) {
+      event.preventDefault();
       return;
     }
 
@@ -128,12 +128,12 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
     }
   };
 
-  const onBlur = (evt: FocusEvent) => {
-    emit("blur", evt);
+  const onBlur = (event: FocusEvent) => {
+    emit("blur", event);
     if (!props.lazy && !props.lazyFormatter) return;
 
-    const { value }: any = evt.target;
-    const formattedValue = _formatValue(value, evt, true);
+    const { value }: any = event.target;
+    const formattedValue = _formatValue(value, event, true);
 
     inputValue = value;
     emit("update:modelValue", formattedValue);
