@@ -33,6 +33,22 @@
         v-model="selectOption6.value"
         v-bind="selectOption6"
       ></Multiselect>
+      <Multiselect
+        v-model="value"
+        mode="multiple"
+        placeholder="Select your characters"
+        :options="{
+          batman: 'Batman',
+          robin: 'Robin',
+          joker: 'Joker',
+        }"
+      >
+        <template v-slot:multiplelabel="{ values }">
+          <div class="multiselect-multiple-label">
+            {{ values.length }} characters selected
+          </div>
+        </template>
+      </Multiselect>
       <Multiselect v-model="selectOption7.value" v-bind="selectOption7">
         <template v-slot:tag="{ option, handleTagRemove, disabled }">
           <div class="multiselect-tag is-user">
@@ -115,7 +131,7 @@
 import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { ref, reactive, computed } from "vue";
-import  VInput  from "./VInput/VInput.vue";
+import VInput from "./VInput/VInput.vue";
 import { VTextarea } from "./VTextarea/VTextarea.tsx";
 
 import Multiselect from "./VSelect/Multiselect.vue";
@@ -326,6 +342,17 @@ export default {
       value: false,
     });
     const name = reactive({});
+
+    // const name1 = props.name;
+    // const {
+    //   value: inputValue,
+    //   errorMessage,
+    //   handleBlur,
+    //   handleChange,
+    //   meta,
+    // } = useField(name1, undefined, {
+    //   initialValue: props.value,
+    // });
 
     return {
       Vswitch,

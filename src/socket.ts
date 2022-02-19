@@ -213,11 +213,7 @@ websocket.onopen = function(event){
     console.log('websocket is open now')
 }
 
-
-
-
 //websocket.close() method closes the websocket connection or connection attempt, if the connection is already CLOSED, this method does nothing
-
 //a numberic value indicating the status code explaining why the connection is being closed. if this parameter is not specified a default value of 1005 is assumed. 
 const code = 1005
 

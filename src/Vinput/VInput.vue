@@ -1,7 +1,7 @@
 <template>
   <div
     class="TextInput"
-    :class="{ 'has-error': !!errorMessage, success: meta.valid }"
+    :class="{ 'has-error': !!errorMessage }"
   >
     <label :for="name">{{ label }}</label>
     <input
