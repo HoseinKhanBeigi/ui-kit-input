@@ -14,7 +14,7 @@
       @blur="handleBlur"
     />
     <p class="help-message" v-show="errorMessage || meta.valid">
-      {{ errorMessage || successMessage }}
+      {{ errorMessage }}
     </p>
   </div>
 </template>
@@ -58,6 +58,10 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    placeholder:{
+      type: String,
+      default: "",
+    },
     type: {
       type: String,
       default: "text",
@@ -86,6 +90,7 @@ export default defineComponent({
       errorMessage,
       inputValue,
       handleBlur,
+      
       handleChange,
       focus,
       blur,

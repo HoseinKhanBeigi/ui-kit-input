@@ -67,8 +67,6 @@ export default function useClasses (props, context, dependencies)
     ...classes_.value,
   }))
 
-  // ============== COMPUTED ==============
-
   const showDropdown = computed(() => {
     return !!(isOpen.value && showOptions.value && (!resolving.value || (resolving.value && fo.value.length)))
   })

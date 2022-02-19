@@ -3,6 +3,7 @@
     @submit="onSubmit"
     :validation-schema="schema"
     @invalid-submit="onInvalidSubmit"
+    v-slot="{ errors }"
   >
     <div class="test">
       <Multiselect
@@ -17,10 +18,23 @@
         v-model="selectOption2.value"
         v-bind="selectOption2"
       ></Multiselect>
-      <Multiselect
-        v-model="selectOption3.value"
-        v-bind="selectOption3"
-      ></Multiselect>
+
+      <div :class="{ invalid: isInvalid }">
+        <Field name="selectOption3" :rules="isRequired">
+          <Multiselect
+            name="selectOption3"
+            v-model="selectOption3.value"
+            v-bind="selectOption3"
+            @open="onTouch"
+            @input="onChange1"
+          ></Multiselect>
+        </Field>
+        <span>{{ errors.selectOption3 }}</span>
+        <label class="typo__label form__label" v-show="isInvalid"
+          >Must have at least one value</label
+        >
+      </div>
+
       <Multiselect
         v-model="selectOption4.value"
         v-bind="selectOption4"
@@ -102,18 +116,10 @@
       <VTextarea id="textarea-2" v-model="book.main"></VTextarea>
     </div>
     <div>
-      <VRadio
-        v-model="radioButton"
-        :aria-describedby="ariaDescribedby"
-        name="some-radios"
-        value="A"
+      <VRadio v-model="radioButton" name="some-radios" value="A"
         >Option A</VRadio
       >
-      <VRadio
-        v-model="radioButton"
-        :aria-describedby="ariaDescribedby"
-        name="some-radios"
-        value="B"
+      <VRadio v-model="radioButton" name="some-radios" value="B"
         >Option B</VRadio
       >
     </div>
@@ -185,7 +191,7 @@ export default {
   },
   setup(props) {
     function onSubmit(values) {
-      console.log(JSON.stringify(values, null, 2));
+      console.log(values);
     }
 
     function onInvalidSubmit() {
@@ -200,10 +206,12 @@ export default {
       name: Yup.string().required(),
       email: Yup.string().email().required(),
       password: Yup.string().min(6).required(),
+      selectOption3: Yup.array().length().min(1).required(),
       confirm_password: Yup.string()
         .required()
         .oneOf([Yup.ref("password")], "Passwords do not match"),
     });
+    console.log(schema);
 
     const book = reactive({ title: "ccc", main: "main" });
     const radioButton = ref("A");
@@ -343,20 +351,35 @@ export default {
     });
     const name = reactive({});
 
-    // const name1 = props.name;
-    // const {
-    //   value: inputValue,
-    //   errorMessage,
-    //   handleBlur,
-    //   handleChange,
-    //   meta,
-    // } = useField(name1, undefined, {
-    //   initialValue: props.value,
-    // });
+    const isTouched = ref(false);
+    const isInvalid = ref(false);
+    const onTouch = () => {
+      isTouched.value = true;
+    };
+
+    const onChange1 = (value) => {
+      selectOption3.value = value;
+
+      if (isTouched.value && selectOption3.value.length === 0) {
+        isInvalid.value = true;
+      } else {
+        isInvalid.value = false;
+      }
+    };
+
+    const getValues = (value) => {
+      console.log(value);
+    };
+
+    const isRequired = (value) => {
+      console.log(value,"hiiiiiii");
+      return value ? true : "This field is required";
+    };
 
     return {
       Vswitch,
       name,
+      isRequired,
       radioButton,
       selectOption,
       selectOption2,
@@ -366,6 +389,10 @@ export default {
       selectOption6,
       selectOption7,
       multiselectAsync,
+      onChange1,
+      getValues,
+      onTouch,
+      isInvalid,
       book,
       checkboxes,
       onSubmit,
