@@ -10,12 +10,16 @@ import {
   watch,
 } from "vue";
 import useId from './useId'
+import { string } from "yup/lib/locale";
 
 export const COMMON_INPUT_PROPS = {
   ariaInvalid: {
     type: [Boolean, String],
     default: false,
   },
+  prefix: { type: String, required: false },
+  suffix: { type: String, required: false },
+  label: { type: String, required: false },
   autocomplete: { type: String, required: false },
   autofocus: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },

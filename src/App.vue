@@ -96,8 +96,9 @@
         placeholder="Your Name"
       />
     </div>
-    <div>
+    <!-- <div>
       <VInput
+        suffix="@gmail.com"
         name="email"
         type="email"
         label="E-mail"
@@ -111,10 +112,8 @@
         label="Password"
         placeholder="Your password"
       />
-    </div>
-    <div>
-      <VTextarea id="textarea-2" v-model="book.main"></VTextarea>
-    </div>
+    </div> -->
+
     <div>
       <VRadio v-model="radioButton" name="some-radios" value="A"
         >Option A</VRadio
@@ -138,7 +137,6 @@ import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { ref, reactive, computed } from "vue";
 import VInput from "./VInput/VInput.vue";
-import { VTextarea } from "./VTextarea/VTextarea.tsx";
 
 import Multiselect from "./VSelect/Multiselect.vue";
 import VSwitch from "./VSwitch/VSwitch.vue";
@@ -182,7 +180,7 @@ const fetchLanguages = async (query) => {
 export default {
   components: {
     VInput,
-    VTextarea,
+
     Multiselect,
     VSwitch,
     VCheckBoxGroup,
@@ -372,7 +370,7 @@ export default {
     };
 
     const isRequired = (value) => {
-      console.log(value,"hiiiiiii");
+      console.log(value, "hiiiiiii");
       return value ? true : "This field is required";
     };
 
