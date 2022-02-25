@@ -8,7 +8,8 @@
         :id="computedId"
         ref="input"
         :class="classes"
-        :name="name || undefined"
+        :value="modelValue"
+        :name="name"
         :form="form || undefined"
         :type="localType"
         :disabled="disabled"
@@ -17,19 +18,22 @@
         :autocomplete="autocomplete || undefined"
         :readonly="readonly || plaintext"
         :aria-invalid="computedAriaInvalid"
-        v-bind="$attrs"
-        @input="onInput($event)"
-        @change="onChange($event)"
+        @input="handleChange1"
         @blur="onBlur($event)"
       />
       <div class="input__label">{{ label }}</div>
       <span v-if="suffix">{{ suffix }}</span>
     </div>
+      <p class="help-message" v-show="errorMessage">
+    {{ errorMessage }}
+  </p>
   </label>
+
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent, toRef, Ref } from "vue";
+import { useField } from "vee-validate";
 import useFormInput, {
   COMMON_INPUT_PROPS,
 } from "../features/composables/useFormInput";
@@ -49,7 +53,7 @@ const allowedTypes = [
 ];
 
 export default defineComponent({
-  name: "BFormInput",
+  name: "VInput",
   props: {
     ...COMMON_INPUT_PROPS,
     max: { type: [String, Number], required: false },
@@ -92,12 +96,38 @@ export default defineComponent({
       blur,
     } = useFormInput(props, emit);
 
+    function handleInput(event: any) {
+      emit("input", event);
+    }
+    function handleChange1(event: any) {
+      handleChange(event);
+    }
+    // function handleBlur(event: any) {
+    //   emit("blur");
+    // }
+
+    const name: any = toRef(props, "name");
+
+    const {
+      value: inputValue,
+      errorMessage,
+      handleBlur,
+      handleChange,
+      meta,
+    } = useField(name, undefined, {
+      initialValue: props.modelValue,
+    });
+
+    console.log(props.modelValue, "props.modelValue,");
+
     return {
       classes,
       localType,
       input,
       computedId,
       computedAriaInvalid,
+      errorMessage,
+      handleChange,
       onInput,
       onChange,
       onBlur,
@@ -125,17 +155,17 @@ export default defineComponent({
   --group-border-focus: var(--input-border-focus);
   --group-background-focus: #678efe;
 
-    --color-light: white;
+  --color-light: white;
   --color-dark: #212121;
   --color-signal: #fab700;
-  
+
   --color-background: var(--color-light);
   --color-text: var(--color-dark);
   --color-accent: var(--color-signal);
-  
-  --size-bezel: .5rem;
+
+  --size-bezel: 0.5rem;
   --size-radius: 4px;
-  
+
   line-height: 1.4;
 }
 

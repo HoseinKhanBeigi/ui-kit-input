@@ -90,15 +90,15 @@
     </div>
     <div>
       <VInput
+        :onChange="(e) => handleChange(e)"
         name="name"
         type="text"
         label="Full Name"
         placeholder="Your Name"
       />
     </div>
-    <!-- <div>
+    <div>
       <VInput
-        suffix="@gmail.com"
         name="email"
         type="email"
         label="E-mail"
@@ -112,7 +112,7 @@
         label="Password"
         placeholder="Your password"
       />
-    </div> -->
+    </div>
 
     <div>
       <VRadio v-model="radioButton" name="some-radios" value="A"
@@ -189,7 +189,7 @@ export default {
   },
   setup(props) {
     function onSubmit(values) {
-      console.log(values);
+      // console.log(values);
     }
 
     function onInvalidSubmit() {
@@ -209,7 +209,7 @@ export default {
         .required()
         .oneOf([Yup.ref("password")], "Passwords do not match"),
     });
-    console.log(schema);
+    // console.log(schema);
 
     const book = reactive({ title: "ccc", main: "main" });
     const radioButton = ref("A");
@@ -374,6 +374,9 @@ export default {
       return value ? true : "This field is required";
     };
 
+    const handleChange = (evt) => {
+      console.log(evt);
+    };
     return {
       Vswitch,
       name,
@@ -387,6 +390,7 @@ export default {
       selectOption6,
       selectOption7,
       multiselectAsync,
+      handleChange,
       onChange1,
       getValues,
       onTouch,
