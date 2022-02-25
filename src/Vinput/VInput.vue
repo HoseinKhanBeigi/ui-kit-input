@@ -8,7 +8,7 @@
         :id="computedId"
         ref="input"
         :class="classes"
-        :value="modelValue"
+        :value="inputValue"
         :name="name"
         :form="form || undefined"
         :type="localType"
@@ -24,11 +24,10 @@
       <div class="input__label">{{ label }}</div>
       <span v-if="suffix">{{ suffix }}</span>
     </div>
-      <p class="help-message" v-show="errorMessage">
-    {{ errorMessage }}
-  </p>
+    <p class="help-message" v-show="errorMessage">
+      {{ errorMessage }}
+    </p>
   </label>
-
 </template>
 
 <script lang="ts">
@@ -99,9 +98,7 @@ export default defineComponent({
     function handleInput(event: any) {
       emit("input", event);
     }
-    function handleChange1(event: any) {
-      handleChange(event);
-    }
+
     // function handleBlur(event: any) {
     //   emit("blur");
     // }
@@ -114,11 +111,15 @@ export default defineComponent({
       handleBlur,
       handleChange,
       meta,
-    } = useField(name, undefined, {
+    } = useField(name.value, undefined, {
       initialValue: props.modelValue,
     });
 
-    console.log(props.modelValue, "props.modelValue,");
+    function handleChange1(event: any) {
+      handleChange(event);
+    }
+
+    console.log(inputValue, "props.modelValue,");
 
     return {
       classes,
@@ -127,7 +128,9 @@ export default defineComponent({
       computedId,
       computedAriaInvalid,
       errorMessage,
-      handleChange,
+      handleChange1,
+ 
+      inputValue,
       onInput,
       onChange,
       onBlur,

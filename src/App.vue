@@ -47,7 +47,7 @@
         v-model="selectOption6.value"
         v-bind="selectOption6"
       ></Multiselect>
-      <Multiselect
+      <!-- <Multiselect
         v-model="value"
         mode="multiple"
         placeholder="Select your characters"
@@ -62,7 +62,7 @@
             {{ values.length }} characters selected
           </div>
         </template>
-      </Multiselect>
+      </Multiselect> -->
       <Multiselect v-model="selectOption7.value" v-bind="selectOption7">
         <template v-slot:tag="{ option, handleTagRemove, disabled }">
           <div class="multiselect-tag is-user">
@@ -375,7 +375,7 @@ export default {
     };
 
     const handleChange = (evt) => {
-      console.log(evt);
+      console.log(evt,"helooo");
     };
     return {
       Vswitch,
