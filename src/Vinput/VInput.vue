@@ -1,43 +1,38 @@
 <template>
-  <label class="input">
-    <div class="vc-input">
-    <div class="vc_input__control">
-    <div class="vc-input__slot">  
-      <div class="form-group">
-        <span v-if="prefix">{{ prefix }}</span>
-        <input
-          class="form-field input__field"
-          :id="computedId"
-          ref="input"
-          :class="classes"
-          :value="inputValue"
-          :name="name"
-          :form="form || undefined"
-          :type="localType"
-          :disabled="disabled"
-          :placeholder="handleAutofocus2 ? placeholder : ''"
-          :required="required"
-          :autocomplete="autocomplete || undefined"
-          :readonly="readonly || plaintext"
-          :aria-invalid="computedAriaInvalid"
-          @input="handleChange1"
-          @blur="onBlur($event)"
-          @focus="focus()"
-        />
-        <div class="input__label">{{ label }}</div>
-        <span v-if="suffix">{{ suffix }}</span>
-      </div>
-    </div>
-    </div>
+  <div class="input">
+ 
+          <div class="form-group">
+            <span v-if="prefix">{{ prefix }}</span>
+            <input
+              class="form-field input__field"
+              :id="computedId"
+              ref="input"
+              :value="inputValue"
+              :name="name"
+              :form="form || undefined"
+              :type="localType"
+              :disabled="disabled"
+              :placeholder="handleAutofocus2 ? placeholder : ''"
+              :required="required"
+              :autocomplete="autocomplete || undefined"
+              :readonly="readonly || plaintext"
+              :aria-invalid="computedAriaInvalid"
+              @input="handleChange1"
+              @blur="onBlur($event)"
+              @focus="handleFocus()"
+            />
+            <div class="input__label">{{ label }}</div>
+     
+      <span v-if="suffix" class="suffix__inner">{{ suffix }}</span>
     </div>
     <p class="help-message" v-show="errorMessage">
       {{ errorMessage }}
     </p>
-  </label>
+  </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, toRef, Ref } from "vue";
+import { computed, defineComponent, toRef, ref } from "vue";
 import { useField } from "vee-validate";
 import useFormInput, {
   COMMON_INPUT_PROPS,
@@ -72,23 +67,11 @@ export default defineComponent({
   },
   emits: ["update:modelValue", "change", "blur", "input"],
   setup(props, { emit }) {
-    const classes = computed(() => {
-      const isRange = props.type === "range";
-      const isColor = props.type === "color";
-      return {
-        "form-range": isRange,
-        "form-control": isColor || (!props.plaintext && !isRange),
-        "form-control-color": isColor,
-        "form-control-plaintext": props.plaintext && !isRange && !isColor,
-        [`form-control-${props.size}`]: props.size,
-        "is-valid": props.state === true,
-        "is-invalid": props.state === false,
-      };
-    });
-
     const localType = computed(() =>
       allowedTypes.includes(props.type) ? props.type : "text"
     );
+
+    const active = ref(false);
 
     const {
       input,
@@ -124,15 +107,21 @@ export default defineComponent({
     }
 
     function handleFocus() {
-      focus();
+      console.log(focus());
+      if(focus()){
+         active.value = true
+      }
+      active.value = false
+      // return focus();
     }
 
-    console.log(focus(), "focus");
+    function handleActive() {
+     
+    }
 
     // console.log(inputValue, "props.modelValue,");
 
     return {
-      classes,
       localType,
       input,
       computedId,
@@ -142,6 +131,8 @@ export default defineComponent({
       handleAutofocus2,
       handleFocus,
       inputValue,
+      handleActive,
+      active,
       onInput,
       onChange,
       onBlur,
@@ -189,6 +180,10 @@ export default defineComponent({
   font-size: 14px;
   color: #5264ae;
 }
+.help-message {
+  margin: 0;
+  color: rgb(248, 15, 104);
+}
 
 .input {
   position: relative;
@@ -212,7 +207,7 @@ export default defineComponent({
     transition-timing-function: cubic-bezier(0.25, 0.8, 0.5, 1);
     transition-delay: 0s;
     white-space: pre;
-    z-index: 1;
+    // z-index: 1;
   }
   &__field {
     box-sizing: border-box;
@@ -249,46 +244,50 @@ export default defineComponent({
   // color: var(--color-accent);
 }
 
-.vc_input__control{
-      display: flex;
-    height: auto;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    position: relative;
-    min-width: 0;
-    width: 100%;
-    border-radius: inherit;
+.vc_input__control {
+  display: flex;
+  height: auto;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  border-radius: inherit;
 }
 
-.vc-input{
-      align-items: flex-start;
-    align-items: center;
-    display: flex;
-    flex: 1 1 auto;
-    font-size: 16px;
-    letter-spacing: normal;
-    max-width: 100%;
-    text-align: left;
-    border:1px solid;
-    padding: 0;
-    position: relative;
-    border-radius: 4px;
-    color: var(--input-border);
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    transition: border 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+.vc-input {
+  align-items: flex-start;
+  align-items: center;
+  display: flex;
+  flex: 1 1 auto;
+  font-size: 16px;
+  letter-spacing: normal;
+  max-width: 100%;
+  text-align: left;
+  border: 1px solid;
+  padding: 0;
+  position: relative;
+  border-radius: 4px;
+  color: #eeeeee;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  transition: border 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
 }
 
-.vc-input__slot{
-      color: inherit;
-    display: flex;
-    align-items: stretch;
-    position: relative;
-    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-    border-radius: 4px;
-    width: 100%;
-    min-height: 40px;
-    cursor: text;
-    background: transparent
+.vc-input__slot {
+  color: inherit;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  border-radius: 4px;
+  width: 100%;
+  min-height: 40px;
+  cursor: text;
+  background: transparent;
+}
+
+.active {
+  color: rgb(160, 160, 160);
 }
 
 .form-field {
@@ -301,16 +300,26 @@ export default defineComponent({
   min-width: 0;
   max-height: 32px;
   color: #212121;
+  border:1px solid silver;
   width: 100%;
   background-color: transparent;
-  border-style: none;
+ transition: border 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
   &::placeholder {
     color: var(--input-placeholder);
   }
   &:focus {
     outline: none;
-    border-color: rgb(197, 197, 197);
+    border-color: rgb(124, 124, 124);
   }
+}
+
+.suffix__inner {
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 25px;
+  color: #919191;
+  background-color: #f0f0f0;
 }
 
 .form-group {
@@ -337,14 +346,6 @@ export default defineComponent({
     width: 1%;
     margin-top: 0;
     margin-bottom: 0;
-  }
-  & > span {
-    text-align: center;
-    padding: 8px 12px;
-    font-size: 14px;
-    line-height: 25px;
-    border: 1px solid var(--group-border);
-    transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
   }
 }
 </style>
