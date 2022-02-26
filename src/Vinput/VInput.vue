@@ -25,10 +25,7 @@
         @input="handleInput"
         @blur="onBlur($event)"
       />
-      <div
-        class="fname"
-        :class="errorMessage ? 'errorLabelValidation' : 'input__label'"
-      >
+      <div class="fname" :class="classes">
         {{ label }}
       </div>
       <span
@@ -110,6 +107,13 @@ export default defineComponent({
       handleChange(event);
     }
 
+    const classes = computed(() => {
+      return {
+        'input__label': !errorMessage,
+        'errorLabelValidation': errorMessage,
+      };
+    });
+
     return {
       localType,
       input,
@@ -117,7 +121,7 @@ export default defineComponent({
       computedAriaInvalid,
       errorMessage,
       handleInput,
-
+      classes,
       inputValue,
       onInput,
       onChange,
@@ -179,11 +183,11 @@ export default defineComponent({
   z-index: 1;
 }
 
-.fnamePosition{
-    left: 0;
+.fnamePosition {
+  left: 0;
 }
 
-.fnamePositionValidation{
+.fnamePositionValidation {
   left: 54px;
 }
 
