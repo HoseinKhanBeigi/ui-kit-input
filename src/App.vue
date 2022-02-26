@@ -1,6 +1,6 @@
 <template>
   <Form
-    @submit="onSubmit"
+    @submit.prevent="onSubmit({name , email , password})"
     :validation-schema="schema"
     @invalid-submit="onInvalidSubmit"
     v-slot="{ errors }"
@@ -92,8 +92,6 @@
       <VInput
         :onInput="(e) => handleInput(e)"
         suffix="http://"
-        
-        v-model="book.title"
         name="name"
         type="text"
         label="Full Name"
@@ -102,6 +100,7 @@
     </div>
     <div>
       <VInput
+      prefix="email"
         name="email"
         type="email"
         label="E-mail"
@@ -192,16 +191,11 @@ export default {
   },
   setup(props) {
     function onSubmit(values) {
-      console.log(values);
+      console.log(book.title);
+          console.log(values);
     }
 
-    function onInvalidSubmit() {
-      const submitBtn = document.querySelector(".submit-btn");
-      submitBtn.classList.add("invalid");
-      setTimeout(() => {
-        submitBtn.classList.remove("invalid");
-      }, 1000);
-    }
+
 
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -402,7 +396,7 @@ export default {
       checkboxes,
       onSubmit,
       schema,
-      onInvalidSubmit,
+     
     };
   },
 };

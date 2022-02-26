@@ -1,10 +1,14 @@
 <template>
   <div class="warp">
     <div class="form-group">
-      <span v-if="prefix">{{ prefix }}</span>
+      <span
+        v-if="prefix"
+        :class="errorMessage ? 'validationSuffixAndPrefix' : 'prefix'"
+        >{{ prefix }}</span
+      >
 
       <input
-        class="form-field input__field"
+        class="form-field"
         :class="errorMessage ? 'validationError' : ''"
         :id="computedId"
         ref="input"
@@ -21,10 +25,17 @@
         @input="handleInput"
         @blur="onBlur($event)"
       />
-      <div class="fname input__label">
+      <div
+        class="fname"
+        :class="errorMessage ? 'errorLabelValidation' : 'input__label'"
+      >
         {{ label }}
       </div>
-      <span v-if="suffix">{{ suffix }}</span>
+      <span
+        v-if="suffix"
+        :class="errorMessage ? 'validationSuffixAndPrefix' : 'suffix'"
+        >{{ suffix }}</span
+      >
     </div>
     <p class="help-message" v-show="errorMessage">
       {{ errorMessage }}
@@ -149,99 +160,37 @@ export default defineComponent({
   line-height: 1.4;
 }
 
-.form__label:focus ~ label,
-.form__label:valid ~ label {
-  top: -20px;
-  font-size: 14px;
-  color: #797979;
-}
-
-// .input {
-//   position: relative;
-
-//   &__label {
-//     position: absolute;
-//     left: 0;
-//     top: 0;
-//     padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
-//     margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
-//     white-space: nowrap;
-//     transform: translate(0, 0);
-//     transform-origin: 0 0;
-//     background: var(--color-background);
-//     transition: transform 120ms ease-in;
-//     font-size: 0.95rem;
-//     line-height: 0.9;
-//     z-index: 1;
-//   }
-//   &__field {
-//     box-sizing: border-box;
-//     display: block;
-//     &:focus,
-//     &:not(:placeholder-shown) {
-//       & + .input__label {
-//         transform: translate(0.25rem, -65%) scale(0.8);
-//         font-size: 0.75rem;
-//       }
-//     }
-//   }
-// }
-
 .warp {
   position: relative;
-
-  .fname {
-    position: absolute;
-    font-size: 0.95rem;
-    left: 0;
-    top: 0;
-    padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
-    margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
-    font-size: 12px;
-    white-space: nowrap;
-    // transform: translate(0, 0);
-    // transform-origin: 0 0;
-    background-color: rgb(255, 255, 255);
-    transition: transform 120ms ease-in;
-    z-index: 1;
-    &:focus,
-    &:not(:placeholder-shown) {
-      & + .input__label {
-        transform: translate(0.25rem, -65%) scale(0.8);
-        font-size: 0.75rem;
-        top:-51px;
-      }
-    }
-  }
 }
 
-.inputValidation {
-  position: relative;
+.fname {
+  position: absolute;
+  font-size: 0.95rem;
+  top: 0;
+  left: 0;
+  padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
+  margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
+  font-size: 12px;
+  white-space: nowrap;
+  transform: translate(0, 0);
+  transform-origin: 0 0;
+  transition: transform 120ms ease-in;
+  z-index: 1;
+}
 
-  &__label {
-    position: absolute;
+.fnamePosition{
     left: 0;
-    top: 0;
-    padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
-    margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
-    white-space: nowrap;
-    transform: translate(0, 0);
-    transform-origin: 0 0;
-    background: var(--color-background);
-    transition: transform 120ms ease-in;
-    font-size: 0.95rem;
-    line-height: 0.9;
-    z-index: 99990;
-  }
-  &__field {
-    &:focus,
-    &:not(:placeholder-shown) {
-      & + .errorLabelValidation {
-        transform: translate(0.25rem, -65%) scale(0.8);
-        font-size: 0.75rem;
-      }
-    }
-  }
+}
+
+.fnamePositionValidation{
+  left: 54px;
+}
+
+.form-field:focus ~ .fname,
+.form-field:not(:placeholder-shown).form-field:not(:focus) ~ .fname {
+  transform: translate(0.25rem, -65%) scale(0.8);
+  font-size: 0.75rem;
 }
 
 .input__label {
@@ -251,6 +200,17 @@ export default defineComponent({
 .errorLabelValidation {
   color: rgb(255, 56, 99);
   background: #ffffff;
+}
+.suffix {
+  background: rgb(231, 231, 231);
+}
+
+.prefix {
+  background: rgb(231, 231, 231);
+}
+
+.validationSuffixAndPrefix {
+  background: rgb(255, 56, 99);
 }
 
 .form-field {
@@ -333,18 +293,12 @@ export default defineComponent({
     line-height: 25px;
     color: silver;
 
-    background: rgb(231, 231, 231);
     border: 1px solid var(--group-border);
     transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
   }
   &:focus-within {
     & > span {
       color: rgb(82, 80, 80);
-    }
-  }
-  &:invalid {
-    & > span {
-      color: rgb(212, 1, 1);
     }
   }
 }
