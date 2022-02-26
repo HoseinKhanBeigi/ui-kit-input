@@ -1,13 +1,13 @@
 <template>
-  <div class="input">
+  <div class="warp">
     <div class="form-group">
       <span v-if="prefix">{{ prefix }}</span>
 
       <input
         class="form-field input__field"
+        :class="errorMessage ? 'validationError' : ''"
         :id="computedId"
         ref="input"
-    
         :value="inputValue"
         :name="name"
         :form="form || undefined"
@@ -18,10 +18,12 @@
         :autocomplete="autocomplete || undefined"
         :readonly="readonly || plaintext"
         :aria-invalid="computedAriaInvalid"
-        @input="handleChange1"
+        @input="handleInput"
         @blur="onBlur($event)"
       />
-      <div class="input__label">{{ label }}</div>
+      <div class="fname input__label">
+        {{ label }}
+      </div>
       <span v-if="suffix">{{ suffix }}</span>
     </div>
     <p class="help-message" v-show="errorMessage">
@@ -66,7 +68,6 @@ export default defineComponent({
   },
   emits: ["update:modelValue", "change", "blur", "input"],
   setup(props, { emit }) {
-
     const localType = computed(() =>
       allowedTypes.includes(props.type) ? props.type : "text"
     );
@@ -78,18 +79,8 @@ export default defineComponent({
       onInput,
       onChange,
       onBlur,
- 
       blur,
-      
     } = useFormInput(props, emit);
-
-    function handleInput(event: any) {
-      emit("input", event);
-    }
-
-    // function handleBlur(event: any) {
-    //   emit("blur");
-    // }
 
     const name: any = toRef(props, "name");
 
@@ -103,21 +94,19 @@ export default defineComponent({
       initialValue: props.modelValue,
     });
 
-    function handleChange1(event: any) {
+    function handleInput(event: any) {
+      onInput(event);
       handleChange(event);
     }
 
-    console.log(inputValue, "props.modelValue,");
-
     return {
-      
       localType,
       input,
       computedId,
       computedAriaInvalid,
       errorMessage,
-      handleChange1,
- 
+      handleInput,
+
       inputValue,
       onInput,
       onChange,
@@ -167,7 +156,66 @@ export default defineComponent({
   color: #797979;
 }
 
-.input {
+// .input {
+//   position: relative;
+
+//   &__label {
+//     position: absolute;
+//     left: 0;
+//     top: 0;
+//     padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
+//     margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
+//     white-space: nowrap;
+//     transform: translate(0, 0);
+//     transform-origin: 0 0;
+//     background: var(--color-background);
+//     transition: transform 120ms ease-in;
+//     font-size: 0.95rem;
+//     line-height: 0.9;
+//     z-index: 1;
+//   }
+//   &__field {
+//     box-sizing: border-box;
+//     display: block;
+//     &:focus,
+//     &:not(:placeholder-shown) {
+//       & + .input__label {
+//         transform: translate(0.25rem, -65%) scale(0.8);
+//         font-size: 0.75rem;
+//       }
+//     }
+//   }
+// }
+
+.warp {
+  position: relative;
+
+  .fname {
+    position: absolute;
+    font-size: 0.95rem;
+    left: 0;
+    top: 0;
+    padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
+    margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
+    font-size: 12px;
+    white-space: nowrap;
+    // transform: translate(0, 0);
+    // transform-origin: 0 0;
+    background-color: rgb(255, 255, 255);
+    transition: transform 120ms ease-in;
+    z-index: 1;
+    &:focus,
+    &:not(:placeholder-shown) {
+      & + .input__label {
+        transform: translate(0.25rem, -65%) scale(0.8);
+        font-size: 0.75rem;
+        top:-51px;
+      }
+    }
+  }
+}
+
+.inputValidation {
   position: relative;
 
   &__label {
@@ -181,23 +229,28 @@ export default defineComponent({
     transform-origin: 0 0;
     background: var(--color-background);
     transition: transform 120ms ease-in;
- font-size: 0.95rem;
+    font-size: 0.95rem;
     line-height: 0.9;
     z-index: 99990;
   }
   &__field {
-
-
     &:focus,
     &:not(:placeholder-shown) {
-      & + .input__label {
+      & + .errorLabelValidation {
         transform: translate(0.25rem, -65%) scale(0.8);
         font-size: 0.75rem;
-        color: #969696;
-        background: #ffffff;
       }
     }
   }
+}
+
+.input__label {
+  color: #969696;
+  background: #ffffff;
+}
+.errorLabelValidation {
+  color: rgb(255, 56, 99);
+  background: #ffffff;
 }
 
 .form-field {
@@ -213,19 +266,34 @@ export default defineComponent({
   color: black;
   border: 1px solid rgb(223, 221, 221);
   // background: var(--input-background);
-    background-color: white;
+  background-color: white;
   transition: border 0.3s ease;
   &::placeholder {
     color: transparent;
   }
-    &:focus::placeholder {
+  &:focus::placeholder {
     color: silver;
   }
   &:focus {
     background-color: transparent;
     outline: none;
     border-color: rgb(134, 133, 133);
-      color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
+  }
+}
+
+.help-message {
+  margin: 0;
+  color: rgb(255, 56, 99);
+}
+
+.validationError {
+  border: 1px solid rgb(255, 56, 99);
+  &:focus {
+    background-color: transparent;
+    outline: none;
+    border-color: rgb(255, 56, 99);
+    color: rgb(0, 0, 0);
   }
 }
 
@@ -264,16 +332,19 @@ export default defineComponent({
     font-size: 14px;
     line-height: 25px;
     color: silver;
- 
+
     background: rgb(231, 231, 231);
     border: 1px solid var(--group-border);
     transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
   }
   &:focus-within {
     & > span {
-         color: rgb(82, 80, 80);
-      // background: var(--group-background-focus);
-      // border-color: var(--group-border-focus);
+      color: rgb(82, 80, 80);
+    }
+  }
+  &:invalid {
+    & > span {
+      color: rgb(212, 1, 1);
     }
   }
 }

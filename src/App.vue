@@ -90,7 +90,7 @@
     </div>
     <div>
       <VInput
-        :onChange="(e) => handleChange(e)"
+        :onInput="(e) => handleInput(e)"
         suffix="http://"
         
         v-model="book.title"
@@ -192,7 +192,7 @@ export default {
   },
   setup(props) {
     function onSubmit(values) {
-      // console.log(values);
+      console.log(values);
     }
 
     function onInvalidSubmit() {
@@ -377,7 +377,7 @@ export default {
       return value ? true : "This field is required";
     };
 
-    const handleChange = (evt) => {
+    const handleInput = (evt) => {
       console.log(evt,"helooo");
     };
     return {
@@ -393,7 +393,7 @@ export default {
       selectOption6,
       selectOption7,
       multiselectAsync,
-      handleChange,
+      handleInput,
       onChange1,
       getValues,
       onTouch,
