@@ -92,6 +92,7 @@
       <VInput
         :onChange="(e) => handleChange(e)"
         suffix="http://"
+        
         v-model="book.title"
         name="name"
         type="text"

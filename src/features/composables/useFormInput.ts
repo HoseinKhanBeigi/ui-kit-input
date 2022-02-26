@@ -9,7 +9,7 @@ import {
   ref,
   watch,
 } from "vue";
-import useId from './useId'
+import useId from "./useId";
 import { string } from "yup/lib/locale";
 
 export const COMMON_INPUT_PROPS = {
@@ -72,30 +72,23 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
     return value;
   };
 
-  const handleAutofocus = () => {
-    nextTick(() => {
-      if (input.value) input.value?.focus();
-    });
-  };
+  // const handleAutofocus = () => {
+  //   nextTick(() => {
+  //     if (input.value) input.value?.focus();
+  //   });
+  // };
 
-  const handleAutofocus2 = () => {
-    return nextTick(() => {
-      if (input.value) {
-        return true
-      }
-      return false
-    });
-  };
 
-  onMounted(handleAutofocus);
-  onMounted(() => {
-    if (input.value) {
-      var { value }: any = input.value;
-      value = props.modelValue;
-    }
-  });
 
-  onActivated(handleAutofocus);
+  // onMounted(handleAutofocus);
+  // onMounted(() => {
+  //   if (input.value) {
+  //     var { value }: any = input.value;
+  //     value = props.modelValue;
+  //   }
+  // });
+
+  // onActivated(handleAutofocus);
 
   const computedAriaInvalid = computed(() => {
     if (props.ariaInvalid) {
@@ -153,11 +146,7 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
   };
 
   const focus = () => {
-    if (!props.disabled) {
-      input.value?.focus();
-      return true
-    }
-    return false
+    if (!props.disabled) input.value?.focus();
   };
 
   const blur = () => {
@@ -179,7 +168,6 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
 
   return {
     input,
-    handleAutofocus2,
     computedId,
     computedAriaInvalid,
     onInput,
