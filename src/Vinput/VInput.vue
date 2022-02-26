@@ -107,10 +107,12 @@ export default defineComponent({
       handleChange(event);
     }
 
+    console.log(errorMessage,"errorMessage")
+
     const classes = computed(() => {
       return {
-        'input__label': !errorMessage,
-        'errorLabelValidation': errorMessage,
+        'input__label': !errorMessage.value,
+        'errorLabelValidation': errorMessage.value,
       };
     });
 
