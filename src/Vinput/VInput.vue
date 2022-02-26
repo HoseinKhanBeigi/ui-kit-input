@@ -2,7 +2,6 @@
   <label class="input">
     <div class="form-group">
       <span v-if="prefix">{{ prefix }}</span>
-
       <input
         class="form-field input__field"
         :id="computedId"
@@ -13,13 +12,14 @@
         :form="form || undefined"
         :type="localType"
         :disabled="disabled"
-        :placeholder="placeholder"
+        :placeholder="handleAutofocus2 ? placeholder : ''"
         :required="required"
         :autocomplete="autocomplete || undefined"
         :readonly="readonly || plaintext"
         :aria-invalid="computedAriaInvalid"
         @input="handleChange1"
         @blur="onBlur($event)"
+        @focus="focus()"
       />
       <div class="input__label">{{ label }}</div>
       <span v-if="suffix">{{ suffix }}</span>
@@ -93,16 +93,14 @@ export default defineComponent({
       onBlur,
       focus,
       blur,
+      handleAutofocus2,
     } = useFormInput(props, emit);
 
     function handleInput(event: any) {
       emit("input", event);
     }
 
-    // function handleBlur(event: any) {
-    //   emit("blur");
-    // }
-
+    handleAutofocus2();
     const name: any = toRef(props, "name");
 
     const {
@@ -119,7 +117,13 @@ export default defineComponent({
       handleChange(event);
     }
 
-    console.log(inputValue, "props.modelValue,");
+    function handleFocus() {
+      focus();
+    }
+
+    console.log(focus(), "focus");
+
+    // console.log(inputValue, "props.modelValue,");
 
     return {
       classes,
@@ -129,7 +133,8 @@ export default defineComponent({
       computedAriaInvalid,
       errorMessage,
       handleChange1,
- 
+      handleAutofocus2,
+      handleFocus,
       inputValue,
       onInput,
       onChange,
@@ -204,10 +209,8 @@ export default defineComponent({
     border: 3px solid currentColor;
     padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
     color: currentColor;
-    // background: transparent;
-    // border-radius: var(--size-radius);
 
-    &:focus,
+ &:focus,
     &:not(:placeholder-shown) {
       & + .input__label {
         transform: translate(0.25rem, -65%) scale(0.8);
@@ -215,6 +218,9 @@ export default defineComponent({
       }
     }
   }
+}
+.input__field:not(:focus)::placeholder {
+  color: transparent;
 }
 
 .form-field {

@@ -74,7 +74,16 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
 
   const handleAutofocus = () => {
     nextTick(() => {
-      if (props.autofocus) input.value?.focus();
+      if (input.value) input.value?.focus();
+    });
+  };
+
+  const handleAutofocus2 = () => {
+    return nextTick(() => {
+      if (input.value) {
+        return true
+      }
+      return false
     });
   };
 
@@ -144,7 +153,11 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
   };
 
   const focus = () => {
-    if (!props.disabled) input.value?.focus();
+    if (!props.disabled) {
+      input.value?.focus();
+      return true
+    }
+    return false
   };
 
   const blur = () => {
@@ -166,6 +179,7 @@ function useFormInput(props: Readonly<InputProps>, emit: InputEmitType) {
 
   return {
     input,
+    handleAutofocus2,
     computedId,
     computedAriaInvalid,
     onInput,
