@@ -1,28 +1,34 @@
 <template>
   <label class="input">
-    <div class="form-group">
-      <span v-if="prefix">{{ prefix }}</span>
-      <input
-        class="form-field input__field"
-        :id="computedId"
-        ref="input"
-        :class="classes"
-        :value="inputValue"
-        :name="name"
-        :form="form || undefined"
-        :type="localType"
-        :disabled="disabled"
-        :placeholder="handleAutofocus2 ? placeholder : ''"
-        :required="required"
-        :autocomplete="autocomplete || undefined"
-        :readonly="readonly || plaintext"
-        :aria-invalid="computedAriaInvalid"
-        @input="handleChange1"
-        @blur="onBlur($event)"
-        @focus="focus()"
-      />
-      <div class="input__label">{{ label }}</div>
-      <span v-if="suffix">{{ suffix }}</span>
+    <div class="vc-input">
+    <div class="vc_input__control">
+    <div class="vc-input__slot">  
+      <div class="form-group">
+        <span v-if="prefix">{{ prefix }}</span>
+        <input
+          class="form-field input__field"
+          :id="computedId"
+          ref="input"
+          :class="classes"
+          :value="inputValue"
+          :name="name"
+          :form="form || undefined"
+          :type="localType"
+          :disabled="disabled"
+          :placeholder="handleAutofocus2 ? placeholder : ''"
+          :required="required"
+          :autocomplete="autocomplete || undefined"
+          :readonly="readonly || plaintext"
+          :aria-invalid="computedAriaInvalid"
+          @input="handleChange1"
+          @blur="onBlur($event)"
+          @focus="focus()"
+        />
+        <div class="input__label">{{ label }}</div>
+        <span v-if="suffix">{{ suffix }}</span>
+      </div>
+    </div>
+    </div>
     </div>
     <p class="help-message" v-show="errorMessage">
       {{ errorMessage }}
@@ -186,21 +192,27 @@ export default defineComponent({
 
 .input {
   position: relative;
-
   &__label {
+    height: 20px;
+    line-height: 10px;
+    letter-spacing: normal;
+    top: 0px;
+    left: 0px;
+    right: auto;
     position: absolute;
-    left: 0;
-    top: 0;
-    padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
+    transform-origin: top left;
+    padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 1.3);
     margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
-    white-space: nowrap;
-    transform: translate(0, 0);
-    transform-origin: 0 0;
-    background: var(--color-background);
-    transition: transform 120ms ease-in;
-    font-weight: bold;
-    line-height: 0.9;
-    z-index: 99990;
+    font-family: sans-serif;
+    color: #969696;
+    pointer-events: none;
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.5, 1);
+    transition-delay: 0s;
+    white-space: pre;
+    z-index: 1;
   }
   &__field {
     box-sizing: border-box;
@@ -210,10 +222,17 @@ export default defineComponent({
     padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
     color: currentColor;
 
- &:focus,
+    &:focus,
     &:not(:placeholder-shown) {
       & + .input__label {
         transform: translate(0.25rem, -65%) scale(0.8);
+        font-size: 0.75rem;
+        color: #969696;
+        background: #ffffff;
+        padding: 0px 1px 1px 1px;
+        margin-top: 10px;
+        margin-left: 8px;
+
         // color: var(--color-accent);
       }
     }
@@ -223,45 +242,89 @@ export default defineComponent({
   color: transparent;
 }
 
+.input__label {
+  font-size: 0.75rem;
+  color: #969696;
+  background: transparent;
+  // color: var(--color-accent);
+}
+
+.vc_input__control{
+      display: flex;
+    height: auto;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    position: relative;
+    min-width: 0;
+    width: 100%;
+    border-radius: inherit;
+}
+
+.vc-input{
+      align-items: flex-start;
+    align-items: center;
+    display: flex;
+    flex: 1 1 auto;
+    font-size: 16px;
+    letter-spacing: normal;
+    max-width: 100%;
+    text-align: left;
+    border:1px solid;
+    padding: 0;
+    position: relative;
+    border-radius: 4px;
+    color: var(--input-border);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    transition: border 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+}
+
+.vc-input__slot{
+      color: inherit;
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    border-radius: 4px;
+    width: 100%;
+    min-height: 40px;
+    cursor: text;
+    background: transparent
+}
+
 .form-field {
-  display: block;
+  flex: 1 1 auto;
+  line-height: 20px;
+  padding: 8px 0;
+  margin-left: 10px;
+  margin-right: 10px;
+  max-width: 100%;
+  min-width: 0;
+  max-height: 32px;
+  color: #212121;
   width: 100%;
-  padding: 8px 16px;
-  line-height: 25px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-  border-radius: 6px;
-  -webkit-appearance: none;
-  color: var(--input-color);
-  border: 1px solid var(--input-border);
-  background: var(--input-background);
-  transition: border 0.3s ease;
+  background-color: transparent;
+  border-style: none;
   &::placeholder {
     color: var(--input-placeholder);
   }
   &:focus {
     outline: none;
-    border-color: var(--input-border-focus);
+    border-color: rgb(197, 197, 197);
   }
 }
 
 .form-group {
-  position: relative;
   display: flex;
-  width: 100%;
+  flex: 1 1 auto;
+  position: relative;
+  align-items: center;
+  max-width: 80%;
   & > span,
   .form-field {
     white-space: nowrap;
     display: block;
     &:not(:first-child):not(:last-child) {
       border-radius: 0;
-    }
-    &:first-child {
-      border-radius: 6px 0 0 6px;
-    }
-    &:last-child {
-      border-radius: 0 6px 6px 0;
     }
     &:not(:first-child) {
       margin-left: -1px;
@@ -280,17 +343,8 @@ export default defineComponent({
     padding: 8px 12px;
     font-size: 14px;
     line-height: 25px;
-    color: var(--group-color);
-    background: var(--group-background);
     border: 1px solid var(--group-border);
     transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
-  }
-  &:focus-within {
-    & > span {
-      color: var(--group-color-focus);
-      background: var(--group-background-focus);
-      border-color: var(--group-border-focus);
-    }
   }
 }
 </style>
