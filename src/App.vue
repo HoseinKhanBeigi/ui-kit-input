@@ -1,6 +1,6 @@
 <template>
   <Form
-    @submit.prevent="onSubmit({name , email , password})"
+    @submit.prevent="onSubmit({ name, email, password })"
     :validation-schema="schema"
     @invalid-submit="onInvalidSubmit"
     v-slot="{ errors }"
@@ -91,12 +91,20 @@
     <div>
       <VInput
         :onInput="(e) => handleInput(e)"
-        
         suffix="ss"
         name="name"
         type="text"
         label="Full Name"
         placeholder="Your Name"
+      />
+    </div>
+    <div>
+      <VTextarea
+        id="textarea"
+
+        placeholder="Enter something..."
+        rows="3"
+        max-rows="6"
       />
     </div>
     <!-- <div>
@@ -131,7 +139,7 @@
       v-model="checkboxes.selected"
       :options="checkboxes.options"
     />
-    <button class="submit-btn" type="submit">Submit</button>
+    <!-- <button class="submit-btn" type="submit">Submit</button> -->
   </Form>
 </template>
 
@@ -140,6 +148,7 @@ import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { ref, reactive, computed } from "vue";
 import VInput from "./VInput/VInput.vue";
+import VTextarea from "./VTextarea/VTextarea.vue";
 
 import Multiselect from "./VSelect/Multiselect.vue";
 import VSwitch from "./VSwitch/VSwitch.vue";
@@ -183,7 +192,7 @@ const fetchLanguages = async (query) => {
 export default {
   components: {
     VInput,
-
+    VTextarea,
     Multiselect,
     VSwitch,
     VCheckBoxGroup,
@@ -193,10 +202,8 @@ export default {
   setup(props) {
     function onSubmit(values) {
       console.log(book.title);
-          console.log(values);
+      console.log(values);
     }
-
-
 
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -373,7 +380,7 @@ export default {
     };
 
     const handleInput = (evt) => {
-      console.log(evt,"helooo");
+      console.log(evt, "helooo");
     };
     return {
       Vswitch,
@@ -397,12 +404,10 @@ export default {
       checkboxes,
       onSubmit,
       schema,
-     
     };
   },
 };
 </script>
-
 
 <style scoped>
 form {

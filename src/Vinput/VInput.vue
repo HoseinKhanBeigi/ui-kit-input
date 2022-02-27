@@ -142,6 +142,8 @@ export default defineComponent({
       return {
         validationError: errorMessage.value,
         inputBorder: props.suffixContext,
+        "form-field-RadiusForSuffix":props.suffix,
+        "form-field-RadiusForPrefix":props.prefix
       };
     });
 
@@ -149,6 +151,8 @@ export default defineComponent({
       return {
         validationSuffixAndPrefix: errorMessage.value,
         prefixAndsuffixDefaultColor: !errorMessage.value,
+        "suffixClass-Radius":props.suffix,
+        "prefixClass-Radius":props.prefix
       };
     });
 
@@ -238,6 +242,7 @@ export default defineComponent({
   display: flex;
   height: 100%;
   width: 50px;
+    border-radius: 3px;
   align-items: center;
   justify-content: center;
   font-size: 14px;
@@ -248,7 +253,7 @@ export default defineComponent({
 .prefixClass {
   text-align: center;
   display: flex;
-
+  border-radius: 3px;
   width: 50px;
   align-items: center;
   justify-content: center;
@@ -256,6 +261,22 @@ export default defineComponent({
   color: silver;
   transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
 }
+
+.prefixClass-Radius{
+  border-radius: 3px 0px 0px 3px !important;
+}
+
+.suffixClass-Radius{
+  border-radius: 0px 3px 3px 0px !important;
+}
+.form-field-RadiusForSuffix{
+  border-radius: 3px 0px 0px 3px !important;
+}
+
+.form-field-RadiusForPrefix{
+  border-radius: 0px 3px 3px 0px !important;
+}
+
 
 .suffixContextIcon {
   position: absolute;
@@ -270,6 +291,8 @@ export default defineComponent({
   justify-content: end;
 }
 
+
+
 .form-field {
   display: block;
   width: 100%;
@@ -278,7 +301,7 @@ export default defineComponent({
   font-size: 14px;
   font-weight: 500;
   font-family: inherit;
-  border-radius: 1px;
+  border-radius: 3px;
   -webkit-appearance: none;
   color: black;
   border: 1px solid rgb(223, 221, 221);
