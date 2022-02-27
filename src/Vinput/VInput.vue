@@ -256,11 +256,11 @@ export default defineComponent({
 
 .validationSuffixAndPrefix {
   background: rgb(255, 56, 99);
-  text-align: center;
-  padding: 9px 14px;
-  font-size: 14px;
-  line-height: 26px;
-  color: silver;
+      text-align: center;
+    padding: 9px 14px;
+    font-size: 14px;
+    line-height: 26px;
+    color: silver;
 }
 
 .suffixContextIcon {
