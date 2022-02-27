@@ -91,7 +91,8 @@
     <div>
       <VInput
         :onInput="(e) => handleInput(e)"
-        prefix="sad"
+        
+        suffix="ss"
         name="name"
         type="text"
         label="Full Name"
@@ -422,7 +423,7 @@ form {
   display: block;
   background-color: aqua;
   width: 100%;
-  border-radius: 7px;
+  border-radius: 1px;
   margin-top: 40px;
   transition: transform 0.3s ease-in-out;
   cursor: pointer;
