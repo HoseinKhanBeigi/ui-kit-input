@@ -1,42 +1,65 @@
 <template>
-  <div class="warp">
-    <div class="form-group">
-      <span
-        v-if="prefix"
-        :class="errorMessage ? 'validationSuffixAndPrefix' : 'prefix'"
-        >{{ prefix }}</span
-      >
-
-      <input
-        class="form-field"
-        :class="errorMessage ? 'validationError' : ''"
-        :id="computedId"
-        ref="input"
-        :value="inputValue"
-        :name="name"
-        :form="form || undefined"
-        :type="localType"
-        :disabled="disabled"
-        :placeholder="placeholder"
-        :required="required"
-        :autocomplete="autocomplete || undefined"
-        :readonly="readonly || plaintext"
-        :aria-invalid="computedAriaInvalid"
-        @input="handleInput"
-        @blur="onBlur($event)"
-      />
-      <div class="fname" :class="classes">
-        {{ label }}
+  <div>
+    <div class="warp">
+      <div class="form-group">
+        <span
+          v-if="prefix"
+          :class="errorMessage ? 'validationSuffixAndPrefix' : 'prefix'"
+          >{{ prefix }}</span
+        >
+        <div class="vInput">
+          <input
+            class="form-field"
+            :class="classesInput"
+            :id="computedId"
+            ref="input"
+            :value="inputValue"
+            :name="name"
+            :form="form || undefined"
+            :type="localType"
+            :disabled="disabled"
+            :placeholder="placeholder"
+            :required="required"
+            :autocomplete="autocomplete || undefined"
+            :readonly="readonly || plaintext"
+            :aria-invalid="computedAriaInvalid"
+            @input="handleInput"
+            @blur="onBlur($event)"
+          />
+          <div class="fname" :class="classes">
+            {{ label }}
+          </div>
+          <span
+            v-if="suffix"
+            :class="errorMessage ? 'validationSuffixAndPrefix' : 'suffix'"
+            >{{ suffix }}
+          </span>
+          <div class="suffixContextIcon" v-if="suffixContext">
+            <svg class="icon-search">
+              <use xlink:href="#icon-search" />
+            </svg>
+          </div>
+        </div>
       </div>
-      <span
-        v-if="suffix"
-        :class="errorMessage ? 'validationSuffixAndPrefix' : 'suffix'"
-        >{{ suffix }}</span
-      >
+      <p class="help-message" v-show="errorMessage">
+        {{ errorMessage }}
+      </p>
     </div>
-    <p class="help-message" v-show="errorMessage">
-      {{ errorMessage }}
-    </p>
+
+    <svg style="display: none">
+      <symbol
+        id="icon-search"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g>
+          <path
+            d="M19.688 18.189l-5.541-5.541a7.879 7.879 0 1 0-1.5 1.5l5.541 5.541a1.074 1.074 0 0 0 1.5 0 1.062 1.062 0 0 0 0-1.5zM2.178 7.905a5.728 5.728 0 1 1 5.728 5.728 5.728 5.728 0 0 1-5.728-5.728z"
+            fill="currentColor"
+          />
+        </g>
+      </symbol>
+    </svg>
   </div>
 </template>
 
@@ -107,16 +130,31 @@ export default defineComponent({
       handleChange(event);
     }
 
-    console.log(errorMessage,"errorMessage")
-
     const classes = computed(() => {
       return {
-        'input__label': !errorMessage.value,
-        'errorLabelValidation': errorMessage.value,
+        input__label: !errorMessage.value,
+        errorLabelValidation: errorMessage.value,
+        fnamePositionValidation: props.prefix,
+        fnamePosition: !props.prefix,
+      };
+    });
+
+    const classesInput = computed(() => {
+      return {
+        validationError: errorMessage.value,
+        inputBorder: props.suffixContext,
+      };
+    });
+
+    const classesSuffixContext = computed(() => {
+      return {
+        validationSuffixContext: errorMessage.value,
+        suffixContextColor: props.suffixContext && !errorMessage.value,
       };
     });
 
     return {
+      classesInput,
       localType,
       input,
       computedId,
@@ -128,6 +166,7 @@ export default defineComponent({
       onInput,
       onChange,
       onBlur,
+      classesSuffixContext,
       focus,
       blur,
     };
@@ -217,6 +256,24 @@ export default defineComponent({
 
 .validationSuffixAndPrefix {
   background: rgb(255, 56, 99);
+  text-align: center;
+  padding: 9px 14px;
+  font-size: 14px;
+  line-height: 26px;
+  color: silver;
+}
+
+.suffixContextIcon {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+}
+
+.vInput {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: end;
 }
 
 .form-field {
@@ -231,6 +288,7 @@ export default defineComponent({
   -webkit-appearance: none;
   color: black;
   border: 1px solid rgb(223, 221, 221);
+
   // background: var(--input-background);
   background-color: white;
   transition: border 0.3s ease;
@@ -263,6 +321,12 @@ export default defineComponent({
   }
 }
 
+.icon-search {
+  color: #d2d2d2;
+  width: 16px;
+  height: 16px;
+}
+
 .form-group {
   position: relative;
   display: flex;
@@ -284,6 +348,7 @@ export default defineComponent({
       margin-left: -1px;
     }
   }
+
   .form-field {
     position: relative;
     z-index: 1;
@@ -300,6 +365,16 @@ export default defineComponent({
     color: silver;
 
     border: 1px solid var(--group-border);
+    transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+  }
+  .suffix {
+    text-align: center;
+    padding: 9px 14px;
+    font-size: 14px;
+    line-height: 26px;
+    color: silver;
+
+    // border: 1px solid var(--group-border);
     transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
   }
   &:focus-within {
