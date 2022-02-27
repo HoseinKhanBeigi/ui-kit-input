@@ -402,8 +402,8 @@ export default {
   },
 };
 </script>
-<style src="./VSelect/themes/default.css"></style>
-<style src="./VSwitch/themes/default.css"></style>
+
+
 <style scoped>
 form {
   width: 300px;
