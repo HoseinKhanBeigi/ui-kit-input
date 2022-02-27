@@ -2,12 +2,9 @@
   <div>
     <div class="warp">
       <div class="form-group">
-        <span
-          v-if="prefix"
-          class="prefixClass"
-          :class="prefixSuffixClass"
-          >{{ prefix }}</span
-        >
+        <span v-if="prefix" class="prefixClass" :class="prefixSuffixClass">{{
+          prefix
+        }}</span>
         <div class="vInput">
           <input
             class="form-field"
@@ -142,8 +139,8 @@ export default defineComponent({
       return {
         validationError: errorMessage.value,
         inputBorder: props.suffixContext,
-        "form-field-RadiusForSuffix":props.suffix,
-        "form-field-RadiusForPrefix":props.prefix
+        "form-field-RadiusForSuffix": props.suffix,
+        "form-field-RadiusForPrefix": props.prefix,
       };
     });
 
@@ -151,8 +148,8 @@ export default defineComponent({
       return {
         validationSuffixAndPrefix: errorMessage.value,
         prefixAndsuffixDefaultColor: !errorMessage.value,
-        "suffixClass-Radius":props.suffix,
-        "prefixClass-Radius":props.prefix
+        "suffixClass-Radius": props.suffix,
+        "prefixClass-Radius": props.prefix,
       };
     });
 
@@ -202,7 +199,13 @@ export default defineComponent({
   white-space: nowrap;
   transform: translate(0, 0);
   transform-origin: 0 0;
-  transition: transform 120ms ease-in;
+  pointer-events: none;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  transition-property: all;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.5, 1);
+  transition-delay: 0s;
+  white-space: pre;
   z-index: 1;
 }
 
@@ -242,7 +245,7 @@ export default defineComponent({
   display: flex;
   height: 100%;
   width: 50px;
-    border-radius: 3px;
+  border-radius: 3px;
   align-items: center;
   justify-content: center;
   font-size: 14px;
@@ -262,21 +265,20 @@ export default defineComponent({
   transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
 }
 
-.prefixClass-Radius{
+.prefixClass-Radius {
   border-radius: 3px 0px 0px 3px !important;
 }
 
-.suffixClass-Radius{
+.suffixClass-Radius {
   border-radius: 0px 3px 3px 0px !important;
 }
-.form-field-RadiusForSuffix{
+.form-field-RadiusForSuffix {
   border-radius: 3px 0px 0px 3px !important;
 }
 
-.form-field-RadiusForPrefix{
+.form-field-RadiusForPrefix {
   border-radius: 0px 3px 3px 0px !important;
 }
-
 
 .suffixContextIcon {
   position: absolute;
@@ -290,8 +292,6 @@ export default defineComponent({
   align-items: center;
   justify-content: end;
 }
-
-
 
 .form-field {
   display: block;
