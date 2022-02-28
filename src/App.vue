@@ -91,14 +91,14 @@
     <div>
       <VInput
         :onInput="(e) => handleInput(e)"
-        prefix="sad"
+        suffixContext
         name="name"
         type="text"
         label="Full Name"
         placeholder="Your Name"
       />
     </div>
-    <!-- <div>
+    <div>
       <VInput
       prefix="email"
         name="email"
@@ -114,7 +114,7 @@
         label="Password"
         placeholder="Your password"
       />
-    </div> -->
+    </div>
 
     <div>
       <VRadio v-model="radioButton" name="some-radios" value="A"
