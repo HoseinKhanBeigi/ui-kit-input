@@ -1,6 +1,6 @@
 <template>
   <Form
-    @submit.prevent="onSubmit({name , email , password})"
+    @submit.prevent="onSubmit({ name, email, password })"
     :validation-schema="schema"
     @invalid-submit="onInvalidSubmit"
     v-slot="{ errors }"
@@ -130,7 +130,7 @@
       v-model="checkboxes.selected"
       :options="checkboxes.options"
     />
-    <button class="submit-btn" type="submit">Submit</button>
+    <!-- <button class="submit-btn" type="submit">Submit</button> -->
   </Form>
 </template>
 
@@ -139,6 +139,7 @@ import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { ref, reactive, computed } from "vue";
 import VInput from "./VInput/VInput.vue";
+import VTextarea from "./VTextarea/VTextarea.vue";
 
 import Multiselect from "./VSelect/Multiselect.vue";
 import VSwitch from "./VSwitch/VSwitch.vue";
@@ -182,20 +183,18 @@ const fetchLanguages = async (query) => {
 export default {
   components: {
     VInput,
-
+    // VTextarea,
     Multiselect,
     VSwitch,
     VCheckBoxGroup,
     VRadio,
     Form,
   },
-  setup(props) {
+  setup() {
     function onSubmit(values) {
       console.log(book.title);
-          console.log(values);
+      console.log(values);
     }
-
-
 
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -372,7 +371,7 @@ export default {
     };
 
     const handleInput = (evt) => {
-      console.log(evt,"helooo");
+      console.log(evt, "helooo");
     };
     return {
       Vswitch,
@@ -396,13 +395,11 @@ export default {
       checkboxes,
       onSubmit,
       schema,
-     
     };
   },
 };
 </script>
-<style src="./VSelect/themes/default.css"></style>
-<style src="./VSwitch/themes/default.css"></style>
+
 <style scoped>
 form {
   width: 300px;
@@ -422,7 +419,7 @@ form {
   display: block;
   background-color: aqua;
   width: 100%;
-  border-radius: 7px;
+  border-radius: 1px;
   margin-top: 40px;
   transition: transform 0.3s ease-in-out;
   cursor: pointer;

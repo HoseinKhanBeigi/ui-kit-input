@@ -2,11 +2,9 @@
   <div>
     <div class="warp">
       <div class="form-group">
-        <span
-          v-if="prefix"
-          :class="errorMessage ? 'validationSuffixAndPrefix' : 'prefix'"
-          >{{ prefix }}</span
-        >
+        <span v-if="prefix" class="prefixClass" :class="prefixSuffixClass">{{
+          prefix
+        }}</span>
         <div class="vInput">
           <input
             class="form-field"
@@ -26,12 +24,10 @@
             @input="handleInput"
             @blur="onBlur($event)"
           />
-          <div class="fname" :class="classes">
+          <div class="nameLabel" :class="labelClass">
             {{ label }}
           </div>
-          <span
-            v-if="suffix"
-            :class="errorMessage ? 'validationSuffixAndPrefix' : 'suffix'"
+          <span v-if="suffix" class="suffixClass" :class="prefixSuffixClass"
             >{{ suffix }}
           </span>
           <div class="suffixContextIcon" v-if="suffixContext">
@@ -130,7 +126,7 @@ export default defineComponent({
       handleChange(event);
     }
 
-    const classes = computed(() => {
+    const labelClass = computed(() => {
       return {
         input__label: !errorMessage.value,
         errorLabelValidation: errorMessage.value,
@@ -143,6 +139,17 @@ export default defineComponent({
       return {
         validationError: errorMessage.value,
         inputBorder: props.suffixContext,
+        "form-field-RadiusForSuffix": props.suffix,
+        "form-field-RadiusForPrefix": props.prefix,
+      };
+    });
+
+    const prefixSuffixClass = computed(() => {
+      return {
+        validationSuffixAndPrefix: errorMessage.value,
+        prefixAndsuffixDefaultColor: !errorMessage.value,
+        "suffixClass-Radius": props.suffix,
+        "prefixClass-Radius": props.prefix,
       };
     });
 
@@ -161,12 +168,13 @@ export default defineComponent({
       computedAriaInvalid,
       errorMessage,
       handleInput,
-      classes,
+      labelClass,
       inputValue,
       onInput,
       onChange,
       onBlur,
       classesSuffixContext,
+      prefixSuffixClass,
       focus,
       blur,
     };
@@ -176,32 +184,8 @@ export default defineComponent({
 
 <style lang="scss">
 :root {
-  --input-color: #99a3ba;
-  --input-border: #cdd9ed;
-  --input-background: #fff;
-  --input-placeholder: #cbd1dc;
-
-  --input-border-focus: #a0a0a0;
-
-  --group-color: var(--input-color);
-  --group-border: var(--input-border);
-  --group-background: #eef4ff;
-
-  --group-color-focus: #fff;
-  --group-border-focus: var(--input-border-focus);
-  --group-background-focus: #929292;
-
-  --color-light: white;
-  --color-dark: #212121;
-  --color-signal: #fab700;
-
-  --color-background: var(--color-light);
-  --color-text: var(--color-dark);
-  --color-accent: var(--color-signal);
-
   --size-bezel: 0.5rem;
   --size-radius: 4px;
-
   line-height: 1.4;
 }
 
@@ -209,33 +193,34 @@ export default defineComponent({
   position: relative;
 }
 
-.fname {
+.nameLabel {
   position: absolute;
   font-size: 0.95rem;
-  top: 0;
-  left: 0;
-  padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
-  margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
-  font-size: 12px;
   white-space: nowrap;
   transform: translate(0, 0);
   transform-origin: 0 0;
-  transition: transform 120ms ease-in;
+  pointer-events: none;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  transition-property: all;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.5, 1);
+  transition-delay: 0s;
+  white-space: pre;
   z-index: 1;
 }
 
 .fnamePosition {
-  left: 0;
+  left: 10px;
 }
 
 .fnamePositionValidation {
-  left: 54px;
+  left: 50px;
 }
 
-.form-field:focus ~ .fname,
-.form-field:not(:placeholder-shown).form-field:not(:focus) ~ .fname {
-  transform: translate(0.25rem, -65%) scale(0.8);
-  font-size: 0.75rem;
+.form-field:focus ~ .nameLabel,
+.form-field:not(:placeholder-shown).form-field:not(:focus) ~ .nameLabel {
+  transform: translate(0.25rem, -100%) scale(0.8);
+  font-size: 0.85rem;
 }
 
 .input__label {
@@ -246,21 +231,53 @@ export default defineComponent({
   color: rgb(255, 56, 99);
   background: #ffffff;
 }
-.suffix {
-  background: rgb(231, 231, 231);
-}
 
-.prefix {
+.prefixAndsuffixDefaultColor {
   background: rgb(231, 231, 231);
 }
 
 .validationSuffixAndPrefix {
-  background: rgb(255, 56, 99);
-      text-align: center;
-    padding: 9px 14px;
-    font-size: 14px;
-    line-height: 26px;
-    color: silver;
+  background: #ff3863;
+}
+
+.suffixClass {
+  text-align: center;
+  display: flex;
+  height: 100%;
+  width: 50px;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: silver;
+  transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+}
+
+.prefixClass {
+  text-align: center;
+  display: flex;
+  border-radius: 3px;
+  width: 50px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: silver;
+  transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+}
+
+.prefixClass-Radius {
+  border-radius: 3px 0px 0px 3px !important;
+}
+
+.suffixClass-Radius {
+  border-radius: 0px 3px 3px 0px !important;
+}
+.form-field-RadiusForSuffix {
+  border-radius: 3px 0px 0px 3px !important;
+}
+
+.form-field-RadiusForPrefix {
+  border-radius: 0px 3px 3px 0px !important;
 }
 
 .suffixContextIcon {
@@ -284,12 +301,10 @@ export default defineComponent({
   font-size: 14px;
   font-weight: 500;
   font-family: inherit;
-  border-radius: 6px;
+  border-radius: 3px;
   -webkit-appearance: none;
   color: black;
   border: 1px solid rgb(223, 221, 221);
-
-  // background: var(--input-background);
   background-color: white;
   transition: border 0.3s ease;
   &::placeholder {
@@ -331,55 +346,10 @@ export default defineComponent({
   position: relative;
   display: flex;
   width: 100%;
-  & > span,
-  .form-field {
-    white-space: nowrap;
-    display: block;
-    &:not(:first-child):not(:last-child) {
-      border-radius: 0;
-    }
-    &:first-child {
-      border-radius: 6px 0 0 6px;
-    }
-    &:last-child {
-      border-radius: 0 6px 6px 0;
-    }
-    &:not(:first-child) {
-      margin-left: -1px;
-    }
-  }
 
-  .form-field {
-    position: relative;
-    z-index: 1;
-    flex: 1 1 auto;
-    width: 1%;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  & > span {
-    text-align: center;
-    padding: 8px 12px;
-    font-size: 14px;
-    line-height: 25px;
-    color: silver;
-
-    border: 1px solid var(--group-border);
-    transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
-  }
-  .suffix {
-    text-align: center;
-    padding: 9px 14px;
-    font-size: 14px;
-    line-height: 26px;
-    color: silver;
-
-    // border: 1px solid var(--group-border);
-    transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
-  }
   &:focus-within {
-    & > span {
-      color: rgb(82, 80, 80);
+    .prefixAndsuffixDefaultColor {
+      background: rgb(121, 121, 121);
     }
   }
 }
