@@ -91,7 +91,7 @@
     <div>
       <VInput
         :onInput="(e) => handleInput(e)"
-        suffixContext
+       suffix="ss"
         name="name"
         type="text"
         label="Full Name"

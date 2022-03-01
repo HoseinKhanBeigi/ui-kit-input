@@ -8,9 +8,9 @@
   box-sizing: border-box;
   cursor: pointer;
   outline: none;
-  border: none;
+  border: silver;
   border-radius: var(--ms-radius, 4px);
-  background: var(--ms-bg, #fff);
+  background: var(--ms-bg, rgb(255, 255, 255));
   font-size: var(--ms-font-size, 1rem);
   min-height: calc(
     var(--ms-border-width, 1px) * 2 + var(--ms-font-size, 1rem) *

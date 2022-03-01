@@ -15,7 +15,7 @@
         @focus="handleFocus"
       >
         <!-- Search -->
-        <!-- <template v-if="mode !== 'tags' && searchable && !disabled">
+        <template v-if="mode !== 'tags' && searchable && !disabled">
           <input
             :type="inputType"
             :modelValue="search"
@@ -26,7 +26,7 @@
             @paste.stop="handlePaste"
             ref="input"
           />
-        </template> -->
+        </template>
 
         <!-- Tags (with search) -->
         <template v-if="mode == 'tags'">
@@ -76,22 +76,22 @@
         </template>
 
         <!-- Single label -->
-        <!-- <template v-if="mode == 'single' && hasSelected && !search && iv">
+        <template v-if="mode == 'single' && hasSelected && !search && iv">
           <slot name="singlelabel" :value="iv">
             <div :class="classList.singleLabel">
               <span :class="classList.singleLabelText">{{ iv[label] }}</span>
             </div>
           </slot>
-        </template> -->
+        </template>
 
         <!-- Multiple label -->
-        <!-- <template v-if="mode == 'multiple' && hasSelected && !search">
+        <template v-if="mode == 'multiple' && hasSelected && !search">
           <slot name="multiplelabel" :values="iv">
             <div :class="classList.multipleLabel">
               {{ multipleLabelText }}
             </div>
           </slot>
-        </template> -->
+        </template>
 
         <!-- Placeholder -->
         <template v-if="placeholder && !hasSelected && !search">
@@ -217,7 +217,7 @@
         </template>
 
         <!-- Create height for empty input -->
-        <!-- <div :class="classList.spacer"></div> -->
+        <div :class="classList.spacer"></div>
       </div>
     </div>
 

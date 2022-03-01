@@ -218,9 +218,12 @@ export default defineComponent({
 
   font-size: 0.85rem;
 }
-.form-field:focus ~ legend {
- display: none;
+
+input:focus~ fieldset legend,
+input:not(:placeholder-shown)~ fieldset legend {
+   display: block;
 }
+
 
 
 .input__label {
@@ -246,7 +249,7 @@ export default defineComponent({
   display: flex;
   height: 100%;
   width: 100px;
-  border-radius: 3px;
+
   align-items: center;
   justify-content: center;
   font-size: 14px;
@@ -266,20 +269,20 @@ export default defineComponent({
   transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
 }
 
-.prefixClass-Radius {
-  border-radius: 3px 0px 0px 3px !important;
-}
+// .prefixClass-Radius {
+//   border-radius: 3px 0px 0px 3px !important;
+// }
 
-.suffixClass-Radius {
-  border-radius: 0px 3px 3px 0px !important;
-}
-.form-field-RadiusForSuffix {
-  border-radius: 3px 0px 0px 3px !important;
-}
+// .suffixClass-Radius {
 
-.form-field-RadiusForPrefix {
-  border-radius: 0px 3px 3px 0px !important;
-}
+// }
+// .form-field-RadiusForSuffix {
+//   border-radius: 3px 0px 0px 3px !important;
+// }
+
+// .form-field-RadiusForPrefix {
+//   border-radius: 0px 3px 3px 0px !important;
+// }
 
 .suffixContextIcon {
   position: absolute;
@@ -384,6 +387,7 @@ export default defineComponent({
 .legendClass {
   width: 48px;
   margin-left: 8px;
+   display: none;
 }
 
 .deactive{
