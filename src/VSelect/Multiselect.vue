@@ -1,4 +1,5 @@
 <template>
+  <div class="warpSelect">
   <div
     ref="multiselect"
     :tabindex="tabindex"
@@ -57,12 +58,20 @@
             :modelValue="search"
             :value="search"
             :class="classList.tagsSearch"
+            class="form-fieldSelect"
             :autocomplete="autocomplete"
             @input="handleSearchInput"
             @paste.stop="handlePaste"
             ref="input"
           />
+                   <fieldset class="fieldSetClassSelect"   :class="classesInput" :aria-hidden="true">
+        <legend class="legendClassSelect"></legend>
+      </fieldset>
+      <div class="nameLabelForSelect" :class="labelClass">
+        {{ label }}
+      </div>
         </div>
+     
       </div>
     </template>
 
@@ -190,6 +199,7 @@
     <!-- Create height for empty input -->
     <div :class="classList.spacer"></div>
 
+  </div>
   </div>
 </template>
 
@@ -533,4 +543,4 @@
     }
   }
 </script>
-<style src="./themes/default.css"></style>
+<style lang="scss" src="./themes/default.scss"></style>

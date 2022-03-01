@@ -3,23 +3,23 @@
     @submit.prevent="onSubmit({ name, email, password })"
     :validation-schema="schema"
     @invalid-submit="onInvalidSubmit"
-    v-slot="{ errors }"
+
   >
     <div class="test">
       <Multiselect
         v-model="multiselectAsync.value"
         v-bind="multiselectAsync"
       ></Multiselect>
-      <Multiselect
+      <!-- <Multiselect
         v-model="selectOption.value"
         v-bind="selectOption"
       ></Multiselect>
       <Multiselect
         v-model="selectOption2.value"
         v-bind="selectOption2"
-      ></Multiselect>
+      ></Multiselect> -->
 
-      <div :class="{ invalid: isInvalid }">
+      <!-- <div :class="{ invalid: isInvalid }">
         <Field name="selectOption3" :rules="isRequired">
           <Multiselect
             name="selectOption3"
@@ -33,9 +33,9 @@
         <label class="typo__label form__label" v-show="isInvalid"
           >Must have at least one value</label
         >
-      </div>
+      </div> -->
 
-      <Multiselect
+      <!-- <Multiselect
         v-model="selectOption4.value"
         v-bind="selectOption4"
       ></Multiselect>
@@ -46,7 +46,7 @@
       <Multiselect
         v-model="selectOption6.value"
         v-bind="selectOption6"
-      ></Multiselect>
+      ></Multiselect> -->
       <!-- <Multiselect
         v-model="value"
         mode="multiple"
@@ -63,7 +63,7 @@
           </div>
         </template>
       </Multiselect> -->
-      <Multiselect v-model="selectOption7.value" v-bind="selectOption7">
+      <!-- <Multiselect v-model="selectOption7.value" v-bind="selectOption7">
         <template v-slot:tag="{ option, handleTagRemove, disabled }">
           <div class="multiselect-tag is-user">
             <img :src="option.image" />
@@ -81,7 +81,7 @@
         <template v-slot:option="{ option }">
           <img class="user-image" :src="option.image" /> {{ option.name }}
         </template>
-      </Multiselect>
+      </Multiselect> -->
     </div>
 
     <div class="example">

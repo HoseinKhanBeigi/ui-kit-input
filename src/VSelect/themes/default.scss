@@ -17,6 +17,62 @@
       var(--ms-line-height, 1.375) + var(--ms-py, 0.5rem) * 2
   );
 }
+.fieldSetClassSelect {
+  padding: 0;
+  border-collapse: collapse;
+  border: 1px solid silver;
+  border-radius: var(--border-radius-3);
+  height: 100%;
+  line-height: 22px;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  transition-duration: 0.15s;
+  transition-property: color;
+}
+.legendClassSelect {
+  width: 48px;
+  margin-left: 8px;
+   display: none;
+}
+.warpSelect {
+  display: flex;
+  height: auto;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  position: relative;
+  width: 100%;
+  border-radius: inherit;
+}
+
+.form-fieldSelect{
+
+}
+
+.nameLabelForSelect {
+  position: absolute;
+  font-size: 12px;
+  white-space: nowrap;
+  transform: translate(0, 0);
+  transform-origin: 0 0;
+  pointer-events: none;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  transition-property: all;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.5, 1);
+  transition-delay: 0s;
+  white-space: pre;
+  z-index: 1;
+}
+
+.form-fieldSelect:focus ~ .nameLabelForSelect ,
+.form-fieldSelect:not(:placeholder-shown).form-fieldSelect:not(:focus) ~ .nameLabelForSelect  {
+  transform: translate(0.25rem, -122%) scale(0.8);
+
+  font-size: 30px
+}
+
+
 .multiselect.is-open {
   border-radius: var(--ms-radius, 4px) var(--ms-radius, 4px) 0 0;
 }
