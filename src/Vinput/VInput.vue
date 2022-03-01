@@ -1,61 +1,40 @@
 <template>
-  <div>
-    <div class="warp">
-      <div class="form-group">
-        <span v-if="prefix" class="prefixClass" :class="prefixSuffixClass">{{
-          prefix
-        }}</span>
-        <div class="vInput">
-          <input
-            class="form-field"
-            :class="classesInput"
-            :id="computedId"
-            ref="input"
-            :value="inputValue"
-            :name="name"
-            :form="form || undefined"
-            :type="localType"
-            :disabled="disabled"
-            :placeholder="placeholder"
-            :required="required"
-            :autocomplete="autocomplete || undefined"
-            :readonly="readonly || plaintext"
-            :aria-invalid="computedAriaInvalid"
-            @input="handleInput"
-            @blur="onBlur($event)"
-          />
-          <div class="nameLabel" :class="labelClass">
-            {{ label }}
-          </div>
-          <span v-if="suffix" class="suffixClass" :class="prefixSuffixClass"
-            >{{ suffix }}
-          </span>
-          <div class="suffixContextIcon" v-if="suffixContext">
-            <svg class="icon-search">
-              <use xlink:href="#icon-search" />
-            </svg>
-          </div>
-        </div>
-      </div>
-      <p class="help-message" v-show="errorMessage">
+  <div class="warp">
+    <span v-if="prefix" class="prefixClass" :class="sharingClass">{{
+      prefix
+    }}</span>
+    <div class="vInput">
+      <input
+        class="form-field"
+        :id="computedId"
+        ref="input"
+        :value="inputValue"
+        :name="name"
+        :form="form || undefined"
+        :type="localType"
+        :disabled="disabled"
+        :placeholder="placeholder"
+        :required="required"
+        :autocomplete="autocomplete || undefined"
+        :readonly="readonly || plaintext"
+        :aria-invalid="computedAriaInvalid"
+        @click="handleDeactive()"
+        @keyup.page-down="onPageDown()"
+        @input="handleInput"
+      />
+      <span v-if="suffix" class="suffixClass" :class="sharingClass"
+        >{{ suffix }}
+      </span>
+        <div class="help-message" v-show="errorMessage">
         {{ errorMessage }}
-      </p>
+      </div>
+      <fieldset class="fieldSetClass"   :class="classesInput" :aria-hidden="true">
+        <legend class="legendClass"></legend>
+      </fieldset>
+      <div class="nameLabel" :class="labelClass">
+        {{ label }}
+      </div>
     </div>
-
-    <svg style="display: none">
-      <symbol
-        id="icon-search"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g>
-          <path
-            d="M19.688 18.189l-5.541-5.541a7.879 7.879 0 1 0-1.5 1.5l5.541 5.541a1.074 1.074 0 0 0 1.5 0 1.062 1.062 0 0 0 0-1.5zM2.178 7.905a5.728 5.728 0 1 1 5.728 5.728 5.728 5.728 0 0 1-5.728-5.728z"
-            fill="currentColor"
-          />
-        </g>
-      </symbol>
-    </svg>
   </div>
 </template>
 
@@ -135,16 +114,20 @@ export default defineComponent({
       };
     });
 
+    const handleDeactive = ()=>{
+      console.log("hello")
+    }
+
     const classesInput = computed(() => {
       return {
         validationError: errorMessage.value,
-        inputBorder: props.suffixContext,
+        // inputBorder: props.suffixContext,
         "form-field-RadiusForSuffix": props.suffix,
         "form-field-RadiusForPrefix": props.prefix,
       };
     });
 
-    const prefixSuffixClass = computed(() => {
+    const sharingClass = computed(() => {
       return {
         validationSuffixAndPrefix: errorMessage.value,
         prefixAndsuffixDefaultColor: !errorMessage.value,
@@ -160,7 +143,13 @@ export default defineComponent({
       };
     });
 
+    const onPageDown = ()=>{
+      console.log("huiii")
+    }
+
     return {
+      onPageDown,
+      handleDeactive,
       classesInput,
       localType,
       input,
@@ -174,7 +163,7 @@ export default defineComponent({
       onChange,
       onBlur,
       classesSuffixContext,
-      prefixSuffixClass,
+      sharingClass,
       focus,
       blur,
     };
@@ -190,7 +179,13 @@ export default defineComponent({
 }
 
 .warp {
+  display: flex;
+  height: auto;
+  flex-grow: 1;
+  flex-wrap: wrap;
   position: relative;
+  width: 100%;
+  border-radius: inherit;
 }
 
 .nameLabel {
@@ -219,13 +214,18 @@ export default defineComponent({
 
 .form-field:focus ~ .nameLabel,
 .form-field:not(:placeholder-shown).form-field:not(:focus) ~ .nameLabel {
-  transform: translate(0.25rem, -100%) scale(0.8);
+  transform: translate(0.25rem, -122%) scale(0.8);
+
   font-size: 0.85rem;
 }
+.form-field:focus ~ legend {
+ display: none;
+}
+
 
 .input__label {
   color: #969696;
-  background: #ffffff;
+  background: transparent;
 }
 .errorLabelValidation {
   color: rgb(255, 56, 99);
@@ -241,15 +241,16 @@ export default defineComponent({
 }
 
 .suffixClass {
+  margin-right: -3px;
   text-align: center;
   display: flex;
   height: 100%;
-  width: 50px;
+  width: 100px;
   border-radius: 3px;
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  color: silver;
+  color: rgb(59, 59, 59);
   transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
 }
 
@@ -290,13 +291,13 @@ export default defineComponent({
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: end;
+  height: 45px;
 }
 
 .form-field {
   display: block;
   width: 100%;
-  padding: 8px 16px;
+  padding-left: 16px;
   line-height: 25px;
   font-size: 14px;
   font-weight: 500;
@@ -304,8 +305,8 @@ export default defineComponent({
   border-radius: 3px;
   -webkit-appearance: none;
   color: black;
-  border: 1px solid rgb(223, 221, 221);
-  background-color: white;
+  border: none;
+  background-color: transparent;
   transition: border 0.3s ease;
   &::placeholder {
     color: transparent;
@@ -322,12 +323,15 @@ export default defineComponent({
 }
 
 .help-message {
-  margin: 0;
-  color: rgb(255, 56, 99);
+     margin: 0;
+    position: absolute;
+    color: #ff3863;
+    top: 46px;
+    left: 2px;
 }
 
 .validationError {
-  border: 1px solid rgb(255, 56, 99);
+  border: 1px solid rgb(255, 56, 99) !important;
   &:focus {
     background-color: transparent;
     outline: none;
@@ -342,15 +346,59 @@ export default defineComponent({
   height: 16px;
 }
 
-.form-group {
-  position: relative;
-  display: flex;
+.fieldSetClass {
+  padding: 0;
+  border-collapse: collapse;
+  border: 1px solid silver;
+  border-radius: var(--border-radius-3);
+  height: 100%;
+  line-height: 22px;
+  pointer-events: none;
+  position: absolute;
   width: 100%;
-
-  &:focus-within {
-    .prefixAndsuffixDefaultColor {
-      background: rgb(121, 121, 121);
-    }
-  }
+  transition-duration: 0.15s;
+  transition-property: color;
 }
+
+.vc_input {
+  color: inherit;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  border-radius: 4px;
+  width: 100%;
+  min-height: 40px;
+  cursor: text;
+  background: transparent;
+}
+
+.vc-input-slot {
+  display: flex;
+  flex: 1 1 auto;
+  position: relative;
+  align-items: center;
+  max-width: 80%;
+}
+
+.legendClass {
+  width: 48px;
+  margin-left: 8px;
+}
+
+.deactive{
+  display: none;
+}
+
+// .form-group {
+//   position: relative;
+//   display: flex;
+//   width: 100%;
+
+//   &:focus-within {
+//     .prefixAndsuffixDefaultColor {
+//       background: rgb(121, 121, 121);
+//     }
+//   }
+// }
 </style>

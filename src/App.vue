@@ -98,7 +98,7 @@
         placeholder="Your Name"
       />
     </div>
-    <div>
+    <!-- <div>
       <VInput
       prefix="email"
         name="email"
@@ -114,7 +114,7 @@
         label="Password"
         placeholder="Your password"
       />
-    </div>
+    </div> -->
 
     <div>
       <VRadio v-model="radioButton" name="some-radios" value="A"
@@ -130,7 +130,7 @@
       v-model="checkboxes.selected"
       :options="checkboxes.options"
     />
-    <!-- <button class="submit-btn" type="submit">Submit</button> -->
+    <button class="submit-btn" type="submit">Submit</button>
   </Form>
 </template>
 

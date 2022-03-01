@@ -639,20 +639,12 @@ export default {
   top: 0px;
 }
 
-// .multiselect-tags-search:focus ~ .nameLabel {
-//   transform: translate(0.35rem, -22%) scale(0.8);
-
-//   font-size: 16px;
-
-// }
-
-.multiselect-tags-search:focus ~ .nameLabel,
-.multiselect-tags-search:not(:placeholder-shown){
+.multiselect-tags-search:focus ~ .nameLabel {
   transform: translate(0.35rem, -22%) scale(0.8);
-
+  top: -12px;
   font-size: 16px;
-}
 
+}
 
 .multiselect {
   position: relative;
@@ -796,8 +788,8 @@ export default {
   height: 0.75rem;
 }
 .multiselect-tags-search-wrapper {
-//  position: relative;
- margin-left: 12px;
+ position: relative;
+  margin: 0 var(--ms-tag-mx, 4px) var(--ms-tag-my, 4px);
   flex-grow: 1;
   flex-shrink: 1;
   height: 100%;
