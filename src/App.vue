@@ -5,7 +5,7 @@
     @invalid-submit="onInvalidSubmit"
 
   >
-    <div class="test">
+    <div class="VI">
       <Multiselect
         v-model="multiselectAsync.value"
         v-bind="multiselectAsync"
@@ -63,67 +63,73 @@
           </div>
         </template>
       </Multiselect> -->
-      <!-- <Multiselect v-model="selectOption7.value" v-bind="selectOption7">
-        <template v-slot:tag="{ option, handleTagRemove, disabled }">
-          <div class="multiselect-tag is-user">
-            <img :src="option.image" />
-            {{ option.name }}
-            <span
-              v-if="!disabled"
-              class="multiselect-tag-remove"
-              @mousedown.prevent="handleTagRemove(option, $event)"
-            >
-              <span class="multiselect-tag-remove-icon"></span>
-            </span>
-          </div>
-        </template>
-
-        <template v-slot:option="{ option }">
-          <img class="user-image" :src="option.image" /> {{ option.name }}
-        </template>
-      </Multiselect> -->
+  <Multiselect
+    v-model="value"
+    mode="tags"
+    placeholder="Select employees"
+    track-by="name"
+    label="name"
+    :close-on-select="false"
+    :search="true"
+    :options="[
+      { value: 'judy', name: 'Judy', image: 'https://randomuser.me/api/portraits/med/women/1.jpg' },
+      { value: 'jane', name: 'Jane', image: 'https://randomuser.me/api/portraits/med/women/2.jpg' },
+      { value: 'john', name: 'John', image: 'https://randomuser.me/api/portraits/med/men/1.jpg' },
+      { value: 'joe', name: 'Joe', image: 'https://randomuser.me/api/portraits/med/men/2.jpg' }
+    ]"
+  >
+    <template v-slot:tag="{ option, handleTagRemove, disabled }">
+      <div class="multiselect-tag is-user">
+        <img :src="option.image">
+        {{ option.name }}
+        <span
+           v-if="!disabled"
+           class="multiselect-tag-remove"
+           @mousedown.prevent="handleTagRemove(option, $event)"
+        >
+          <span class="multiselect-tag-remove-icon"></span>
+        </span>
+      </div>
+    </template>
+ </Multiselect>
     </div>
 
-    <div class="example">
+    <Multiselect
+  v-model="value"
+  mode="tags"
+  :close-on-select="false"
+  :searchable="true"
+  :create-option="true"
+  :options="[
+    { value: 'batman', label: 'Batman' },
+    { value: 'robin', label: 'Robin' },
+    { value: 'joker', label: 'Joker' },
+  ]"
+/>
+
+    <!-- <div class="example">
       <div class="output">Data: {{ Vswitch.value }}</div>
       <VSwitch v-model="Vswitch.value" v-bind="Vswitch"></VSwitch>
-    </div>
-    <div>
-      <VInput
-        :onInput="(e) => handleInput(e)"
-       suffix="ss"
-        name="name"
-        type="text"
-        label="Full Name"
-        placeholder="Your Name"
-      />
-    </div>
-    <!-- <div>
-      <VInput
-      prefix="email"
-        name="email"
-        type="email"
-        label="E-mail"
-        placeholder="Your email address"
-      />
-    </div>
+    </div> -->
+
+   
     <div>
       <VInput
         name="password"
-        type="password"
+        type="text"
         label="Password"
         placeholder="Your password"
       />
-    </div> -->
+    </div>
 
-    <div>
+    <!-- <div>
       <VRadio v-model="radioButton" name="some-radios" value="A"
         >Option A</VRadio
       >
       <VRadio v-model="radioButton" name="some-radios" value="B"
         >Option B</VRadio
       >
-    </div>
+    </div> -->
 
     <VCheckBoxGroup
       id="checkbox-group-1"
@@ -144,6 +150,7 @@ import VTextarea from "./VTextarea/VTextarea.vue";
 import Multiselect from "./VSelect/Multiselect.vue";
 import VSwitch from "./VSwitch/VSwitch.vue";
 import VCheckBoxGroup from "./VCheckbox/VCheckBoxGroup.vue";
+import VCheckBox from "./VCheckbox/VCheckBox.vue";
 import VRadio from "./VRadio/VRadio.vue";
 
 const fetchLanguages = async (query) => {
@@ -185,9 +192,9 @@ export default {
     VInput,
     // VTextarea,
     Multiselect,
-    VSwitch,
+    // VSwitch,
     VCheckBoxGroup,
-    VRadio,
+    // VRadio,
     Form,
   },
   setup() {
@@ -224,6 +231,7 @@ export default {
       minChars: 1,
       resolveOnLoad: false,
       delay: 0,
+      // label:"countries",
       searchable: true,
       options: async (query) => {
         return await fetchLanguages(query);
@@ -410,6 +418,32 @@ form {
   flex-direction: column;
 }
 
+.multiselect-tag.is-user {
+    padding: 5px 8px;
+    border-radius: 22px;
+    background: #35495e;
+    margin: 3px 3px 8px;
+  }
+
+  .multiselect-tag.is-user img {
+    width: 18px;
+    border-radius: 50%;
+    height: 18px;
+    margin-right: 8px;
+    border: 2px solid #ffffffbf;
+  }
+
+  .multiselect-tag.is-user i:before {
+    color: #ffffff;
+    border-radius: 50%;;
+  }
+
+  .user-image {
+    margin: 0 6px 0 0;
+    border-radius: 50%;
+    height: 22px;
+  }
+
 .submit-btn {
   outline: none;
   border: none;
@@ -429,6 +463,10 @@ form {
   animation: shake 0.5s;
   /* When the animation is finished, start again */
   animation-iteration-count: infinite;
+}
+
+.VI{
+  margin-bottom: 120px;
 }
 
 @keyframes shake {

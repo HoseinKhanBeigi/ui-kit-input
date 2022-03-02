@@ -18,7 +18,6 @@
         :autocomplete="autocomplete || undefined"
         :readonly="readonly || plaintext"
         :aria-invalid="computedAriaInvalid"
-        @click="handleDeactive()"
         @keyup.page-down="onPageDown()"
         @input="handleInput"
       />
@@ -114,10 +113,6 @@ export default defineComponent({
       };
     });
 
-    const handleDeactive = ()=>{
-      console.log("hello")
-    }
-
     const classesInput = computed(() => {
       return {
         validationError: errorMessage.value,
@@ -143,13 +138,9 @@ export default defineComponent({
       };
     });
 
-    const onPageDown = ()=>{
-      console.log("huiii")
-    }
+  
 
     return {
-      onPageDown,
-      handleDeactive,
       classesInput,
       localType,
       input,
@@ -315,7 +306,7 @@ input:not(:placeholder-shown)~ fieldset legend {
     color: transparent;
   }
   &:focus::placeholder {
-    color: silver;
+    color: rgb(150, 150, 150);
   }
   &:focus {
     background-color: transparent;
