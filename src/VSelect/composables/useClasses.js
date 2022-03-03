@@ -17,6 +17,13 @@ export default function useClasses (props, context, dependencies)
   const fo = dependencies.fo
 
   const classes = computed(() => ({
+    labelname:'labelname',
+    activelabel:'activelabel',
+    legendClassSelectdeActive:'legendClassSelectdeActive',
+    legendClassSelect:'legendClassSelect',
+    inputOption:'inputOption',
+    fieldSetClassSelect:'fieldSetClassSelect',
+    wrapperContainer:'wrapper-container',
     container: 'multiselect',
     containerDisabled: 'is-disabled',
     containerOpen: 'is-open',
@@ -75,6 +82,29 @@ export default function useClasses (props, context, dependencies)
     const c = classes.value
 
     return {
+
+      inputOption:c.inputOption,
+      wrapperContainer:c.wrapperContainer,
+      fieldSetClassSelect:c.fieldSetClassSelect,
+      activeLegened:(values, hidden) => {
+        if (values.length > 0) {
+          return c.legendClassSelect;
+        }
+        if (hidden[1] === "is-hidden") {
+          return c.legendClassSelectdeActive;
+        }
+  
+        return c.legendClassSelect;
+      },
+      activeLabelInput:(values, hidden)=>{
+        if (values.length > 0) {
+          return c.activelabel
+        }
+        if (hidden[1] !== "is-hidden") {
+          return c.activelabel
+        }
+        return c.labelname;
+      },
       container: [c.container]
         .concat(disabled.value ? c.containerDisabled : [])
         .concat(showDropdown.value && openDirection.value === 'top'  ? c.containerOpenTop : [])

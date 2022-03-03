@@ -1,6 +1,8 @@
 <template>
-  <div class="wrapperClass">
-    <div :class="activeLabelInput(iv, classList.dropdown)">{{ label }}</div>
+  <div :class="classList.wrapperContainer">
+    <div :class="classList.activeLabelInput(iv, classList.dropdown)">
+      {{ label }}
+    </div>
     <div
       ref="multiselect"
       :tabindex="tabindex"
@@ -11,12 +13,10 @@
       @keydown="handleKeydown"
       @focus="handleFocus"
     >
-      <fieldset
-        class="fieldSetClassSelect"
-        :class="classesInput"
-        :aria-hidden="true"
-      >
-        <legend :class="activeLegened(iv, classList.dropdown)"></legend>
+      <fieldset :class="classList.fieldSetClassSelect" :aria-hidden="true">
+        <legend
+          :class="classList.activeLegened(iv, classList.dropdown)"
+        ></legend>
       </fieldset>
       <!-- Search -->
       <template v-if="mode !== 'tags' && searchable && !disabled">
@@ -59,21 +59,6 @@
             <!-- Used for measuring search width -->
             <span :class="classList.tagsSearchCopy">{{ search }}</span>
           </div>
-
-          <!-- Actual search input -->
-          <!-- <input
-            class="form-fieldSelect"
-            v-if="searchable && !disabled"
-            :type="inputType"
-            :modelValue="search"
-            :value="search"
-            :class="classList.tagsSearch"
-            :autocomplete="autocomplete"
-            v-bind="attrs"
-            @input="handleSearchInput"
-            @paste.stop="handlePaste"
-            ref="input"
-          /> -->
         </div>
       </template>
 
@@ -135,9 +120,9 @@
 
       <!-- Options -->
       <div :class="classList.dropdown" tabindex="-1">
-        <div class="inputWrapper">
+        <div :class="classList.inputOption">
           <input
-          placeholder="Search Somethings..."
+            placeholder="Search Somethings..."
             class="form-fieldSelect"
             v-if="searchable && !disabled"
             :type="inputType"
@@ -145,7 +130,6 @@
             :value="search"
             :class="classList.tagsSearch"
             :autocomplete="autocomplete"
-            v-bind="attrs"
             @input="handleSearchInput"
             @paste.stop="handlePaste"
             ref="input"
@@ -197,7 +181,19 @@
               @click="handleOptionClick(option)"
             >
               <slot name="option" :option="option" :search="search">
-                <span>{{ option[label] }}</span>
+              
+              
+                <VCheckBox
+                  v-if="is_checkBox"
+                  :id="key"
+                  v-model="option[label]"
+                  :name="`checkbox-${i}`"
+                  :value="option[value]"
+                  v-bind="option"
+                  @change="childUpdated(handleOptionClick(option), option.value)"
+                />
+
+                <span v-else>{{ option[label] }}</span>
               </slot>
             </li>
           </template>
@@ -286,10 +282,13 @@ import useDropdown from "./composables/useDropdown";
 import useMultiselect from "./composables/useMultiselect";
 import useKeyboard from "./composables/useKeyboard";
 import useClasses from "./composables/useClasses";
+import VCheckBox from "../VCheckbox/VCheckBox.vue";
+import VCheckBoxGroup from "../VCheckbox/VCheckBoxGroup.vue";
 
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 
 export default {
+  components: { VCheckBox },
   name: "Multiselect",
   emits: [
     "open",
@@ -538,6 +537,11 @@ export default {
       required: false,
       default: true,
     },
+    is_checkBox: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     inputType: {
       type: String,
       required: false,
@@ -609,40 +613,30 @@ export default {
       fo: options.fo,
     });
 
-    // console.log(dropdown.isOpen.value);
+    const childUpdated = (newValue, checkedValue) => {
 
-    // const computedActiveLegend = computed(() => {
-    //   return {
-    //     legendClassSelect: value.iv > 0,
-    //     legendClassSelectdeActive: !dropdown.isOpen.value,
-    //   };
-    // });
-
-    const activeLegened = (values, hidden) => {
-      if (values.length > 0) {
-        return "legendClassSelect";
-      }
-      if (hidden[1] === "is-hidden") {
-        return "legendClassSelectdeActive";
-      }
-
-      return "legendClassSelect";
+      console.log(newValue,"newValue")
+       
+      const resp = props.modelValue.filter(
+        (e) => JSON.stringify(e) !== JSON.stringify(checkedValue)
+      );
+      if (JSON.stringify(newValue) === JSON.stringify(checkedValue))
+        resp.push(newValue);
+      context.emit("update:modelValue", resp);
+      context.emit("change", resp);
     };
 
-    const activeLabelInput = (values, hidden) => {
-      if (values.length > 0) {
-        return "activelabel";
-      }
-      if (hidden[1] !== "is-hidden") {
-        return "activelabel";
-      }
-      return "labelname";
-      // return 'labelname':
-    };
+   
+
+    const checkboxes = reactive({
+      status: "accepted",
+      selected: ["pineapple"],
+      options: options.fo.value,
+    });
 
     return {
-      activeLabelInput,
-      activeLegened,
+      childUpdated,
+      checkboxes,
       ...value,
       ...dropdown,
       ...multiselect,
@@ -658,9 +652,9 @@ export default {
 };
 </script>
 
-<style  lang="scss" scoped>
+<style lang="scss" scoped>
 .fieldSetClassSelect {
-  margin:0;
+  margin: 0;
   padding: 0;
   left: 0;
   right: 0;
@@ -685,7 +679,7 @@ export default {
   color: inherit;
   text-align: left;
   line-height: 11px;
-  min-width:  28px;
+  min-width: 28px;
   margin-left: 8px;
 }
 .legendClassSelectdeActive {
@@ -705,9 +699,8 @@ export default {
   font-size: 14px;
 
   &::placeholder {
-   font-size: 14px;
+    font-size: 14px;
   }
-
 }
 
 .nameLabelForSelect {
@@ -728,7 +721,7 @@ export default {
   z-index: 1;
 }
 
-.inputWrapper {
+.inputOption {
   padding: 12px;
 }
 
@@ -736,19 +729,19 @@ export default {
   position: absolute;
   top: 8px;
   left: 10px;
-  z-index: 99999;
+  z-index: 10;
   color: silver;
 }
 
 .activelabel {
   animation: labelName 0.3s ease-in-out;
-  transform:  scale(0.8);
+  transform: scale(0.8);
   color: rgb(150, 150, 150);
   font-size: 14px;
   position: absolute;
   top: -10px;
   left: 10px;
-  z-index: 99999;
+  z-index: 10;
 }
 
 @keyframes labelName {
@@ -761,7 +754,7 @@ export default {
   }
 }
 
-.wrapperClass {
+.wrapper-container {
   position: relative;
 }
 
@@ -855,10 +848,8 @@ export default {
   margin: var(--ms-tag-my, 0.25rem) 0 0;
   // padding-left: var(--ms-py, 0.5rem);
   align-items: center;
-padding: 1px 0 5px 9px ;
+  padding: 1px 0 5px 9px;
 }
-
-
 
 .multiselect-dropdown {
   // height: 150px;
@@ -878,27 +869,22 @@ padding: 1px 0 5px 9px ;
   background-color: #dedede;
 }
 
-
-
-
 .multiselect-tag {
-
   line-height: var(--ms-tag-line-height, 1.25rem);
 
-      display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex: 0 1 auto;
-    border-radius: var(--border-radius-3);
-    padding: 2px 5px;
-    margin: 2.5px;
-    min-width: fit-content;
-    background: #f0f0f0;
-    font-size: 12px;
-    text-transform: capitalize;
-    color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 0 1 auto;
+  border-radius: var(--border-radius-3);
+  padding: 2px 5px;
+  margin: 2.5px;
+  min-width: fit-content;
+  background: #f0f0f0;
+  font-size: 12px;
+  text-transform: capitalize;
+  color: black;
 
-  
   /* white-space: nowrap; */
 }
 .multiselect-tag.is-disabled {
@@ -1082,7 +1068,6 @@ padding: 1px 0 5px 9px ;
   display: none;
 }
 .multiselect-options {
-
   padding: 0;
   margin: 0;
   list-style: none;

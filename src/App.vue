@@ -2,7 +2,6 @@
   <Form
     @submit.prevent="onSubmit({ name, email, password })"
     :validation-schema="schema"
-    @invalid-submit="onInvalidSubmit"
 
   >
     <div class="VI">
@@ -10,6 +9,17 @@
         v-model="multiselectAsync.value"
         v-bind="multiselectAsync"
       ></Multiselect>
+
+      <Multiselect
+  v-model="value"
+  :options="['Batman', 'Robin', 'Joker']"
+/>
+
+  <div class="output">Data: {{ selectOption4.value }}</div>
+    <Multiselect
+      v-model="selectOption4.value"
+      v-bind="selectOption4"
+    ></Multiselect>
       <!-- <Multiselect
         v-model="selectOption.value"
         v-bind="selectOption"
@@ -63,7 +73,7 @@
           </div>
         </template>
       </Multiselect> -->
-  <Multiselect
+      <!-- <Multiselect
     v-model="value"
     mode="tags"
     placeholder="Select employees"
@@ -91,36 +101,34 @@
         </span>
       </div>
     </template>
- </Multiselect>
+ </Multiselect> -->
     </div>
 
-    <Multiselect
+ <!-- <Multiselect
   v-model="value"
-  mode="tags"
+  mode="multiple"
   :close-on-select="false"
-  :searchable="true"
-  :create-option="true"
-  :options="[
-    { value: 'batman', label: 'Batman' },
-    { value: 'robin', label: 'Robin' },
-    { value: 'joker', label: 'Joker' },
-  ]"
-/>
+  :options="{
+    batman: 'Batman',
+    robin: 'Robin',
+    joker: 'Joker'
+  }"
+/> -->
+    
 
     <!-- <div class="example">
       <div class="output">Data: {{ Vswitch.value }}</div>
       <VSwitch v-model="Vswitch.value" v-bind="Vswitch"></VSwitch>
     </div> -->
 
-   
-    <div>
+    <!-- <div>
       <VInput
         name="password"
         type="text"
         label="Password"
         placeholder="Your password"
       />
-    </div>
+    </div> -->
 
     <!-- <div>
       <VRadio v-model="radioButton" name="some-radios" value="A"
@@ -130,9 +138,17 @@
         >Option B</VRadio
       >
     </div> -->
+    <!-- <VCheckBox
+      id="checkbox-1"
+      v-model="status"
+      name="checkbox-1"
+      value="accepted"
+      unchecked-value="not_accepted"
+    /> -->
 
     <VCheckBoxGroup
       id="checkbox-group-1"
+      
       v-model="checkboxes.selected"
       :options="checkboxes.options"
     />
@@ -189,7 +205,7 @@ const fetchLanguages = async (query) => {
 
 export default {
   components: {
-    VInput,
+    // VInput,
     // VTextarea,
     Multiselect,
     // VSwitch,
@@ -197,6 +213,24 @@ export default {
     // VRadio,
     Form,
   },
+  // data: () => ({
+  //   example4: {
+  //   	mode: 'multiple',
+  //     groups: true,
+  //     value: [],
+  //     closeOnSelect: false,
+  //     options: [
+  //     	{
+  //       	label: 'DC',
+  //         options: ['Batman', 'Robin', 'Joker'],
+  //       },
+  //     	{
+  //       	label: 'Marvel',
+  //         options: ['Spiderman', 'Iron Man', 'Captain America'],
+  //       },
+  //     ]
+  //   }
+  // }),
   setup() {
     function onSubmit(values) {
       console.log(book.title);
@@ -227,16 +261,19 @@ export default {
       closeOnSelect: false,
       value: [],
       placeholder: "Choose your stack",
-      filterResults: false,
+      filterResults: true,
       minChars: 1,
       resolveOnLoad: false,
       delay: 0,
+      is_checkBox:true,
       // label:"countries",
       searchable: true,
       options: async (query) => {
         return await fetchLanguages(query);
       },
     };
+
+    console.log(multiselectAsync.value)
 
     const selectOption = {
       value: 0,
@@ -265,7 +302,7 @@ export default {
       ],
     };
 
-    const selectOption4 = {
+    const selectOption4 = reactive({
       mode: "multiple",
       groups: true,
       value: [],
@@ -280,7 +317,7 @@ export default {
           options: ["Spiderman", "Iron Man", "Captain America"],
         },
       ],
-    };
+    });
     const selectOption5 = {
       mode: "tags",
       value: ["batman"],
@@ -305,7 +342,7 @@ export default {
         joker: "Joker",
       },
     };
-    const selectOption7 = {
+    const selectOption7 =reactive( {
       mode: "tags",
       value: [],
       placeholder: "Select employees",
@@ -335,7 +372,7 @@ export default {
           image: "https://randomuser.me/api/portraits/med/men/2.jpg",
         },
       ],
-    };
+    })
 
     const checkboxes = reactive({
       status: "accepted",
@@ -419,30 +456,30 @@ form {
 }
 
 .multiselect-tag.is-user {
-    padding: 5px 8px;
-    border-radius: 22px;
-    background: #35495e;
-    margin: 3px 3px 8px;
-  }
+  padding: 5px 8px;
+  border-radius: 22px;
+  background: #35495e;
+  margin: 3px 3px 8px;
+}
 
-  .multiselect-tag.is-user img {
-    width: 18px;
-    border-radius: 50%;
-    height: 18px;
-    margin-right: 8px;
-    border: 2px solid #ffffffbf;
-  }
+.multiselect-tag.is-user img {
+  width: 18px;
+  border-radius: 50%;
+  height: 18px;
+  margin-right: 8px;
+  border: 2px solid #ffffffbf;
+}
 
-  .multiselect-tag.is-user i:before {
-    color: #ffffff;
-    border-radius: 50%;;
-  }
+.multiselect-tag.is-user i:before {
+  color: #ffffff;
+  border-radius: 50%;
+}
 
-  .user-image {
-    margin: 0 6px 0 0;
-    border-radius: 50%;
-    height: 22px;
-  }
+.user-image {
+  margin: 0 6px 0 0;
+  border-radius: 50%;
+  height: 22px;
+}
 
 .submit-btn {
   outline: none;
@@ -465,7 +502,7 @@ form {
   animation-iteration-count: infinite;
 }
 
-.VI{
+.VI {
   margin-bottom: 120px;
 }
 

@@ -6,7 +6,7 @@
             :for="computedId"
             :class="[labelClasses, { active: isChecked, focus: isFocused }]"
         >
-            Checkbox text
+           <span>{{modelValue}}</span>
             <input
                 :id="computedId"
                 v-bind="$attrs"
@@ -27,7 +27,7 @@
                 @focus="focus()"
                 @blur="blur()"
             />
-            <span class="checkbox__checkmark"></span>
+            <span class="checkbox__checkmark checkbox__checkmark--small"></span>
             <slot />
         </label>
     </div>
@@ -52,7 +52,7 @@ import { InputSize } from "../features/types";
 import useId from "../features/composables/useId";
 
 export default defineComponent({
-    name: "BFormCheckbox",
+    name: "VCheckbox",
     inheritAttrs: false,
     props: {
         id: { type: String, default: undefined },

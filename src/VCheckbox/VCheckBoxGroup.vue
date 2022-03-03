@@ -92,7 +92,11 @@ export default defineComponent({
         }))
     )
 
+        
+
     const childUpdated = (newValue: any, checkedValue: any) => {
+      console.log(...props.modelValue.values(),"modelvalue")
+      console.log(newValue,"newValueyy")
       const resp = props.modelValue.filter(
         (e) => JSON.stringify(e) !== JSON.stringify(checkedValue)
       )
@@ -110,6 +114,7 @@ export default defineComponent({
         emit('input', newValue)
       }
     )
+    
 
     // TODO: make jest tests compatible with the v-focus directive
 
