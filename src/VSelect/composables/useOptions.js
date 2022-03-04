@@ -245,6 +245,7 @@ export default function useOptions (props, context, dep)
   const clear = () => {
     context.emit('clear')
     update(nullValue.value)
+    console.log("hiii")
   }
 
   const isSelected = (option) => {
@@ -462,7 +463,7 @@ export default function useOptions (props, context, dep)
     }
 
     if (hideSelected.value && excludeHideSelected) {
-      // fo = fo.filter((option) => !shouldHideOption(option))
+      fo = fo.filter((option) => !shouldHideOption(option))
     }
 
     return fo

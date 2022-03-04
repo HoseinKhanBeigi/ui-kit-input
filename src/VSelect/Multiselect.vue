@@ -178,15 +178,14 @@
               :key="key"
               :data-pointed="isPointed(option)"
               @mouseenter="setPointer(option)"
-              @click="handleOptionClick(option)"
+              @click="!is_checkBox && handleOptionClick(option)"
             >
               <slot name="option" :option="option" :search="search">
                 <VCheckBox
                   v-if="is_checkBox"
-                  :id="key"
                   v-model="checkboxes.selected"
-                  :name="`checkbox-${i}`"
                   v-bind="option"
+                  @click="handleOptionClick(option)"
                 >
                   {{ option[label] }}
                 </VCheckBox>
@@ -366,7 +365,7 @@ export default {
     hideSelected: {
       type: Boolean,
       required: false,
-      default: true,
+      default: false,
     },
     is_search: {
       type: Boolean,
@@ -622,23 +621,10 @@ export default {
       fo: options.fo,
     });
 
-    const childUpdated = (newValue, checkedValue) => {
-      console.log(newValue, "newValue");
-      console.log(checkedValue);
-      console.log(options.fo.value);
-      options.fo.value.map((e) => {
-        console.log(e.value, "eee");
-      });
-
-      const resp = options.fo.value.filter(
-        (e) => JSON.stringify(e.value) !== checkedValue
-      );
-      if (JSON.stringify(newValue) === JSON.stringify(checkedValue))
-        resp.push(newValue);
-
-      console.log(resp, "resppppp");
-      context.emit("update:modelValue", resp);
-      context.emit("change", resp);
+    const childUpdated = (optionsValue, checkedValue) => {
+      console.log(optionsValue);
+      const resp = optionsValue.value.filter((e) => e.value !== checkedValue);
+      console.log(resp, "resppp");
     };
 
     const checkboxes = reactive({
@@ -647,7 +633,12 @@ export default {
       options: options.fo.value,
     });
 
+    const handleClick = () => {
+      console.log("hii");
+    };
+
     return {
+      handleClick,
       childUpdated,
       checkboxes,
       ...value,

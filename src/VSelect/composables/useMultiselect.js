@@ -65,6 +65,7 @@ export default function useMultiselect (props, context, dep)
   }
 
   const handleCaretClick = () => {
+  
     deactivate()
     blur()
   }
