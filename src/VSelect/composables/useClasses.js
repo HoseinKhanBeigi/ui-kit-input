@@ -87,7 +87,7 @@ export default function useClasses (props, context, dependencies)
       wrapperContainer:c.wrapperContainer,
       fieldSetClassSelect:c.fieldSetClassSelect,
       activeLegened:(values, hidden) => {
-        if (values.length > 0) {
+        if (values.length > 0|| values.value) {
           return c.legendClassSelect;
         }
         if (hidden[1] === "is-hidden") {
@@ -97,7 +97,7 @@ export default function useClasses (props, context, dependencies)
         return c.legendClassSelect;
       },
       activeLabelInput:(values, hidden)=>{
-        if (values.length > 0) {
+        if (values.length > 0 || values.value) {
           return c.activelabel
         }
         if (hidden[1] !== "is-hidden") {

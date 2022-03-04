@@ -6,7 +6,6 @@
             :for="computedId"
             :class="[labelClasses, { active: isChecked, focus: isFocused }]"
         >
-           <span>{{modelValue}}</span>
             <input
                 :id="computedId"
                 v-bind="$attrs"

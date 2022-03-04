@@ -2,7 +2,6 @@
   <Form
     @submit.prevent="onSubmit({ name, email, password })"
     :validation-schema="schema"
-
   >
     <div class="VI">
       <Multiselect
@@ -10,16 +9,39 @@
         v-bind="multiselectAsync"
       ></Multiselect>
 
-      <Multiselect
-  v-model="value"
-  :options="['Batman', 'Robin', 'Joker']"
-/>
+      <div class="output">Data: {{ example.value }}</div>
 
-  <div class="output">Data: {{ selectOption4.value }}</div>
-    <Multiselect
-      v-model="selectOption4.value"
-      v-bind="selectOption4"
-    ></Multiselect>
+      <Multiselect
+        v-model="example.value3"
+        :options="[
+          { value: 'v1', label: 'Batman1' },
+          { value: 'v2', label: 'Robin1' },
+          { value: 'v3', label: 'Joker1' },
+        ]"
+      />
+
+      <!-- <Multiselect
+  v-model="example.value"
+  :options="['Batman', 'Robin', 'Joker']"
+/> -->
+
+      <!-- <Multiselect
+        v-model="selectOption4.value"
+        v-bind="selectOption4"
+      ></Multiselect> -->
+
+      <Multiselect
+        v-model="example.value"
+        mode="tags"
+        :is_checkBox="true"
+        :close-on-select="false"
+        :searchable="true"
+        :options="[
+          { value: 'batman', label: 'Batman' },
+          { value: 'robin', label: 'Robin' },
+          { value: 'joker', label: 'Joker' },
+        ]"
+      ></Multiselect>
       <!-- <Multiselect
         v-model="selectOption.value"
         v-bind="selectOption"
@@ -104,7 +126,7 @@
  </Multiselect> -->
     </div>
 
- <!-- <Multiselect
+    <!-- <Multiselect
   v-model="value"
   mode="multiple"
   :close-on-select="false"
@@ -114,7 +136,6 @@
     joker: 'Joker'
   }"
 /> -->
-    
 
     <!-- <div class="example">
       <div class="output">Data: {{ Vswitch.value }}</div>
@@ -148,7 +169,6 @@
 
     <VCheckBoxGroup
       id="checkbox-group-1"
-      
       v-model="checkboxes.selected"
       :options="checkboxes.options"
     />
@@ -237,6 +257,8 @@ export default {
       console.log(values);
     }
 
+    const example = reactive({ value: [],value3:[] });
+
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().email().required(),
@@ -261,19 +283,22 @@ export default {
       closeOnSelect: false,
       value: [],
       placeholder: "Choose your stack",
-      filterResults: true,
-      minChars: 1,
+      filterResults: false,
+      // minChars: 3,
       resolveOnLoad: false,
       delay: 0,
-      is_checkBox:true,
-      // label:"countries",
+      is_checkBox: false,
+      labelName: "countries",
       searchable: true,
       options: async (query) => {
         return await fetchLanguages(query);
       },
+      // options: [
+      //   { value: "batman", label: "Batman" },
+      //   { value: "robin", label: "Robin" },
+      //   { value: "joker", label: "Joker" },
+      // ],
     };
-
-    console.log(multiselectAsync.value)
 
     const selectOption = {
       value: 0,
@@ -306,7 +331,7 @@ export default {
       mode: "multiple",
       groups: true,
       value: [],
-      closeOnSelect: false,
+      // closeOnSelect: false,
       options: [
         {
           label: "DC",
@@ -342,7 +367,7 @@ export default {
         joker: "Joker",
       },
     };
-    const selectOption7 =reactive( {
+    const selectOption7 = reactive({
       mode: "tags",
       value: [],
       placeholder: "Select employees",
@@ -372,7 +397,7 @@ export default {
           image: "https://randomuser.me/api/portraits/med/men/2.jpg",
         },
       ],
-    })
+    });
 
     const checkboxes = reactive({
       status: "accepted",
@@ -431,6 +456,7 @@ export default {
       selectOption6,
       selectOption7,
       multiselectAsync,
+      example,
       handleInput,
       onChange1,
       getValues,

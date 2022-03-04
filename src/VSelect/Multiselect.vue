@@ -1,7 +1,7 @@
 <template>
   <div :class="classList.wrapperContainer">
     <div :class="classList.activeLabelInput(iv, classList.dropdown)">
-      {{ label }}
+      {{ labelName }}
     </div>
     <div
       ref="multiselect"
@@ -181,17 +181,17 @@
               @click="handleOptionClick(option)"
             >
               <slot name="option" :option="option" :search="search">
-              
-              
                 <VCheckBox
                   v-if="is_checkBox"
                   :id="key"
                   v-model="option[label]"
                   :name="`checkbox-${i}`"
-                  :value="option[value]"
+            
                   v-bind="option"
                   @change="childUpdated(handleOptionClick(option), option.value)"
-                />
+                >
+                  {{ option[label] }}
+                </VCheckBox>
 
                 <span v-else>{{ option[label] }}</span>
               </slot>
@@ -414,6 +414,11 @@ export default {
       required: false,
       default: "The list is empty",
     },
+    labelName: {
+      type: String,
+      required: false,
+      default: "label",
+    },
     noResultsText: {
       type: String,
       required: false,
@@ -614,9 +619,8 @@ export default {
     });
 
     const childUpdated = (newValue, checkedValue) => {
+      console.log(newValue, "newValue");
 
-      console.log(newValue,"newValue")
-       
       const resp = props.modelValue.filter(
         (e) => JSON.stringify(e) !== JSON.stringify(checkedValue)
       );
@@ -626,11 +630,9 @@ export default {
       context.emit("change", resp);
     };
 
-   
-
     const checkboxes = reactive({
       status: "accepted",
-      selected: ["pineapple"],
+      selected: [],
       options: options.fo.value,
     });
 
