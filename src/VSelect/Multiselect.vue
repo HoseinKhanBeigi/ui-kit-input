@@ -120,7 +120,7 @@
 
       <!-- Options -->
       <div :class="classList.dropdown" tabindex="-1">
-        <div :class="classList.inputOption">
+        <div v-if="searchable" :class="classList.inputOption">
           <input
             placeholder="Search Somethings..."
             class="form-fieldSelect"
@@ -184,11 +184,9 @@
                 <VCheckBox
                   v-if="is_checkBox"
                   :id="key"
-                  v-model="option[label]"
+                  v-model="checkboxes.selected"
                   :name="`checkbox-${i}`"
-            
                   v-bind="option"
-                  @change="childUpdated(handleOptionClick(option), option.value)"
                 >
                   {{ option[label] }}
                 </VCheckBox>
@@ -286,6 +284,7 @@ import VCheckBox from "../VCheckbox/VCheckBox.vue";
 import VCheckBoxGroup from "../VCheckbox/VCheckBoxGroup.vue";
 
 import { computed, reactive } from "vue";
+import { boolean } from "yup/lib/locale";
 
 export default {
   components: { VCheckBox },
@@ -368,6 +367,11 @@ export default {
       type: Boolean,
       required: false,
       default: true,
+    },
+    is_search: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     createTag: {
       type: Boolean,
@@ -620,12 +624,19 @@ export default {
 
     const childUpdated = (newValue, checkedValue) => {
       console.log(newValue, "newValue");
+      console.log(checkedValue);
+      console.log(options.fo.value);
+      options.fo.value.map((e) => {
+        console.log(e.value, "eee");
+      });
 
-      const resp = props.modelValue.filter(
-        (e) => JSON.stringify(e) !== JSON.stringify(checkedValue)
+      const resp = options.fo.value.filter(
+        (e) => JSON.stringify(e.value) !== checkedValue
       );
       if (JSON.stringify(newValue) === JSON.stringify(checkedValue))
         resp.push(newValue);
+
+      console.log(resp, "resppppp");
       context.emit("update:modelValue", resp);
       context.emit("change", resp);
     };
@@ -1108,7 +1119,7 @@ export default {
 }
 .multiselect-group-label.is-selected {
   /* background: var(--ms-group-label-bg-selected, #059669); */
-  color: var(--ms-group-label-color-selected, #fff);
+  color: var(--ms-group-label-color-selected, rgb(148, 148, 148));
 }
 .multiselect-group-label.is-disabled {
   background: var(--ms-group-label-bg-disabled, #f3f4f6);

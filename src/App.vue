@@ -13,6 +13,7 @@
 
       <Multiselect
         v-model="example.value3"
+  
         :options="[
           { value: 'v1', label: 'Batman1' },
           { value: 'v2', label: 'Robin1' },
@@ -35,7 +36,9 @@
         mode="tags"
         :is_checkBox="true"
         :close-on-select="false"
+        :is_search="true"
         :searchable="true"
+
         :options="[
           { value: 'batman', label: 'Batman' },
           { value: 'robin', label: 'Robin' },

@@ -462,7 +462,7 @@ export default function useOptions (props, context, dep)
     }
 
     if (hideSelected.value && excludeHideSelected) {
-      fo = fo.filter((option) => !shouldHideOption(option))
+      // fo = fo.filter((option) => !shouldHideOption(option))
     }
 
     return fo
