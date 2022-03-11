@@ -13,21 +13,12 @@ export interface SocketClient {
     id: string;
   }
   const SocketBaseURL = process.env.VUE_APP_WEBSOCKET_URL || "ws://167.172.33.80:8003";
-  const IS_DEV_MODE = process.env.NODE_ENV === "development";
   let __id = 0;
   export function wsClient(path = SocketBaseURL, options: any = {}): SocketClient {
-    console.log("wsClient: ", wsClient);
     let selfClose = false;
-
-    const auth = () => {
-      return localStorage.getItem("AUTH_TOKEN");
-    };
-    const autoReconnect = options.autoReconnect ? options.autoReconnect : true;
     const autoReconnectTimeout = options.autoReconnectTimeout ? options.autoReconnectTimeout : 1500;
     const autoConnect = options.autoConnect ? options.autoConnect : true;
-    const debug = options.debug ? options.debug : IS_DEV_MODE;
     const q = options.query || {};
-    console.log("debug: ", debug)
     let qs = Object.entries(q)
       .map(([k, v]) => `${k}=${v}`)
       .join("&");
@@ -48,26 +39,15 @@ export interface SocketClient {
         }
       },
       emit: (event: string, data: any) => {
-        console.log("emit: ", event, data);
         instance.socket.send(JSON.stringify({ event, data }));
       },
       reconnect: (e: any) => {
-        // Set reconnect timeout
         setTimeout(function () {
-          // Log reconnecting
-          if (debug) {
-            console.log(`[WebSocket]: ${instance.id} Reconnecting...`);
-          }
-
-          // Define has reconnected
           instance.reconnected = true;
-
-          // Try and open the URL
           instance.connect();
         }, autoReconnectTimeout);
       },
       disconnect: async () => {
-        console.log(`[WebSocket]: ${instance.id} disconnecting.`);
         selfClose = true;
         for (const key in instance.events) {
           instance.events[key] = undefined;
@@ -79,7 +59,6 @@ export interface SocketClient {
           instance.socket.close(1000, "Disconnect called");
           instance.socket = null;
         }
-        console.log(`[WebSocket]: ${instance.id} disconnected.`);
       },
       connect: async () => {
         if (instance.socket && instance.socket.readyState === 1) {
@@ -94,29 +73,13 @@ export interface SocketClient {
 
         instance.socket = new WebSocket(path + (Object.keys(q).length > 0 ? "?" + qs : ""), ["websocket"]);
         instance.socket.onopen = function (ev: any) {
-          const message = "WebSocket connection id: " + (instance.id ? instance.id : __id) + " established.";
-          const section = "WebSocket";
-
-          debug === true &&
-            console.log(
-              `%cFabizi%c${section}%c${message}`,
-              "color: #fff; background: #000;padding:2px;border:1px solid #000;border-top-left-radius:2px;1px solid #000;border-bottom-left-radius:2px; ",
-              "color: #000; background: #fff; padding:2px;border:1px solid #000;border-top-right-radius:2px;1px solid #000;border-bottom-right-radius:2px;",
-              "margin-left:4px;  color: #000; background: #fff; padding:2px;"
-            );
-
-          // Run the open function
           instance.onopen && instance.onopen(ev);
         };
 
         instance.socket.onclose = function (e: any) {
-          debug === true && console.log("WebSocket disconnected id: " + (instance.id ? instance.id : __id));
           switch (e.code) {
             // Normal closure
             case 1000:
-              if (debug) {
-                console.log(`[WebSocket]: ${instance.id} Closed.`);
-              }
               break;
 
             // Abnormal closure
@@ -130,7 +93,6 @@ export interface SocketClient {
         };
 
         instance.socket.onerror = function (e: any) {
-          debug === true && console.error("Socket error", e);
           switch (e.code) {
             // Try and reconnect
             case "ECONNREFUSED":
@@ -145,7 +107,6 @@ export interface SocketClient {
         };
 
         instance.socket.onmessage = (ev: MessageEvent<any>) => {
-          debug === true && console.log("Socket data " + instance.id, ev.target, ev.type, ev.timeStamp);
           if (ev.type === "message") {
             const d = JSON.parse(ev.data);
             if (d.event) {

@@ -633,6 +633,8 @@ export default {
       options: options.fo.value,
     });
 
+    console.log(context.emit('change'),'hii');
+
     const handleClick = () => {
       console.log("hii");
     };

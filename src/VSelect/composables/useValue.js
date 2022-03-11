@@ -1,5 +1,5 @@
 import { computed, toRefs, ref } from 'vue'
-
+import { useField } from "vee-validate";
 export default function useValue (props, context)
 {
   const { value, modelValue, mode, valueProp } = toRefs(props)
@@ -14,6 +14,20 @@ export default function useValue (props, context)
   /* istanbul ignore next */
   // externalValue
   const ev = context.expose !== undefined ? modelValue : value
+
+  const { checked, handleChange } = useField(props.name, undefined, {
+    type: "checkbox",
+    checkedValue: value,
+  });
+
+  if(ev){
+    handleChange()
+  }
+
+
+
+
+  console.log(checked,"checked")
 
   const plainValue = computed(() => {
     return mode.value === 'single' ? iv.value[valueProp.value] : iv.value.map(v=>v[valueProp.value])

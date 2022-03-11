@@ -1,6 +1,6 @@
 <template>
   <Form
-    @submit.prevent="onSubmit({ name, email, password })"
+    @submit.prevent="onSubmit({ name, email, password, names })"
     :validation-schema="schema"
   >
     <div class="VI">
@@ -9,23 +9,12 @@
         v-bind="multiselectAsync"
       ></Multiselect>
 
-      <div class="output">Data: {{ example.value }}</div>
-
-      <Multiselect
-        v-model="example.value3"
-  
-        :options="[
-          { value: 'v1', label: 'Batman1' },
-          { value: 'v2', label: 'Robin1' },
-          { value: 'v3', label: 'Joker1' },
-        ]"
-      />
-
       <!-- <Multiselect
   v-model="example.value"
   :options="['Batman', 'Robin', 'Joker']"
 /> -->
 
+      <div class="output">Data: {{ example.value }}</div>
       <!-- <Multiselect
         v-model="selectOption4.value"
         v-bind="selectOption4"
@@ -33,12 +22,14 @@
 
       <Multiselect
         v-model="example.value"
+       
+        @close="onTouch"
+        @select="onSelect"
         mode="tags"
+        name="names"
         :is_checkBox="true"
         :close-on-select="false"
-        :is_search="true"
         :searchable="true"
-
         :options="[
           { value: 'batman', label: 'Batman' },
           { value: 'robin', label: 'Robin' },
@@ -146,15 +137,6 @@
     </div> -->
 
     <!-- <div>
-      <VInput
-        name="password"
-        type="text"
-        label="Password"
-        placeholder="Your password"
-      />
-    </div> -->
-
-    <!-- <div>
       <VRadio v-model="radioButton" name="some-radios" value="A"
         >Option A</VRadio
       >
@@ -169,6 +151,13 @@
       value="accepted"
       unchecked-value="not_accepted"
     /> -->
+
+    <VInput
+      name="password"
+      type="text"
+      label="Password"
+      placeholder="Your password"
+    />
 
     <VCheckBoxGroup
       id="checkbox-group-1"
@@ -228,7 +217,7 @@ const fetchLanguages = async (query) => {
 
 export default {
   components: {
-    // VInput,
+    VInput,
     // VTextarea,
     Multiselect,
     // VSwitch,
@@ -260,13 +249,13 @@ export default {
       console.log(values);
     }
 
-    const example = reactive({ value: [],value3:[] });
+    const example = reactive({ value: [] });
 
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().email().required(),
       password: Yup.string().min(6).required(),
-      selectOption3: Yup.array().length().min(1).required(),
+      names: Yup.array().length().min(1).required(),
       confirm_password: Yup.string()
         .required()
         .oneOf([Yup.ref("password")], "Passwords do not match"),
@@ -418,10 +407,23 @@ export default {
     });
     const name = reactive({});
 
+    const handleselect = () => {
+      console.log(example.value);
+    };
+
     const isTouched = ref(false);
     const isInvalid = ref(false);
     const onTouch = () => {
       isTouched.value = true;
+    };
+
+    const onSelect = (option) => {
+
+      console.log(example.value)
+      console.log(option);
+    };
+    const onChange = (value) => {
+      console.log(value);
     };
 
     const onChange1 = (value) => {
@@ -451,6 +453,9 @@ export default {
       name,
       isRequired,
       radioButton,
+      onSelect,
+      onChange,
+      handleselect,
       selectOption,
       selectOption2,
       selectOption3,
